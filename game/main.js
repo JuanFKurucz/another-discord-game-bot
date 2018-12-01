@@ -30,30 +30,30 @@ function commandHandler(msg){
     switch(command[0]){
       case "info":
         response="You have "+user.cookies+" cookies\nBuildings owned:\n";
-        for(var i=0;i<user.buildings.length;i++){
+        for(var i in user.buildings){
           response+=user.buildings[i].name+" (Level: "+user.buildings[i].level+")\n";
         }
         break;
 
       case "buy":
-        var userBuilding= user.getBuilding(parseInt(command[1]);
-          if(userBuilding== null) {
-            var building=b.createBuilding(parseInt(command[1]));
-            if(building==null){
-              if(building.acquire(user)){
-                response="You bought a building "+command[1]+"!";
-              } else {
-                response=user.mention+" don't have enough cookies...";
-              }
-            }
-          } else if(userBuilding.levelUp(user)){
-              response="You upgraded your building !";
+        var userBuilding= user.getBuilding(parseInt(command[1]));
+        if(userBuilding== null) {
+          var building=b.createBuilding(parseInt(command[1]));
+          if(building!=null){
+            if(building.acquire(user)){
+              response="You bought a building "+command[1]+"!";
             } else {
-                response=user.mention+" don't have enough cookies...";
-              }
-          break;
-
-
+              response=user.mention+" don't have enough cookies...";
+            }
+          } else {
+            response = "This building doesn't exist";
+          }
+        } else if(userBuilding.levelUp(user)){
+          response="You upgraded your building !";
+        } else {
+          response=user.mention+" don't have enough cookies...";
+        }
+        break;
       default:
         response = "Unknown command";
         break;
