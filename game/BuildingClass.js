@@ -25,7 +25,7 @@ var Building = class {
   }
 
   levelUp(){
-    if(this.owner.cookies>=this.cost){
+    if(this.owner && this.owner.cookies>=this.cost){
       this.owner.cookies-=this.cost;
       this.level++;
       this.cost *= this.costMultiplier;
