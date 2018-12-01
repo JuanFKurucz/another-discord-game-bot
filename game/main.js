@@ -4,6 +4,7 @@
   -Seconds
 */
 var u = require(__dirname+"/UserClass.js");
+var u = require(__dirname+"/BuildingClass.js");
 
 var users={
   //"id":UserObject
@@ -21,8 +22,15 @@ function commandHandler(msg){
       case "info":
         response="You have "+users[msg.author.id].cookies+" cookies";
         break;
+
+      case "buy 1":
+        response="You bought a building !";
+        var building=new b.Building(1);
+        users[msg.author.id].buildings.push(building);
+        break;
+
       default:
-        response = "Uknown command";
+        response = "Unknown command";
         break;
     }
   }
