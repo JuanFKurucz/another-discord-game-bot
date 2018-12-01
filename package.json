@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/JuanFKurucz/another-discord-game-bot#readme",
   "dependencies": {
+    "big-integer": "^1.6.36",
     "discord.js": "^11.4.2",
     "mysql": "^2.16.0"
   }
