@@ -1,5 +1,6 @@
 var User = class {
   constructor(id) {
+    this.mention="<@!"+id+">";
     this.id=id;
     this.cookies = 0;
     this.buildings=[];

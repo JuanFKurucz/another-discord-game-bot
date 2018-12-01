@@ -39,7 +39,7 @@ function commandHandler(msg){
           if(building.acquire(user)){
             response="You bought a building "+command[1]+"!";
           } else{
-            response="You don't have enough cookies...";
+            response=user.mention+" don't have enough cookies...";
           }
         } else {
           response="This building doesn't exist";

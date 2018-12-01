@@ -10,9 +10,12 @@ function onMessage(msg){
     let text = msg.content+"";
     let response=game.read(msg);
     if(response!=""){
-      msg.reply(response)
-      .then(sent => console.log(`Sent a reply to ${sent.author.username}`))
+      msg.channel.send(response)
+      .then(message => console.log(`Sent message: ${message.content}`))
       .catch(console.error);
+    /*  msg.reply(response)
+      .then(sent => console.log(`Sent a reply to ${sent.author.username}`))
+      .catch(console.error);*/
     }
   }
 }
