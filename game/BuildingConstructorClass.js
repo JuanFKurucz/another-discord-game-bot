@@ -38,6 +38,13 @@ var buildings={
   }
 };
 
+function checkExists(id){
+  var buildingInfo = buildings[id];
+  if(buildingInfo){
+    return true;
+  }
+  return false;
+}
 
 function createBuilding(id){
   var buildingInfo = buildings[id];
