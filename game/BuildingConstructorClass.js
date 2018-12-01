@@ -4,27 +4,37 @@ var buildings={
   "1":{
     name:"Homless",
     cost:10,
-    cps:5
+    costMultiplier:1.5,
+    cps:5,
+    cpsMultiplier:1.5
   },
   "2":{
     name:"Shelter",
     cost:50,
-    cps:10
+    costMultiplier:1.5,
+    cps:10,
+    cpsMultiplier:1.5
   },
   "3":{
     name:"Appartment",
     cost:250,
-    cps:100
+    costMultiplier:1.5,
+    cps:100,
+    cpsMultiplier:1.5
   },
   "4":{
     name:"House",
     cost:3000,
-    cps:1000
+    costMultiplier:1.5,
+    cps:1000,
+    cpsMultiplier:1.5
   },
   "5":{
     name:"Palace",
     cost:50000,
-    cps:2000
+    costMultiplier:1.5,
+    cps:2000,
+    cpsMultiplier:1.5
   }
 };
 
@@ -32,11 +42,13 @@ var buildings={
 function createBuilding(id){
   var buildingInfo = buildings[id];
   if(buildingInfo){
-    return b.Building(
+    return new b.Building(
       id,
       buildingInfo.name,
       buildingInfo.cost,
-      buildingInfo.cps
+      buildingInfo.costMultiplier,
+      buildingInfo.cps,
+      buildingInfo.cpsMultiplier
     );
   }
   return null;

@@ -6,12 +6,23 @@ var Building = class {
     this.costMultiplier=costMultiplier;
     this.cpsMultiplier=cpsMultiplier;
     this.cps=parseFloat(cps);
+    this.level=1;
   }
 
   acquire(user){
     if(user.cookies>=this.cost){
       user.cookies-=this.cost;
       user.buildings.push(this);
+      return true;
+    }
+    return false;
+  }
+
+  levelUp(){
+    if(user.cookies>=this.cost){
+      this.level++;
+      this.cost *= this.costMultiplier;
+      this.cps *= this.cpsMultiplier;
       return true;
     }
     return false;

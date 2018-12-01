@@ -9,8 +9,15 @@ var b = require(__dirname+"/BuildingConstructorClass.js");
 var users={
   //"id":UserObject
 };
-
-
+/*
+users
+  buildings
+    [
+      Home <-- level up,
+      Homless
+      Shetler
+    ]
+*/
 const prefix = "!";
 
 function commandHandler(msg){
@@ -22,7 +29,10 @@ function commandHandler(msg){
     var user=users[msg.author.id];
     switch(command[0]){
       case "info":
-        response="You have "+users[msg.author.id].cookies+" cookies";
+        response="You have "+user.cookies+" cookies\nBuildings owned:\n";
+        for(var i=0;i<user.buildings.length;i++){
+          response+=user.buildings[i].name+" (Level: "+user.buildings[i].level+")\n";
+        }
         break;
 
       case "buy":
