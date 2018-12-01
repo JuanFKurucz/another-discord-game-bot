@@ -1,6 +1,6 @@
 var Building = class {
   constructor(cps) {
-    this.cps=cps;
+    this.cps=parseFloat(cps);
   }
 }
 

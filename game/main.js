@@ -25,7 +25,7 @@ function commandHandler(msg){
 
       case "buy":
         response="You bought a building "+command[1]+"!";
-        var building=new b.Building(command[1]);
+        var building=new b.Building(parseFloat(command[1]));
         users[msg.author.id].buildings.push(building);
         break;
 
