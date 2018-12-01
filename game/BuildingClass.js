@@ -1,5 +1,6 @@
 var Building = class {
   constructor(id,name,cost,costMultiplier,cps,cpsMultiplier) {
+    this.owner=null;
     this.id=id;
     this.name=name;
     this.cost=cost;
@@ -15,6 +16,7 @@ var Building = class {
       return false;
     }
     if(user.cookies>=this.cost){
+      this.owner=user;
       user.cookies-=this.cost;
       user.buildings[this.id]=this;
       return true;
@@ -22,9 +24,9 @@ var Building = class {
     return false;
   }
 
-  levelUp(user){
-    if(user.cookies>=this.cost){
-      user.cookies-=this.cost;
+  levelUp(){
+    if(this.owner.cookies>=this.cost){
+      this.owner.cookies-=this.cost;
       this.level++;
       this.cost *= this.costMultiplier;
       this.cps *= this.cpsMultiplier;
