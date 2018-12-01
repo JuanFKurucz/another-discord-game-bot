@@ -1,6 +1,6 @@
 
-function read(message, typeMessage){
-  let result = "Hi :D";
+function read(message, typeMessage){ //dm or text
+  let result = "";
 
   return result;
 }
