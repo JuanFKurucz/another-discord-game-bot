@@ -36,22 +36,21 @@ function commandHandler(msg){
         break;
 
       case "buy":
-        if(building){
-          if(getBuilding(command[1])== null) {
+        var userBuilding= user.getBuilding(parseInt(command[1]);
+          if(userBuilding== null) {
             var building=b.createBuilding(parseInt(command[1]));
-            if(building.acquire(user)){
-              response="You bought a building "+command[1]+"!";
-            } else {
-              response=user.mention+" don't have enough cookies...";
+            if(building==null){
+              if(building.acquire(user)){
+                response="You bought a building "+command[1]+"!";
+              } else {
+                response=user.mention+" don't have enough cookies...";
+              }
             }
-          } else if(building.levelUp(user)){
+          } else if(userBuilding.levelUp(user)){
               response="You upgraded your building !";
             } else {
                 response=user.mention+" don't have enough cookies...";
               }
-          } else {
-              response="This building doesn't exist";
-            }
           break;
 
 
