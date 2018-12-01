@@ -7,7 +7,7 @@ var User = class {
 
   claimCookies(){
     for(var i=0;i<this.buildings.length;i++){
-      this.cookies+=this.buildings[i].cps;
+      this.cookies+=parseFloat(this.buildings[i].cps);
     }
   }
 }
