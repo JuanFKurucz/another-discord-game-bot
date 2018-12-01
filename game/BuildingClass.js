@@ -10,7 +10,9 @@ var Building = class {
     if(user.cookies>=this.cost){
       user.cookies-=this.cost;
       user.buildings.push(this);
+      return true;
     }
+    return false;
   }
 }
 
