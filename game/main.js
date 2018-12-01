@@ -30,7 +30,7 @@ function commandHandler(msg){
     switch(command[0]){
       case "info":
         response="You have "+user.cookies+" cookies\nBuildings owned:\n";
-        for(var i=0;i<user.buildings.length;i++){
+        for(var i in user.buildings){
           response+=user.buildings[i].name+" (Level: "+user.buildings[i].level+")\n";
         }
         break;

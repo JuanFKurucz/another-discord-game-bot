@@ -10,9 +10,13 @@ var Building = class {
   }
 
   acquire(user){
+    var building=user.buildings[this.id];
+    if(building){
+      return false;
+    }
     if(user.cookies>=this.cost){
       user.cookies-=this.cost;
-      user.buildings.push(this);
+      user.buildings[this.id]=this;
       return true;
     }
     return false;
