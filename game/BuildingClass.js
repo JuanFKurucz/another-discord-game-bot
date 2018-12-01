@@ -22,7 +22,7 @@ var Building = class {
     return false;
   }
 
-  levelUp(){
+  levelUp(user){
     if(user.cookies>=this.cost){
       user.cookies-=this.cost;
       this.level++;
