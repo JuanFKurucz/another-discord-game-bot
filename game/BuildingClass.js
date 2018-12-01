@@ -24,6 +24,7 @@ var Building = class {
 
   levelUp(){
     if(user.cookies>=this.cost){
+      user.cookies-=this.cost;
       this.level++;
       this.cost *= this.costMultiplier;
       this.cps *= this.cpsMultiplier;
