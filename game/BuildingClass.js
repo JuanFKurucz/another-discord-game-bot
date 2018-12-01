@@ -1,8 +1,10 @@
 var Building = class {
-  constructor(id,name,cost,cps) {
+  constructor(id,name,cost,costMultiplier,cps,cpsMultiplier) {
     this.id=id;
     this.name=name;
     this.cost=cost;
+    this.costMultiplier=costMultiplier;
+    this.cpsMultiplier=cpsMultiplier;
     this.cps=parseFloat(cps);
   }
 

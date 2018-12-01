@@ -4,18 +4,10 @@
   -Seconds
 */
 var u = require(__dirname+"/UserClass.js");
-var b = require(__dirname+"/BuildingClass.js");
+var b = require(__dirname+"/BuildingConstructorClass.js");
 
 var users={
   //"id":UserObject
-};
-
-var buildings={
-  "1":new b.Building("1","Shelter",10,5),
-  "2":new b.Building("2","Shelter",50,10),
-  "3":new b.Building("3","Appartment",250,100),
-  "4":new b.Building("4","House",3000,1000),
-  "5":new b.Building("5","Palace",50000,2000),
 };
 
 
@@ -34,7 +26,7 @@ function commandHandler(msg){
         break;
 
       case "buy":
-        var building=buildings[parseInt(command[1])];
+        var building=b.createBuilding(parseInt(command[1]));
         if(building){
           if(building.acquire(user)){
             response="You bought a building "+command[1]+"!";
