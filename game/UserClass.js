@@ -1,4 +1,5 @@
-var User = class {
+'use strict';
+module.exports = class User {
   constructor(id) {
     this.mention="<@!"+id+">";
     this.id=id;
@@ -19,8 +20,4 @@ var User = class {
     }
     return null;
   }
-}
-
-module.exports = {
-  User:User
 }

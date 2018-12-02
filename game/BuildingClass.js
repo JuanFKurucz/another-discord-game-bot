@@ -1,4 +1,5 @@
-var Building = class {
+'use strict';
+module.exports = class Building {
   constructor(id,name,cost,costMultiplier,cps,cpsMultiplier) {
     this.owner=null;
     this.id=id;
@@ -7,7 +8,13 @@ var Building = class {
     this.costMultiplier=costMultiplier;
     this.cpsMultiplier=cpsMultiplier;
     this.cps=parseFloat(cps);
-    this.level=1;
+    this.level=0;
+  }
+
+  increase(){
+    this.owner.cookies-=this.cost;
+    this.level++;
+    this.cost *= this.costMultiplier;
   }
 
   acquire(user){
@@ -17,8 +24,8 @@ var Building = class {
     }
     if(user.cookies>=this.cost){
       this.owner=user;
-      user.cookies-=this.cost;
       user.buildings[this.id]=this;
+      this.increase();
       return true;
     }
     return false;
@@ -26,16 +33,10 @@ var Building = class {
 
   levelUp(){
     if(this.owner && this.owner.cookies>=this.cost){
-      this.owner.cookies-=this.cost;
-      this.level++;
-      this.cost *= this.costMultiplier;
+      this.increase();
       this.cps *= this.cpsMultiplier;
       return true;
     }
     return false;
   }
-}
-
-module.exports = {
-  Building:Building
 }
