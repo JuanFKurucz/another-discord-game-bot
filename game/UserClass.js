@@ -4,6 +4,7 @@ module.exports = class User {
     this.mention="<@!"+id+">";
     this.id=id;
     this.cookies = 0;
+    this.cpm = 1;
     this.buildings={};
   }
 
@@ -11,6 +12,10 @@ module.exports = class User {
     for(var i in this.buildings){
       this.cookies+=parseFloat(this.buildings[i].cps);
     }
+  }
+
+  addCookie(){
+    this.cookies+=this.cpm;
   }
 
   getBuilding(id){
