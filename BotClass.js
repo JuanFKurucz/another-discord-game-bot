@@ -39,25 +39,15 @@ module.exports = class Bot {
   }
 
   commandHandler(msg){
-    var user=this.game.getUser(msg.author.id);
-    user.addCookie();
-
     let response = "";
     let text = msg.content+"";
+
+    var user=this.game.getUser(msg.author.id);
+
     if(text.indexOf(this.prefix)===0){
-      text=text.substring(this.prefix.length,text.length);
+      text=text.substring(this.prefix.length,text.length).toLowerCase();
       var command = text.split(" ");
-      switch(command[0]){
-        case "info":
-          response=this.game.execute_info(user);
-          break;
-        case "buy":
-          response = this.game.execute_buy(user,parseInt(command[1]));
-          break;
-        default:
-          response = "Unknown command";
-          break;
-      }
+      response=this.game.execute(user,command);
     }
     return response;
   }

@@ -26,10 +26,28 @@ module.exports = class Game {
     if(!this.users.hasOwnProperty(id)){
       this.users[id] = new User(id);
     }
+    this.claimMessage(this.users[id]);
     return this.users[id];
   }
 
-  execute_info(user){
+  claimMessage(user){
+    user.addCookie();
+  }
+
+  execute(user,command){
+    let response="";
+    let call = "execute_"+command[0];
+
+    if(typeof this[call] === 'function'){
+      response = this[call](user,command);
+    } else {
+      response = "Unknown command";
+    }
+
+    return response;
+  }
+
+  execute_info(user,command){
     let response="You have "+user.cookies+" cookies\nBuildings owned:\n";
     for(var i in user.buildings){
       response+=user.buildings[i].name+" (Level: "+user.buildings[i].level+")\n";
@@ -37,7 +55,8 @@ module.exports = class Game {
     return response;
   }
 
-  execute_buy(user,id_building){
+  execute_buy(user,command){
+    let id_building = parseInt(command[1]);
     let response='';
     var userBuilding = user.getBuilding(id_building);
     if(userBuilding== null) {
