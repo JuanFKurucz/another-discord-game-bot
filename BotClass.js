@@ -47,7 +47,14 @@ module.exports = class Bot {
     if(text.indexOf(this.prefix)===0){
       text=text.substring(this.prefix.length,text.length).toLowerCase();
       var command = text.split(" ");
-      response=this.game.execute(user,command);
+
+      let call = "execute_"+command[0];
+
+      if(typeof this.game[call] === 'function'){
+        response = this.game[call](user,command);
+      } else {
+        response = "Unknown command";
+      }
     }
     return response;
   }

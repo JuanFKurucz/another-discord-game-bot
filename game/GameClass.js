@@ -34,19 +34,6 @@ module.exports = class Game {
     user.addCookie();
   }
 
-  execute(user,command){
-    let response="";
-    let call = "execute_"+command[0];
-
-    if(typeof this[call] === 'function'){
-      response = this[call](user,command);
-    } else {
-      response = "Unknown command";
-    }
-
-    return response;
-  }
-
   execute_info(user,command){
     let response="You have "+user.cookies+" cookies\nBuildings owned:\n";
     for(var i in user.buildings){
