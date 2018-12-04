@@ -23,12 +23,13 @@ module.exports = class Game {
     }
   }
 
-  getUser(id){
-    if(!this.users.hasOwnProperty(id)){
-      this.users[id] = new User(id);
+  getUser(info){
+    if(!this.users.hasOwnProperty(info.id)){
+      this.users[info.id] = new User(info.id);
     }
-    this.claimMessage(this.users[id]);
-    return this.users[id];
+    this.users[info.id].setInfo(info);
+    this.claimMessage(this.users[info.id]);
+    return this.users[info.id];
   }
 
   claimMessage(user){

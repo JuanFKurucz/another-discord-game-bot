@@ -6,6 +6,11 @@ module.exports = class User {
     this.cookies = 0;
     this.cpm = 1;
     this.buildings={};
+    this.info=null;
+  }
+
+  setInfo(info){
+    this.info=info;
   }
 
   claimCookies(){

@@ -11,9 +11,8 @@
 const Bot = new require(__dirname+"/BotClass.js");
 const DataBase = require(__dirname+"/DataBaseClass.js");
 const token = 'NTE4NDc3Nzc3NTcwMTAzMjk2.DuRVpw.FrIJP52YjMI_ZRr2Jr_VI0ZzhmI';
-const botId = "518477777570103296";
 
 let db = new DataBase();
 
-let botObject = new Bot(botId);
+let botObject = new Bot();
 botObject.start(token);

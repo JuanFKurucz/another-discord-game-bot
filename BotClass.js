@@ -11,11 +11,10 @@ const Discord = require('discord.js');
 const Game = require(__dirname+"/game/GameClass.js");
 
 module.exports = class Bot {
-  constructor(botId) {
+  constructor() {
     this.prefix = "!";
     this.game = new Game();
     this.client = new Discord.Client();
-    this.id=botId;
 
     this.startDaemon();
   }
@@ -41,8 +40,7 @@ module.exports = class Bot {
   commandHandler(msg){
     let response = "";
     let text = msg.content+"";
-
-    var user=this.game.getUser(msg.author.id);
+    var user=this.game.getUser(msg.author);
 
     if(text.indexOf(this.prefix)===0){
       text=text.substring(this.prefix.length,text.length).toLowerCase();
@@ -60,7 +58,7 @@ module.exports = class Bot {
   }
 
   onMessage(msg){
-    if(msg.hasOwnProperty("author") && msg.author.id != this.id){
+    if(msg.hasOwnProperty("author") && !msg.author.bot){
       let text = msg.content+"";
       let response = this.commandHandler(msg);//this.game.read(msg);
       if(response!=""){
