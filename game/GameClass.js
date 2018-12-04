@@ -69,8 +69,8 @@ module.exports = class Game {
     response="List of buildings\n";
     for(var v in this.constructor.buildings){
       response += this.constructor.buildings[v].name +
-                  " Price: "+this.constructor.buildings[v].cost +
-                  " Cps: "+this.constructor.buildings[v].cps "\n"
+                  "Price: "+this.constructor.buildings[v].cost +
+                  "Cps: "+this.constructor.buildings[v].cps+
     }
 
   }
