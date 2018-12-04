@@ -12,6 +12,7 @@ const BuildingConstructor = require(__dirname+"/BuildingConstructorClass.js");
 
 module.exports = class Game {
   constructor() {
+    this.functionPrefix = "execute_";
     this.users = {};
     this.constructor = new BuildingConstructor();
   }

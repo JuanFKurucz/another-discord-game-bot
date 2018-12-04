@@ -48,7 +48,7 @@ module.exports = class Bot {
       text=text.substring(this.prefix.length,text.length).toLowerCase();
       var command = text.split(" ");
 
-      let call = "execute_"+command[0];
+      let call = this.game.functionPrefix+command[0];
 
       if(typeof this.game[call] === 'function'){
         response = this.game[call](user,command);
