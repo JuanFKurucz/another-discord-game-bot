@@ -5,7 +5,15 @@ module.exports = class User {
     this.id=id;
     this.cookies = 0;
     this.cpm = 1;
+
+    this.multipliers={
+      "cpmMultiplier":1,
+      "buildingMultiplier":1,
+      "buildingCost":1
+    };
+
     this.buildings={};
+    this.upgrades={};
     this.info=null;
   }
 
@@ -15,12 +23,16 @@ module.exports = class User {
 
   claimCookies(){
     for(var i in this.buildings){
-      this.cookies+=parseFloat(this.buildings[i].cps);
+      var buildingM=1;
+      if(this.multipliers["buildings"].hasOwnProperty(i)){
+        buildingM=this.multipliers["buildings"][i];
+      }
+      this.cookies+=(parseFloat(this.buildings[i].cps)*buildingM)*this.multipliers["buildingMultiplier"];
     }
   }
 
   addCookie(){
-    this.cookies+=this.cpm;
+    this.cookies+=this.cpm*this.multipliers["cpmMultiplier"];
   }
 
   getBuilding(id){
