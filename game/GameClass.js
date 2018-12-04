@@ -46,7 +46,7 @@ module.exports = class Game {
 
   execute_buy(user,command){
     let response='';
-    if(command[1]!='\0'){
+    if(command.length>1){
     let id_building = parseInt(command[1]);
     var userBuilding = user.getBuilding(id_building);
     if(userBuilding== null) {
