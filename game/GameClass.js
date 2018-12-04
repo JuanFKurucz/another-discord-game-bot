@@ -68,12 +68,14 @@ module.exports = class Game {
   }else {
     response="List of buildings\n";
     for(var v in this.constructor.buildings){
-      response += "Name:"+this.constructor.buildings[v].name+ "\n"+
-                  "Cost:"+this.constructor.buildings[v].cost+"\n"+
-                  this.constructor.buildings[v].costMultiplier+"\n"+
-                  "Cps:"+this.constructor.buildings[v].cps+"\n"+
-                  this.constructor.buildings[v].cpsMultiplier+"\n\n"
+    response += "Name:"+ (this.constructor.buildings[v].name+ "\n"+
+                "Cost:"+this.constructor.buildings[v].cost+"\n"+
+                this.constructor.buildings[v].costMultiplier+"\n"+
+                "Cps:"+this.constructor.buildings[v].cps+"\n"+
+                this.constructor.buildings[v].cpsMultiplier+"\n\n";
     }
   }
     return response;
   }
+
+}
