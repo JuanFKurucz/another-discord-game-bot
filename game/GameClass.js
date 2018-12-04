@@ -45,6 +45,7 @@ module.exports = class Game {
   }
 
   execute_buy(user,command){
+    if(command[1]!='\0'){
     let id_building = parseInt(command[1]);
     let response='';
     var userBuilding = user.getBuilding(id_building);
@@ -64,6 +65,16 @@ module.exports = class Game {
     } else {
       response=user.mention+" don't have enough cookies...";
     }
+  }else {
+    response="List of buildings\n";
+    for(var v in this.constructor.buildings){
+    response += "Name:"+ (this.constructor.buildings[v].name+ "\n"+
+                "Cost:"+this.constructor.buildings[v].cost+"\n"+
+                this.constructor.buildings[v].costMultiplier+"\n"+
+                "Cps:"+this.constructor.buildings[v].cps+"\n"+
+                this.constructor.buildings[v].cpsMultiplier+"\n\n";
+    }
+  }
     return response;
   }
 
