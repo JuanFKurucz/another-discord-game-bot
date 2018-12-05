@@ -23,11 +23,7 @@ module.exports = class User {
 
   claimCookies(){
     for(var i in this.buildings){
-      var buildingM=1;
-      if(this.multipliers["buildings"].hasOwnProperty(i)){
-        buildingM=this.multipliers["buildings"][i];
-      }
-      this.cookies+=(parseFloat(this.buildings[i].cps)*buildingM)*this.multipliers["buildingMultiplier"];
+      this.cookies+=(parseFloat(this.buildings[i].cps))*this.multipliers["buildingMultiplier"];
     }
   }
 
