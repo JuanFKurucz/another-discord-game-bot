@@ -11,6 +11,16 @@ module.exports = class Building {
     this.level=0;
   }
 
+  nextLevelInfo(){
+    return {
+      name:this.name,
+      cost:this.cost,
+      costMultiplier:1.5,
+      cps:this.cps*this.costMultiplier,
+      cpsMultiplier:1.5
+    }
+  }
+
   increase(){
     this.owner.cookies-=this.cost;
     this.level++;
