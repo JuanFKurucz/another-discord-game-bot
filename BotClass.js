@@ -54,6 +54,7 @@ module.exports = class Bot {
         response = "Unknown command";
       }
     }
+    
     return response;
   }
 
