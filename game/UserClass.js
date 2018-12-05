@@ -38,4 +38,20 @@ module.exports = class User {
     }
     return null;
   }
+
+  getUpgrade(id){
+    var upgrade = this.upgrades[id];
+    if(upgrade){
+      return upgrade;
+    }
+    return null;
+  }
+
+  addBuilding(building){
+    this.buildings[building.id]=building;
+  }
+  
+  addUpgrade(upgrade){
+    this.upgrades[upgrade.id]=upgrade;
+  }
 }

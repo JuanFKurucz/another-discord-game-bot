@@ -50,7 +50,7 @@ module.exports = class Game {
       let id_building = parseInt(command[1]);
       var userBuilding = user.getBuilding(id_building);
       if(userBuilding== null) {
-        var building = this.constructor.createBuilding(id_building);
+        var building = this.constructor.create(id_building);
         if(building!=null){
           if(building.acquire(user)){
             response="You bought a building "+id_building+"!";
@@ -67,10 +67,10 @@ module.exports = class Game {
       }
     }else {
       response="List of buildings\n";
-      for(var v in this.constructor.buildings){
-        response += this.constructor.buildings[v].name +
-        " Price: "+this.constructor.buildings[v].cost +
-        " Cps: "+this.constructor.buildings[v].cps+"\n"
+      for(var v in this.constructor.elements){
+        response += this.constructor.elements[v].name +
+        " Price: "+this.constructor.elements[v].cost +
+        " Cps: "+this.constructor.elements[v].cps+"\n"
       }
 
     }

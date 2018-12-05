@@ -1,10 +1,11 @@
 'use strict';
 
+const Constructor = require(__dirname+"/ConstructorClass.js");
 const Building = require(__dirname+"/BuildingClass.js");
 
-module.exports = class BuildingConstructor {
+module.exports = class BuildingConstructor extends Constructor {
   constructor(){
-    this.buildings={
+    super({
       "1":{
         name:"Homless",
         cost:10,
@@ -40,27 +41,17 @@ module.exports = class BuildingConstructor {
         cps:2000,
         cpsMultiplier:1.5
       }
-    };
+    });
   }
-  checkExists(id){
-    var buildingInfo = this.buildings[id];
-    if(buildingInfo){
-      return true;
-    }
-    return false;
-  }
-  createBuilding(id){
-    var buildingInfo = this.buildings[id];
-    if(buildingInfo){
-      return new Building(
-        id,
-        buildingInfo.name,
-        buildingInfo.cost,
-        buildingInfo.costMultiplier,
-        buildingInfo.cps,
-        buildingInfo.cpsMultiplier
-      );
-    }
-    return null;
+
+  createObject(id,buildingInfo){
+    return new Building(
+      id,
+      buildingInfo.name,
+      buildingInfo.cost,
+      buildingInfo.costMultiplier,
+      buildingInfo.cps,
+      buildingInfo.cpsMultiplier
+    );
   }
 }

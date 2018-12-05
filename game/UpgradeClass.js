@@ -1,21 +1,13 @@
-var Upgrade = class {
+'use strict';
+
+const ShopItem = require(__dirname+"/ShopItemClass.js");
+
+module.exports = class Upgrade extends ShopItem {
   constructor(id,name,cost,multiplierName,multiplier) {
-    this.owner=null;
+    super(id,name,cost);
     this.applyed=false;
-    this.id=id;
-    this.name=name;
-    this.cost=cost;
     this.multiplier=multiplier;
     this.multiplierName=multiplierName;
-  }
-
-  acquire(user){
-    if(user.cookies>=this.cost){
-      this.owner=user;
-      this.owner.cookies-=this.cost;
-      this.owner.upgrades.push(this);
-      this.applyEffect();
-    }
   }
 
   isAcquired(){
@@ -26,15 +18,10 @@ var Upgrade = class {
     return this.isAcquired() && this.applyed==false;
   }
 
-  applyEffect(){
+  apply(){
     if(this.canBeApplied()){
       this.applyed=true;
       this.owner.multipliers[this.multiplierName]+=this.multiplier;
     }
   }
-}
-
-
-module.exports = {
-  UpgradeCPSMultiplier:UpgradeCPSMultiplier
 }

@@ -1,10 +1,10 @@
 'use strict';
-module.exports = class Building {
+
+const ShopItem = require(__dirname+"/ShopItemClass.js");
+
+module.exports = class Building extends ShopItem {
   constructor(id,name,cost,costMultiplier,cps,cpsMultiplier) {
-    this.owner=null;
-    this.id=id;
-    this.name=name;
-    this.cost=cost;
+    super(id,name,cost);
     this.costMultiplier=costMultiplier;
     this.cpsMultiplier=cpsMultiplier;
     this.cps=parseFloat(cps);
@@ -21,28 +21,9 @@ module.exports = class Building {
     }
   }
 
-  increase(){
-    this.owner.cookies-=this.cost;
+  apply(){
     this.level++;
     this.cost *= this.costMultiplier;
-  }
-
-  canPurchase(user){
-    return user.cookies>=this.cost;
-  }
-
-  acquire(user){
-    var building=user.buildings[this.id];
-    if(building){
-      return false;
-    }
-    if(this.canPurchase(user)){
-      this.owner=user;
-      user.buildings[this.id]=this;
-      this.increase();
-      return true;
-    }
-    return false;
   }
 
   levelUp(){
