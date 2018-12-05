@@ -1,10 +1,10 @@
 'use strict';
 
 /**
-  Game Class, this is where the fun begins.
+Game Class, this is where the fun begins.
 
-  Every message from Discord is setn to read function, where it creates the player of the user that sent the message if it doesn't exist
-  and handles the message with commandHandler.
+Every message from Discord is setn to read function, where it creates the player of the user that sent the message if it doesn't exist
+and handles the message with commandHandler.
 **/
 
 const User = require(__dirname+"/UserClass.js");
@@ -47,34 +47,34 @@ module.exports = class Game {
   execute_buy(user,command){
     let response='';
     if(command.length>1){
-    let id_building = parseInt(command[1]);
-    var userBuilding = user.getBuilding(id_building);
-    if(userBuilding== null) {
-      var building = this.constructor.createBuilding(id_building);
-      if(building!=null){
-        if(building.acquire(user)){
-          response="You bought a building "+id_building+"!";
+      let id_building = parseInt(command[1]);
+      var userBuilding = user.getBuilding(id_building);
+      if(userBuilding== null) {
+        var building = this.constructor.createBuilding(id_building);
+        if(building!=null){
+          if(building.acquire(user)){
+            response="You bought a building "+id_building+"!";
+          } else {
+            response=user.mention+" don't have enough cookies...";
+          }
         } else {
-          response=user.mention+" don't have enough cookies...";
+          response = "This building doesn't exist";
         }
+      } else if(userBuilding.levelUp(user)){
+        response="You upgraded your building !";
       } else {
-        response = "This building doesn't exist";
+        response=user.mention+" don't have enough cookies...";
       }
-    } else if(userBuilding.levelUp(user)){
-      response="You upgraded your building !";
-    } else {
-      response=user.mention+" don't have enough cookies...";
-    }
-   }else {
-    response="List of buildings\n";
-    for(var v in this.constructor.buildings){
-      response += this.constructor.buildings[v].name +
-                  " Price: "+this.constructor.buildings[v].cost +
-                  " Cps: "+this.constructor.buildings[v].cps+"\n"
-    }
+    }else {
+      response="List of buildings\n";
+      for(var v in this.constructor.buildings){
+        response += this.constructor.buildings[v].name +
+        " Price: "+this.constructor.buildings[v].cost +
+        " Cps: "+this.constructor.buildings[v].cps+"\n"
+      }
 
-  }
-  return response;
+    }
+    return response;
   }
 
-  }
+}
