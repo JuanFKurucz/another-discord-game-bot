@@ -65,21 +65,21 @@ module.exports = class Game {
       } else {
         response=user.mention+" don't have enough cookies...";
       }
-    } else if(user.getBuilding==null){
-      response="List of buildings\n";
-      for(var v in this.constructor.elements){
-        response += this.constructor.elements[v].name +
-        " Price: "+ this.constructor.elements[v].cost +
-        " Cps: "+ this.constructor.elements[v].cps+"\n"
-      }
-
     } else {
-      var nbuilding = building.nextLevelInfo();
+      var nbuilding;
       response="List of buildings\n";
-      for(var v in this.constructor.elements){
-        response += nbuilding.name +
-        " Price: "+ nbuilding.cost +
-        " Cost: "+ nbuilding.cps+"\n"
+      for(var w in this.constructor.elements){
+        if(user.getBuilding(w)==null){
+          response += this.constructor.elements[w].name +
+          " Price: "+ this.constructor.elements[w].cost +
+          " Cps: "+ this.constructor.elements[w].cps+"\n"
+        } else {
+          nbuilding = user.buildings[w].nextLevelInfo();
+          response += nbuilding.name +
+          " Price: "+ nbuilding.cost +
+          " Cps: "+ nbuilding.cps+"\n"
+        }
+
       }
 
     }
