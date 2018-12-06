@@ -7,7 +7,7 @@ module.exports = class BuildingConstructor extends Constructor {
   constructor(){
     super({
       "1":{
-        name:"Homless",
+        name:"Homeless",
         cost:10,
         costMultiplier:1.5,
         cps:5,
