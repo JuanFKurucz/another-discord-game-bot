@@ -94,7 +94,7 @@ module.exports = class Game {
     var nbuilding=null,
         response="";
     response="";
-    this.messageObject.setTitle("Buy buildings list");
+    this.messageObject.setTitle("List of buildings");
     for(var w in this.constructor.elements){
       nbuilding=user.getBuilding(w);
       if(!nbuilding){
@@ -110,7 +110,7 @@ module.exports = class Game {
         response += "\n";
       }
     }
-    this.messageObject.addField("List of buildings",response);
+    this.messageObject.setDescription(response);
   }
 
   execute_buy(user,command){
