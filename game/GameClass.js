@@ -36,15 +36,19 @@ module.exports = class Game {
     user.addCookie();
   }
 
-  execute_info(user,command){
-    let response="You have "+user.cookies+" cookies\nBuildings owned:\n";
+  execute_info(messageObject,user,command){
+    messageObject.setTitle("Info");
+    let response="You have "+user.cookies+" cookies";
+    messageObject.setDescription(response);
+    let buildings="";
     for(var i in user.buildings){
-      response+=user.buildings[i].name+" (Level: "+user.buildings[i].level+")\n";
+      buildings+=user.buildings[i].name+" (Level: "+user.buildings[i].level+")\n";
     }
-    return response;
+    messageObject.addField("Buildings owned",buildings);
   }
 
   buyBuilding(command,user){
+    messageObject.setTitle("Buy building");
     let response="";
     let id_building = parseInt(command[1]);
     var userBuilding = user.getBuilding(id_building);
@@ -64,13 +68,14 @@ module.exports = class Game {
     } else {
       response=user.mention+" don't have enough cookies...";
     }
-    return response;
+    messageObject.setDescription(response);
   }
 
   displayBuildingList(user){
     var nbuilding=null,
         response="";
-    response="List of buildings:\n";
+    response="";
+    messageObject.setTitle("Buy buildings list");
     for(var w in this.constructor.elements){
       nbuilding=user.getBuilding(w);
       if(!nbuilding){
@@ -81,20 +86,20 @@ module.exports = class Game {
       " Price: "+ nbuilding.cost +
       " Cps: "+ nbuilding.cps;
       if(user.cookies<nbuilding.cost){
-        response += " (Not affordable yet)\n\n";
-      } else {response += "\n\n";}
+        response += " (Not affordable yet)\n";
+      } else {
+        response += "\n";
+      }
     }
-    return response;
+    messageObject.addField("List of buildings",response);
   }
 
-  execute_buy(user,command){
-    let response='';
+  execute_buy(messageObject,user,command){
     if(command.length>1){
-      response=this.buyBuilding(command,user)
+      this.buyBuilding(messageObject,command,user)
     } else {
-      response=this.displayBuildingList(user);
+      this.displayBuildingList(messageObject,user);
     }
-    return response;
   }
 
 }
