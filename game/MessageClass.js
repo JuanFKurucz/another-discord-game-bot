@@ -25,14 +25,16 @@ module.exports = class User {
   }
 
   addField(name,value){
-    var o ={};
-    o["name"]=name;
-    o["value"]=value;
-    this.fields.push(o);
+    if(value && name){
+      var o ={};
+      o["name"]=name;
+      o["value"]=value;
+      this.fields.push(o);
+    }
   }
 
   print(){
-    if(this.title){
+    if(this.title.length){
       var o = {};
       o.embed = {};
       o.embed.color=this.color;

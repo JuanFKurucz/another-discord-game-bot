@@ -15,6 +15,25 @@ module.exports = class Game {
     this.functionPrefix = "execute_";
     this.users = {};
     this.constructor = new BuildingConstructor();
+    this.messageObject = null;
+  }
+
+  newMessage(m){
+    this.messageObject = m;
+  }
+
+  errorMessage(){
+    this.messageObject.setTitle("Unknown command");
+    this.messageObject.setDescription("Please write help to see the command list.");
+  }
+
+  getMessage(){
+    let m = this.messageObject;
+    if(m!==null){
+      m=m.print();
+    }
+    this.messageObject = null;
+    return m;
   }
 
   claimCookiesUsers(){
@@ -36,19 +55,19 @@ module.exports = class Game {
     user.addCookie();
   }
 
-  execute_info(messageObject,user,command){
-    messageObject.setTitle("Info");
+  execute_info(user,command){
+    this.messageObject.setTitle("Info");
     let response="You have "+user.cookies+" cookies";
-    messageObject.setDescription(response);
+    this.messageObject.setDescription(response);
     let buildings="";
     for(var i in user.buildings){
       buildings+=user.buildings[i].name+" (Level: "+user.buildings[i].level+")\n";
     }
-    messageObject.addField("Buildings owned",buildings);
+    this.messageObject.addField("Buildings owned",buildings);
   }
 
   buyBuilding(command,user){
-    messageObject.setTitle("Buy building");
+    this.messageObject.setTitle("Buy building");
     let response="";
     let id_building = parseInt(command[1]);
     var userBuilding = user.getBuilding(id_building);
@@ -68,14 +87,14 @@ module.exports = class Game {
     } else {
       response=user.mention+" don't have enough cookies...";
     }
-    messageObject.setDescription(response);
+    this.messageObject.setDescription(response);
   }
 
   displayBuildingList(user){
     var nbuilding=null,
         response="";
     response="";
-    messageObject.setTitle("Buy buildings list");
+    this.messageObject.setTitle("Buy buildings list");
     for(var w in this.constructor.elements){
       nbuilding=user.getBuilding(w);
       if(!nbuilding){
@@ -91,14 +110,14 @@ module.exports = class Game {
         response += "\n";
       }
     }
-    messageObject.addField("List of buildings",response);
+    this.messageObject.addField("List of buildings",response);
   }
 
-  execute_buy(messageObject,user,command){
+  execute_buy(user,command){
     if(command.length>1){
-      this.buyBuilding(messageObject,command,user)
+      this.buyBuilding(command,user)
     } else {
-      this.displayBuildingList(messageObject,user);
+      this.displayBuildingList(user);
     }
   }
 

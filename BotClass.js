@@ -8,8 +8,8 @@
 **/
 
 const Discord = require('discord.js');
-const Game = require(__dirname+"/game/GameClass.js");
 const Message = require(__dirname+"/game/MessageClass.js");
+const Game = require(__dirname+"/game/GameClass.js");
 
 module.exports = class Bot {
   constructor() {
@@ -38,7 +38,7 @@ module.exports = class Bot {
     this.client.login(token);
   }
 
-  commandHandler(msg,messageObject){
+  commandHandler(msg){
     let response = "";
     let text = msg.content+"";
     var user=this.game.getUser(msg.author);
@@ -50,10 +50,9 @@ module.exports = class Bot {
       let call = this.game.functionPrefix+command[0];
 
       if(typeof this.game[call] === 'function'){
-        this.game[call](messageObject,user,command);
+        this.game[call](user,command);
       } else {
-        messageObject.setTitle("Unknown command");
-        messageObject.setDescription("Please write "+this.prefix +"help to see the command list.");
+        this.game.errorMessage();
       }
     }
 
@@ -63,14 +62,12 @@ module.exports = class Bot {
   onMessage(msg){
     if(msg.hasOwnProperty("author") && !msg.author.bot){
       let text = msg.content+"";
-      let messageObject = new Message(this.client);
-
-      this.commandHandler(msg,messageObject);
-
-      let response=messageObject.print();
+      this.game.newMessage(new Message(this.client));
+      this.commandHandler(msg);
+      let response=this.game.getMessage();
       if(response!==null){
         msg.channel.send(response)
-        .then(message => console.log(`Sent message: ${message.content}`))
+        .then(message => console.log(`Sent message: ${response}`))
         .catch(console.error);
       }
     }
