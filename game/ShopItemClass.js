@@ -16,7 +16,6 @@ module.exports = class ShopItem {
   }
 
   acquire(user){
-    console.log(this.constructor.name);
     var item=user["get"+this.constructor.name](this.id);
     if(item){
       return false;

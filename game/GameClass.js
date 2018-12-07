@@ -73,12 +73,10 @@ module.exports = class Game {
     response="List of buildings:\n";
     for(var w in this.constructor.elements){
       nbuilding=user.getBuilding(w);
-      if(nbuilding){
-        nbuilding=nbuilding.nextLevelInfo();
-      } else {
-        nbuilding=this.constructor.elements[w];
-        nbuilding.level=1;
+      if(!nbuilding){
+        nbuilding= this.constructor.create(w);
       }
+      nbuilding=nbuilding.nextLevelInfo();
       response += w+". "+ nbuilding.name + " ("+nbuilding.level+")" +
       " Price: "+ nbuilding.cost +
       " Cps: "+ nbuilding.cps;

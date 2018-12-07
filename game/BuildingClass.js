@@ -12,14 +12,18 @@ module.exports = class Building extends ShopItem {
   }
 
   nextLevelInfo(){
-    return {
+    var response = {
       level:this.level+1,
       name:this.name,
       cost:this.cost,
-      costMultiplier:1.5,
-      cps:this.cps*this.cpsMultiplier,
-      cpsMultiplier:1.5
+      costMultiplier:this.costMultiplier,
+      cps:this.cps,
+      cpsMultiplier:this.cpsMultiplier
+    };
+    if(this.owner!==null){
+      response.cps *= this.cpsMultiplier;
     }
+    return response;
   }
 
   apply(){
