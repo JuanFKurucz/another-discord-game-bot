@@ -81,7 +81,10 @@ module.exports = class Game {
       }
       response += w+". "+ nbuilding.name + " ("+nbuilding.level+")" +
       " Price: "+ nbuilding.cost +
-      " Cps: "+ nbuilding.cps+"\n";
+      " Cps: "+ nbuilding.cps;
+      if(user.cookies<nbuilding.cost){
+        response += " (Not affordable yet)\n\n";
+      } else {response += "\n\n";}
     }
     return response;
   }
