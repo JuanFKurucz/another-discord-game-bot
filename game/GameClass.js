@@ -44,46 +44,55 @@ module.exports = class Game {
     return response;
   }
 
+  buyBuilding(command,user){
+    let response="";
+    let id_building = parseInt(command[1]);
+    var userBuilding = user.getBuilding(id_building);
+    if(userBuilding== null) {
+      var building = this.constructor.create(id_building);
+      if(building!=null){
+        if(building.acquire(user)){
+          response="You bought a building "+id_building+"!";
+        } else {
+          response=user.mention+" don't have enough cookies...";
+        }
+      } else {
+        response = "This building doesn't exist";
+      }
+    } else if(userBuilding.levelUp(user)){
+      response="You upgraded your building !";
+    } else {
+      response=user.mention+" don't have enough cookies...";
+    }
+    return response;
+  }
+
+  displayBuildingList(user){
+    var nbuilding=null,
+        response="";
+    response="List of buildings:\n";
+    for(var w in this.constructor.elements){
+      nbuilding=user.getBuilding(w);
+      if(nbuilding){
+        nbuilding=nbuilding.nextLevelInfo();
+      } else {
+        nbuilding=this.constructor.elements[w];
+        nbuilding.level=1;
+      }
+      response += w+". "+ nbuilding.name + " ("+nbuilding.level+")" +
+      " Price: "+ nbuilding.cost +
+      " Cps: "+ nbuilding.cps+"\n";
+    }
+    return response;
+  }
+
   execute_buy(user,command){
     let response='';
     if(command.length>1){
-      let id_building = parseInt(command[1]);
-      var userBuilding = user.getBuilding(id_building);
-      if(userBuilding== null) {
-        var building = this.constructor.create(id_building);
-        if(building!=null){
-          if(building.acquire(user)){
-            response="You bought a building "+id_building+"!";
-          } else {
-            response=user.mention+" don't have enough cookies...";
-          }
-        } else {
-          response = "This building doesn't exist";
-        }
-      } else if(userBuilding.levelUp(user)){
-        response="You upgraded your building !";
-      } else {
-        response=user.mention+" don't have enough cookies...";
-      }
+      response=this.buyBuilding(command,user)
     } else {
-      var nbuilding;
-      response="List of buildings\n";
-      for(var w in this.constructor.elements){
-        if(user.getBuilding(w)==null){
-          response += this.constructor.elements[w].name +
-          " Price: "+ this.constructor.elements[w].cost +
-          " Cps: "+ this.constructor.elements[w].cps+"\n"
-        } else {
-          nbuilding = user.buildings[w].nextLevelInfo();
-          response += nbuilding.name +
-          " Price: "+ nbuilding.cost +
-          " Cps: "+ nbuilding.cps+"\n"
-        }
-
-      }
-
+      response=this.displayBuildingList(user);
     }
-
     return response;
   }
 

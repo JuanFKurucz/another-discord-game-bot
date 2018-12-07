@@ -13,8 +13,9 @@ module.exports = class Building extends ShopItem {
 
   nextLevelInfo(){
     return {
+      level:this.level+1,
       name:this.name,
-      cost:this.cost*this.costMultiplier,
+      cost:this.cost,
       costMultiplier:1.5,
       cps:this.cps*this.cpsMultiplier,
       cpsMultiplier:1.5
