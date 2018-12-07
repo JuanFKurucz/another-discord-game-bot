@@ -1,14 +1,17 @@
 'use strict';
-module.exports = class User {
-  constructor(client) {
+module.exports = class Message {
+  static client(){
+    
+  }
+  constructor() {
     this.color=3447003;
     this.title="";
     this.url="";
     this.description="";
     this.fields=[];
     this.footer={
-      icon_url:client.user.avatarURL,
-      text:client.user.username
+      icon_url:Message.client.user.avatarURL,
+      text:Message.client.user.username
     }
   }
 

@@ -16,7 +16,7 @@ module.exports = class Bot {
     this.prefix = "!";
     this.game = new Game();
     this.client = new Discord.Client();
-
+    Message.client = this.client;
     this.startDaemon();
   }
 
@@ -39,7 +39,7 @@ module.exports = class Bot {
   }
 
   commandHandler(msg){
-    let response = "";
+    let response = null;
     let text = msg.content+"";
     var user=this.game.getUser(msg.author);
 
@@ -50,9 +50,9 @@ module.exports = class Bot {
       let call = this.game.functionPrefix+command[0];
 
       if(typeof this.game[call] === 'function'){
-        this.game[call](user,command);
+        return this.game[call](user,command);
       } else {
-        this.game.errorMessage();
+        return this.game.errorMessage();
       }
     }
 
@@ -62,13 +62,15 @@ module.exports = class Bot {
   onMessage(msg){
     if(msg.hasOwnProperty("author") && !msg.author.bot){
       let text = msg.content+"";
-      this.game.newMessage(new Message(this.client));
-      this.commandHandler(msg);
-      let response=this.game.getMessage();
+      let response=this.commandHandler(msg);
       if(response!==null){
-        msg.channel.send(response)
-        .then(message => console.log(`Sent message: ${response}`))
-        .catch(console.error);
+        console.log(response);
+        response=response.print();
+        if(response!==null){
+          msg.channel.send(response)
+          .then(message => console.log(`Sent message: ${response}`))
+          .catch(console.error);
+        }
       }
     }
   }

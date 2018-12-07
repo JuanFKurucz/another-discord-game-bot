@@ -9,30 +9,19 @@ and handles the message with commandHandler.
 
 const User = require(__dirname+"/UserClass.js");
 const BuildingConstructor = require(__dirname+"/BuildingConstructorClass.js");
+const Message = require(__dirname+"/MessageClass.js");
 
 module.exports = class Game {
   constructor() {
     this.functionPrefix = "execute_";
     this.users = {};
     this.constructor = new BuildingConstructor();
-    this.messageObject = null;
-  }
-
-  newMessage(m){
-    this.messageObject = m;
   }
 
   errorMessage(){
-    this.messageObject.setTitle("Unknown command");
-    this.messageObject.setDescription("Please write help to see the command list.");
-  }
-
-  getMessage(){
-    let m = this.messageObject;
-    if(m!==null){
-      m=m.print();
-    }
-    this.messageObject = null;
+    var m = new Message();
+    m.setTitle("Unknown command");
+    m.setDescription("Please write help to see the command list.");
     return m;
   }
 
@@ -56,18 +45,21 @@ module.exports = class Game {
   }
 
   execute_info(user,command){
-    this.messageObject.setTitle("Info");
+    var m = new Message();
+    m.setTitle("Info");
     let response="You have "+user.cookies+" cookies";
-    this.messageObject.setDescription(response);
+    m.setDescription(response);
     let buildings="";
     for(var i in user.buildings){
       buildings+=user.buildings[i].name+" (Level: "+user.buildings[i].level+")\n";
     }
-    this.messageObject.addField("Buildings owned",buildings);
+    m.addField("Buildings owned",buildings);
+    return m;
   }
 
   buyBuilding(command,user){
-    this.messageObject.setTitle("Buy building");
+    var m = new Message();
+    m.setTitle("Buy building");
     let response="";
     let id_building = parseInt(command[1]);
     var userBuilding = user.getBuilding(id_building);
@@ -87,14 +79,16 @@ module.exports = class Game {
     } else {
       response=user.mention+" don't have enough cookies...";
     }
-    this.messageObject.setDescription(response);
+    m.setDescription(response);
+    return m;
   }
 
   displayBuildingList(user){
+    var m = new Message();
     var nbuilding=null,
         response="";
     response="";
-    this.messageObject.setTitle("List of buildings");
+    m.setTitle("List of buildings");
     for(var w in this.constructor.elements){
       nbuilding=user.getBuilding(w);
       if(!nbuilding){
@@ -110,14 +104,15 @@ module.exports = class Game {
         response += "\n";
       }
     }
-    this.messageObject.setDescription(response);
+    m.setDescription(response);
+    return m;
   }
 
   execute_buy(user,command){
     if(command.length>1){
-      this.buyBuilding(command,user)
+      return this.buyBuilding(command,user)
     } else {
-      this.displayBuildingList(user);
+      return this.displayBuildingList(user);
     }
   }
 
