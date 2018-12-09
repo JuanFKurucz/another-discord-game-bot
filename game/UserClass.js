@@ -50,7 +50,7 @@ module.exports = class User {
   addBuilding(building){
     this.buildings[building.id]=building;
   }
-  
+
   addUpgrade(upgrade){
     this.upgrades[upgrade.id]=upgrade;
   }

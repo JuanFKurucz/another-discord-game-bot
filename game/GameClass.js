@@ -111,7 +111,7 @@ module.exports = class Game {
     return m;
   }
 
-  buyUpgrade(command,user){
+  buyUpgrade(user,command){
     var m = new Message();
     m.setTitle("Buy upgrade");
     let response="";
@@ -121,7 +121,7 @@ module.exports = class Game {
       var upgrade= this.constructorU.create(id_upgrade);
     }
     if(upgrade != null){
-      if(upgrade.canBeApplied() && user.cookies>upgrade.cost){
+      if(upgrade.acquire(user)){
         response += "You bought an upgrade "+ id_upgrade+"!";
       } else {
         response += user.mention+" don't have enough cookies..."
@@ -167,7 +167,7 @@ module.exports = class Game {
 
   execute_upgrade(user, command){
     if(command.length>1){
-      return this.buyUpgrade(command, user);
+      return this.buyUpgrade(user, command);
     } else {
       return this.displayUpgradeList(user);
     }
