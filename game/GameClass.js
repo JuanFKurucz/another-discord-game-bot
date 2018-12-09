@@ -137,6 +137,7 @@ module.exports = class Game {
     var m = new Message();
     var upgrade = null;
     let response = "";
+    var i=1;
     m.setTitle("List of upgrades");
     for(var v in this.constructorU.elements){
       upgrade = user.getUpgrade(v);
@@ -144,8 +145,9 @@ module.exports = class Game {
         upgrade= this.constructorU.create(v);
       }
       if(!upgrade.isAcquired()){
-        response += v+". "+ upgrade.name +
+        response += i+". "+ upgrade.name +
         " Price: "+ upgrade.cost;
+        i++;
         if(user.cookies<upgrade.cost){
           response += " (Not affordable yet)\n";
         } else {
