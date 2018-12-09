@@ -20,10 +20,8 @@ module.exports = class Bot {
   }
 
   startDaemon(){
-    var self = this;
-    self.g = this.game;
-    self.set = setInterval(function(){
-      self.g.claimCookiesUsers();
+    setInterval( () => {
+      this.game.claimCookiesUsers();
     },1000);
   }
 
