@@ -11,6 +11,18 @@ module.exports = class Building extends ShopItem {
     this.level=0;
   }
 
+  print(){
+    return this.name+" (Level: "+this.level+") CPS: "+this.cps;
+  }
+
+  getLevel(){
+    return this.level;
+  }
+
+  getCps(){
+    return this.cps;
+  }
+
   nextLevelInfo(){
     var response = {
       level:this.level+1,

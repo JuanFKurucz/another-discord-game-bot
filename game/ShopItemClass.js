@@ -7,8 +7,28 @@ module.exports = class ShopItem {
     this.cost=cost;
   }
 
+  print(){
+    return this.name;
+  }
+
   apply(){
     //override
+  }
+
+  getName(){
+    return this.name;
+  }
+
+  getId(){
+    return this.id;
+  }
+
+  getCost(){
+    return this.cost;
+  }
+
+  getOwner(){
+    return this.owner;
   }
 
   canPurchase(user){

@@ -10,6 +10,10 @@ module.exports = class Upgrade extends ShopItem {
     this.multiplierName=multiplierName;
   }
 
+  print(){
+    return this.name+" "+this.multiplierName+": "+(parseFloat(this.multiplier)*100)+"%";
+  }
+
   isAcquired(){
     return this.owner !== null;
   }

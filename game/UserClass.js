@@ -22,9 +22,17 @@ module.exports = class User {
   }
 
   claimCookies(){
+    this.cookies += this.getTotalCps();
+  }
+
+  getTotalCps(){
+    let sum=0;
+
     for(var i in this.buildings){
-      this.cookies+=(parseFloat(this.buildings[i].cps))*this.multipliers["buildingMultiplier"];
+      sum+=(parseFloat(this.buildings[i].cps))*this.multipliers["buildingMultiplier"];
     }
+
+    return sum;
   }
 
   addCookie(){

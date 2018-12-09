@@ -37,25 +37,28 @@ module.exports = class BuyCommand extends Command {
   displayBuildingList(m,user){
     let building=null,
         buildingInfo="",
-        response="";
+        tmp="";
+
+    m.setTitle("List of buildings");
 
     for(var w in this.constructor.elements){
+      tmp="";
       building=user.getBuilding(w);
       if(!building){
         building=this.constructor.create(w);
       }
       buildingInfo=building.nextLevelInfo();
-      response += w+". "+ buildingInfo.name + " ("+buildingInfo.level+")" +
-                  " Price: "+ buildingInfo.cost +
-                  " Cps: "+ buildingInfo.cps;
-      if(!building.canPurchase(user)){
-        response += " (Not affordable yet)";
-      }
-      response += "\n";
-    }
 
-    m.setTitle("List of buildings");
-    m.setDescription(response);
+      if(!building.canPurchase(user)){
+        tmp = " (Not affordable yet)";
+      } else {
+        tmp = "";
+      }
+      m.addField(
+        w+". "+buildingInfo.name + " Level: "+buildingInfo.level + tmp,
+        " Price: "+ buildingInfo.cost + "   " +" Cps: "+ buildingInfo.cps
+      );
+    }
   }
 
   execute(m,user,command){

@@ -32,27 +32,29 @@ module.exports = class UpgradeCommand extends Command {
 
   displayUpgradeList(m,user){
     let upgrade = null,
-        response = "",
+        tmp = "",
         i=1;
 
+    m.setTitle("List of upgrades");
     for(var v in this.constructor.elements){
       upgrade = user.getUpgrade(v);
       if(!upgrade){
         upgrade= this.constructor.create(v);
       }
       if(!upgrade.isAcquired()){
-        response += i+". "+ upgrade.name +
-        " Price: "+ upgrade.cost;
         if(!upgrade.canPurchase(user)){
-          response += " (Not affordable yet)";
+          tmp = " (Not affordable yet)";
+        } else {
+          tmp = "";
         }
-        response += "\n";
+
+        m.addField(
+          i+". "+upgrade.name + tmp,
+          " Price: "+ upgrade.cost
+        );
         i++;
       }
     }
-
-    m.setTitle("List of upgrades");
-    m.setDescription(response);
   }
 
   execute(m,user,command){
