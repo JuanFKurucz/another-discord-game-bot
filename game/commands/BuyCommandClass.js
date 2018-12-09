@@ -1,6 +1,6 @@
 'use strict';
-const Command = require(__dirname+"/CommandClass.js");
-const BuildingConstructor = require("../BuildingConstructorClass.js");
+const Command = require("../CommandClass.js");
+const BuildingConstructor = require("../constructors/BuildingConstructorClass.js");
 
 module.exports = class BuyCommand extends Command {
   constructor(id,name,description) {
@@ -41,15 +41,15 @@ module.exports = class BuyCommand extends Command {
 
     for(var w in this.constructor.elements){
       building=user.getBuilding(w);
-      if(!nbuilding){
-        building= this.constructor.create(w);
+      if(!building){
+        building=this.constructor.create(w);
       }
-      buildingInfo=nbuilding.nextLevelInfo();
+      buildingInfo=building.nextLevelInfo();
       response += w+". "+ buildingInfo.name + " ("+buildingInfo.level+")" +
                   " Price: "+ buildingInfo.cost +
                   " Cps: "+ buildingInfo.cps;
-      if(building.canPurchase(user)){
-        response += " (Not affordable yet)\n";
+      if(!building.canPurchase(user)){
+        response += " (Not affordable yet)";
       }
       response += "\n";
     }

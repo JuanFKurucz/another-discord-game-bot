@@ -1,5 +1,5 @@
 'use strict';
-const Command = require(__dirname+"/CommandClass.js");
+const Command = require("../CommandClass.js");
 
 module.exports = class ErrorCommand extends Command {
   constructor(id,name,description) {

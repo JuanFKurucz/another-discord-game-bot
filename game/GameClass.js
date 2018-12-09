@@ -8,7 +8,7 @@ and handles the message with commandHandler.
 **/
 
 const User = require(__dirname+"/UserClass.js");
-const CommandConstructor = require(__dirname+"/commands/CommandConstructorClass.js");
+const CommandConstructor = require(__dirname+"/constructors/CommandConstructorClass.js");
 
 module.exports = class Game {
   constructor() {

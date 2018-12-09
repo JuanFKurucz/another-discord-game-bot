@@ -1,6 +1,6 @@
 'use strict';
-const Command = require(__dirname+"/CommandClass.js");
-const UpgradeConstructor = require("../UpgradeConstructorClass.js");
+const Command = require("../CommandClass.js");
+const UpgradeConstructor = require("../constructors/UpgradeConstructorClass.js");
 
 module.exports = class UpgradeCommand extends Command {
   constructor(id,name,description) {
@@ -43,7 +43,7 @@ module.exports = class UpgradeCommand extends Command {
       if(!upgrade.isAcquired()){
         response += i+". "+ upgrade.name +
         " Price: "+ upgrade.cost;
-        if(upgrade.canPurchase(user)){
+        if(!upgrade.canPurchase(user)){
           response += " (Not affordable yet)";
         }
         response += "\n";

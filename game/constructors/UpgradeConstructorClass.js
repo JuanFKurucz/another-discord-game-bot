@@ -1,7 +1,7 @@
 'use strict';
 
-const Constructor = require(__dirname+"/ConstructorClass.js");
-const Upgrade = require(__dirname+"/UpgradeClass.js");
+const Constructor = require("../ConstructorClass.js");
+const Upgrade = require("../items/UpgradeClass.js");
 
 module.exports = class UpgradeConstructor extends Constructor {
   constructor(){
