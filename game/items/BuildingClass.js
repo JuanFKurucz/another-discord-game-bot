@@ -41,12 +41,12 @@ module.exports = class Building extends ShopItem {
   apply(){
     this.level++;
     this.cost *= this.costMultiplier;
+    this.cps *= this.cpsMultiplier;
   }
 
   levelUp(){
     if(this.owner && this.canPurchase(this.owner)){
       this.apply();
-      this.cps *= this.cpsMultiplier;
       return true;
     }
     return false;
