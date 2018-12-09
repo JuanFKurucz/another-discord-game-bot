@@ -8,7 +8,7 @@
 **/
 
 const Discord = require('discord.js');
-const Message = require(__dirname+"/game/MessageClass.js");
+const Message = require('discord.js').RichEmbed;
 const Game = require(__dirname+"/game/GameClass.js");
 
 module.exports = class Bot {
@@ -16,7 +16,6 @@ module.exports = class Bot {
     this.prefix = "!";
     this.game = new Game();
     this.client = new Discord.Client();
-    Message.client = this.client;
     this.startDaemon();
   }
 
@@ -61,16 +60,13 @@ module.exports = class Bot {
 
   onMessage(msg){
     if(msg.hasOwnProperty("author") && !msg.author.bot){
-      let text = msg.content+"";
       let response=this.commandHandler(msg);
       if(response!==null){
-        console.log(response);
-        response=response.print();
-        if(response!==null){
-          msg.channel.send(response)
-          .then(message => console.log(`Sent message: ${response}`))
-          .catch(console.error);
-        }
+        response.setFooter(this.client.user.username);
+        response.setTimestamp(new Date());
+        msg.channel.send(response)
+        .then(message => console.log(`Sent message: ${response}`))
+        .catch(console.error);
       }
     }
   }

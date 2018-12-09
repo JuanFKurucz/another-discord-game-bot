@@ -9,7 +9,7 @@ and handles the message with commandHandler.
 
 const User = require(__dirname+"/UserClass.js");
 const BuildingConstructor = require(__dirname+"/BuildingConstructorClass.js");
-const Message = require(__dirname+"/MessageClass.js");
+const Message = require('discord.js').RichEmbed;
 
 module.exports = class Game {
   constructor() {
@@ -53,7 +53,9 @@ module.exports = class Game {
     for(var i in user.buildings){
       buildings+=user.buildings[i].name+" (Level: "+user.buildings[i].level+")\n";
     }
-    m.addField("Buildings owned",buildings);
+    if(buildings!=""){
+      m.addField("Buildings owned",buildings);
+    }
     return m;
   }
 
