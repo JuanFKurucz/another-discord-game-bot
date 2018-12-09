@@ -44,10 +44,10 @@ module.exports = class Bot {
       text=text.substring(this.prefix.length,text.length).toLowerCase();
       var command = text.split(" ");
 
-      let call = this.game.functionPrefix+command[0];
-
-      if(typeof this.game[call] === 'function'){
-        return this.game[call](user,command);
+      let call = command[0];
+      let commandFunc = this.game.getCommand(call);
+      if(commandFunc){
+        return commandFunc.execute(user,command);
       } else {
         return this.game.errorMessage();
       }
