@@ -9,13 +9,15 @@ and handles the message with commandHandler.
 
 const User = require(__dirname+"/UserClass.js");
 const BuildingConstructor = require(__dirname+"/BuildingConstructorClass.js");
+const UpgradeConstructor = require(__dirname+"/UpgradeConstructorClass.js");
 const Message = require('discord.js').RichEmbed;
 
 module.exports = class Game {
   constructor() {
     this.functionPrefix = "execute_";
     this.users = {};
-    this.constructor = new BuildingConstructor();
+    this.constructorB = new BuildingConstructor();
+    this.constructorU = new UpgradeConstructor();
   }
 
   errorMessage(){
@@ -66,7 +68,7 @@ module.exports = class Game {
     let id_building = parseInt(command[1]);
     var userBuilding = user.getBuilding(id_building);
     if(userBuilding== null) {
-      var building = this.constructor.create(id_building);
+      var building = this.constructorB.create(id_building);
       if(building!=null){
         if(building.acquire(user)){
           response="You bought a building "+id_building+"!";
@@ -89,12 +91,11 @@ module.exports = class Game {
     var m = new Message();
     var nbuilding=null,
         response="";
-    response="";
     m.setTitle("List of buildings");
-    for(var w in this.constructor.elements){
+    for(var w in this.constructorB.elements){
       nbuilding=user.getBuilding(w);
       if(!nbuilding){
-        nbuilding= this.constructor.create(w);
+        nbuilding= this.constructorB.create(w);
       }
       nbuilding=nbuilding.nextLevelInfo();
       response += w+". "+ nbuilding.name + " ("+nbuilding.level+")" +
@@ -110,11 +111,65 @@ module.exports = class Game {
     return m;
   }
 
+  buyUpgrade(command,user){
+    var m = new Message();
+    m.setTitle("Buy upgrade");
+    let response="";
+    let id_upgrade = parseInt(command[1]);
+    var userUpgrade = user.getUpgrade(id_upgrade);
+    if(userUpgrade==null){
+      var upgrade= this.constructorU.create(id_upgrade);
+    }
+    if(upgrade != null){
+      if(upgrade.canBeApplied() && user.cookies>upgrade.cost){
+        response += "You bought an upgrade "+ id_upgrade+"!";
+      } else {
+        response += user.mention+" don't have enough cookies..."
+      }
+    } else {
+      response = "This upgrade doesn't exist";
+    }
+    m.setDescription(response);
+    return m;
+    }
+
+  displayUpgradeList(user){
+    var m = new Message();
+    var upgrade = null;
+    let response = "";
+    m.setTitle("List of upgrades");
+    for(var v in this.constructorU.elements){
+      upgrade = user.getUpgrade(v);
+      if(!upgrade){
+        upgrade= this.constructorU.create(v);
+      }
+      if(!upgrade.isAcquired()){
+        response += v+". "+ upgrade.name +
+        " Price: "+ upgrade.cost;
+        if(user.cookies<upgrade.cost){
+          response += " (Not affordable yet)\n";
+        } else {
+          response += "\n";
+        }
+      }
+    }
+    m.setDescription(response);
+    return m;
+  }
+
   execute_buy(user,command){
     if(command.length>1){
       return this.buyBuilding(command,user)
     } else {
       return this.displayBuildingList(user);
+    }
+  }
+
+  execute_upgrade(user, command){
+    if(command.length>1){
+      return this.buyUpgrade(command, user);
+    } else {
+      return this.displayUpgradeList(user);
     }
   }
 
