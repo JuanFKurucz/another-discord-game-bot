@@ -46,11 +46,11 @@ module.exports = class Bot {
 
       let call = command[0];
       let commandFunc = this.game.getCommand(call);
-      if(commandFunc){
-        return commandFunc.execute(user,command);
-      } else {
-        return this.game.errorMessage();
+      response = new Message();
+      if(!commandFunc){
+        commandFunc=this.game.getCommand("error");
       }
+      commandFunc.execute(response,user,command);
     }
 
     return response;

@@ -1,6 +1,5 @@
 'use strict';
 const Command = require(__dirname+"/CommandClass.js");
-const Message = require('discord.js').RichEmbed;
 const UpgradeConstructor = require("../UpgradeConstructorClass.js");
 
 module.exports = class UpgradeCommand extends Command {
@@ -8,8 +7,7 @@ module.exports = class UpgradeCommand extends Command {
     super(id,name);
     this.constructor = new UpgradeConstructor();
   }
-  buyUpgrade(user,command){
-    var m = new Message();
+  buyUpgrade(m,user,command){
     m.setTitle("Buy upgrade");
     let response="";
     let id_upgrade = parseInt(command[1]);
@@ -27,11 +25,9 @@ module.exports = class UpgradeCommand extends Command {
       response = "This upgrade doesn't exist";
     }
     m.setDescription(response);
-    return m;
-    }
+  }
 
-  displayUpgradeList(user){
-    var m = new Message();
+  displayUpgradeList(m,user){
     var upgrade = null;
     let response = "";
     var i=1;
@@ -53,14 +49,13 @@ module.exports = class UpgradeCommand extends Command {
       }
     }
     m.setDescription(response);
-    return m;
   }
 
-  execute(user,command){
+  execute(m,user,command){
     if(command.length>1){
-      return this.buyUpgrade(user, command);
+      this.buyUpgrade(m, user, command);
     } else {
-      return this.displayUpgradeList(user);
+      this.displayUpgradeList(m, user);
     }
   }
 }

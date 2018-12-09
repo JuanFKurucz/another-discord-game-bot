@@ -1,7 +1,6 @@
 'use strict';
 const Command = require(__dirname+"/CommandClass.js");
 const BuildingConstructor = require("../BuildingConstructorClass.js");
-const Message = require('discord.js').RichEmbed;
 
 module.exports = class BuyCommand extends Command {
   constructor(id,name) {
@@ -9,8 +8,7 @@ module.exports = class BuyCommand extends Command {
     this.constructor = new BuildingConstructor();
   }
 
-  buyBuilding(command,user){
-    var m = new Message();
+  buyBuilding(m,command,user){
     m.setTitle("Buy building");
     let response="";
     let id_building = parseInt(command[1]);
@@ -32,11 +30,9 @@ module.exports = class BuyCommand extends Command {
       response=user.mention+" don't have enough cookies...";
     }
     m.setDescription(response);
-    return m;
   }
 
-  displayBuildingList(user){
-    var m = new Message();
+  displayBuildingList(m,user){
     var nbuilding=null,
         response="";
     m.setTitle("List of buildings");
@@ -56,14 +52,13 @@ module.exports = class BuyCommand extends Command {
       }
     }
     m.setDescription(response);
-    return m;
   }
 
-  execute(user,command){
+  execute(m,user,command){
     if(command.length>1){
-      return this.buyBuilding(command,user)
+      this.buyBuilding(m,command,user)
     } else {
-      return this.displayBuildingList(user);
+      this.displayBuildingList(m,user);
     }
   }
 }

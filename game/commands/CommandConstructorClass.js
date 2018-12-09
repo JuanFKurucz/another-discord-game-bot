@@ -5,6 +5,10 @@ const Constructor = require("../ConstructorClass.js");
 module.exports = class CommandConstructor extends Constructor {
   constructor(){
     super({
+      "-1":{
+        name:"error",
+        constructor:require(__dirname+"/ErrorCommandClass.js")
+      },
       "1":{
         name:"info",
         constructor:require(__dirname+"/InfoCommandClass.js")

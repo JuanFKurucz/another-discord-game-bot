@@ -1,14 +1,12 @@
 'use strict';
 const Command = require(__dirname+"/CommandClass.js");
-const Message = require('discord.js').RichEmbed;
 
 module.exports = class InfoCommand extends Command {
   constructor(id,name) {
     super(id,name);
   }
 
-  execute(user,command){
-    var m = new Message();
+  execute(m,user,command){
     m.setTitle("Info");
     let response="You have "+user.cookies+" cookies";
     m.setDescription(response);
@@ -19,6 +17,5 @@ module.exports = class InfoCommand extends Command {
     if(buildings!=""){
       m.addField("Buildings owned",buildings);
     }
-    return m;
   }
 }

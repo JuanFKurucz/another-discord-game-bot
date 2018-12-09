@@ -14,7 +14,7 @@ module.exports = class Command {
     return this.id;
   }
 
-  execute(user,command){
+  execute(m,user,command){
     //to implement
   }
 }

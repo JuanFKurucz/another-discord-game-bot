@@ -8,7 +8,6 @@ and handles the message with commandHandler.
 **/
 
 const User = require(__dirname+"/UserClass.js");
-const Message = require('discord.js').RichEmbed;
 const CommandConstructor = require(__dirname+"/commands/CommandConstructorClass.js");
 
 module.exports = class Game {
@@ -24,13 +23,6 @@ module.exports = class Game {
     } else {
       return null;
     }
-  }
-
-  errorMessage(){
-    var m = new Message();
-    m.setTitle("Unknown command");
-    m.setDescription("Please write help to see the command list.");
-    return m;
   }
 
   claimCookiesUsers(){
