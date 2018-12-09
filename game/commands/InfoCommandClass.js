@@ -2,18 +2,19 @@
 const Command = require(__dirname+"/CommandClass.js");
 
 module.exports = class InfoCommand extends Command {
-  constructor(id,name) {
-    super(id,name);
+  constructor(id,name,description) {
+    super(id,name,description);
   }
 
   execute(m,user,command){
-    m.setTitle("Info");
     let response="You have "+user.cookies+" cookies";
-    m.setDescription(response);
     let buildings="";
     for(var i in user.buildings){
       buildings+=user.buildings[i].name+" (Level: "+user.buildings[i].level+")\n";
     }
+
+    m.setTitle("Info");
+    m.setDescription(response);
     if(buildings!=""){
       m.addField("Buildings owned",buildings);
     }

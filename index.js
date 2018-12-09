@@ -14,5 +14,5 @@ const token = 'NTE4NDc3Nzc3NTcwMTAzMjk2.DuRVpw.FrIJP52YjMI_ZRr2Jr_VI0ZzhmI';
 
 let db = new DataBase();
 
-let botObject = new Bot();
+let botObject = Bot.get();
 botObject.start(token);

@@ -3,16 +3,16 @@ const Command = require(__dirname+"/CommandClass.js");
 const BuildingConstructor = require("../BuildingConstructorClass.js");
 
 module.exports = class BuyCommand extends Command {
-  constructor(id,name) {
-    super(id,name);
+  constructor(id,name,description) {
+    super(id,name,description);
     this.constructor = new BuildingConstructor();
   }
 
   buyBuilding(m,command,user){
-    m.setTitle("Buy building");
-    let response="";
-    let id_building = parseInt(command[1]);
-    var userBuilding = user.getBuilding(id_building);
+    let response="",
+        id_building = parseInt(command[1]),
+        userBuilding = user.getBuilding(id_building);
+
     if(userBuilding== null) {
       var building = this.constructor.create(id_building);
       if(building!=null){
@@ -29,28 +29,32 @@ module.exports = class BuyCommand extends Command {
     } else {
       response=user.mention+" don't have enough cookies...";
     }
+
+    m.setTitle("Buy building");
     m.setDescription(response);
   }
 
   displayBuildingList(m,user){
-    var nbuilding=null,
+    let building=null,
+        buildingInfo="",
         response="";
-    m.setTitle("List of buildings");
+
     for(var w in this.constructor.elements){
-      nbuilding=user.getBuilding(w);
+      building=user.getBuilding(w);
       if(!nbuilding){
-        nbuilding= this.constructor.create(w);
+        building= this.constructor.create(w);
       }
-      nbuilding=nbuilding.nextLevelInfo();
-      response += w+". "+ nbuilding.name + " ("+nbuilding.level+")" +
-      " Price: "+ nbuilding.cost +
-      " Cps: "+ nbuilding.cps;
-      if(user.cookies<nbuilding.cost){
+      buildingInfo=nbuilding.nextLevelInfo();
+      response += w+". "+ buildingInfo.name + " ("+buildingInfo.level+")" +
+                  " Price: "+ buildingInfo.cost +
+                  " Cps: "+ buildingInfo.cps;
+      if(building.canPurchase(user)){
         response += " (Not affordable yet)\n";
-      } else {
-        response += "\n";
       }
+      response += "\n";
     }
+
+    m.setTitle("List of buildings");
     m.setDescription(response);
   }
 

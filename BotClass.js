@@ -11,12 +11,25 @@ const Discord = require('discord.js');
 const Message = require('discord.js').RichEmbed;
 const Game = require(__dirname+"/game/GameClass.js");
 
+let BotObject = null;
+
 module.exports = class Bot {
+  static get(){
+    if(BotObject===null){
+      BotObject = new Bot();
+    }
+    return BotObject;
+  }
+
   constructor() {
     this.prefix = "!";
     this.game = new Game();
     this.client = new Discord.Client();
     this.startDaemon();
+  }
+
+  getPrefix(){
+    return this.prefix;
   }
 
   startDaemon(){

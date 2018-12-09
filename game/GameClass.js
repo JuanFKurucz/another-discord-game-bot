@@ -17,6 +17,10 @@ module.exports = class Game {
     this.commands = this.commandConstructor.initCommands();
   }
 
+  getCommands(){
+    return this.commands;
+  }
+
   getCommand(command){
     if(this.commands[command]){
       return this.commands[command];
