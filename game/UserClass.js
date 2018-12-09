@@ -35,8 +35,12 @@ module.exports = class User {
     return sum;
   }
 
+  getTotalCpm(){
+      return this.cpm*this.multipliers["cpmMultiplier"];
+  }
+
   addCookie(){
-    this.cookies+=this.cpm*this.multipliers["cpmMultiplier"];
+    this.cookies+=this.getTotalCpm();
   }
 
   getBuilding(id){
