@@ -9,6 +9,6 @@ module.exports = class ErrorCommand extends Command {
   execute(m,user,command){
     let prefix = new require("../../BotClass.js").get().getPrefix();
     m.setTitle("Unknown command");
-    m.setDescription("Please write "+prefix+"help to see the command list"); 
+    m.setDescription("Please write "+prefix+"help to see the command list");
   }
 }

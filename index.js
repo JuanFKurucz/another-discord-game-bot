@@ -8,8 +8,8 @@
   Here we just call for Bot and DataBase classes and start them.
 **/
 
-const Bot = new require(__dirname+"/BotClass.js");
-const { dbChangeEnable } = require(__dirname+"/DataBaseClass.js");
+const Bot = new require(__dirname+"/src/BotClass.js");
+const { dbChangeEnable } = require(__dirname+"/src/DataBaseClass.js");
 const token = 'NTE4NDc3Nzc3NTcwMTAzMjk2.DuRVpw.FrIJP52YjMI_ZRr2Jr_VI0ZzhmI';
 
 var argumentDatabase = process.argv[2];

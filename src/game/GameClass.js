@@ -52,8 +52,8 @@ module.exports = class Game {
             user.buildings[buildingResults[br].id_building]=building;
           }
         }
+        upgradeResults=await dbQuery("SELECT id_upgrade FROM user_upgrade LEFT JOIN user ON user.id_user = user_upgrade.id_user");
         if(upgradeResults){
-          upgradeResults=await dbQuery("SELECT id_upgrade FROM user_upgrade LEFT JOIN user ON user.id_user = user_upgrade.id_user");
           for(var upr in upgradeResults){
             upgrade = upgradeConstractor.create(upgradeResults[upr].id_upgrade);
             upgrade.owner = user;
