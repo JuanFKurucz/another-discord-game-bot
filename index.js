@@ -9,10 +9,28 @@
 **/
 
 const Bot = new require(__dirname+"/BotClass.js");
+const { dbChangeEnable } = require(__dirname+"/DataBaseClass.js");
 const token = 'NTE4NDc3Nzc3NTcwMTAzMjk2.DuRVpw.FrIJP52YjMI_ZRr2Jr_VI0ZzhmI';
+
+var argumentDatabase = process.argv[2];
+if(argumentDatabase){
+  var bool = argumentDatabase.split("=")[1];
+  if(bool == 'false'){
+    console.log("DataBase disabled");
+    dbChangeEnable(false);
+  } else {
+    console.log("DataBase enabled");
+    dbChangeEnable(true);
+  }
+} else {
+  console.log("DataBase configuration is as default");
+}
+
+
 console.log("Starting bot please wait...");
 let botObject = Bot.get();
 console.log("Bot created");
+
 
 
 process.stdin.resume();//so the program will not close instantly

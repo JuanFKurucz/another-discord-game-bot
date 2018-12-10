@@ -7,7 +7,8 @@ const mysql = require('mysql');
 
 class DataBase {
 
-  constructor(){
+  constructor(enabled=true){
+    this.enabled = enabled;
     this.printErrors=true;
     this.options = {
       connectionLimit: 100,
@@ -23,6 +24,10 @@ class DataBase {
     };
     this.start();
   }
+  setEnabled(bool){
+    this.enabled=bool;
+  }
+
   start(){
     this.connection=mysql.createConnection(this.options);
     this.connection.connect((err) => {
@@ -56,21 +61,22 @@ class DataBase {
   }
 
   async query(sql,object){
-    if(this.connection===null){
+    if(this.connection===null || !this.enabled){
       return await (new Promise((resolve, reject) => {
         resolve(null);
       }));
-    }
-    let response;
-    try {
-      response = await this.queryPromise(sql,object);
-    } catch(e){
-      if(this.printErrors){
-        console.error(e);
+    } else {
+      let response;
+      try {
+        response = await this.queryPromise(sql,object);
+      } catch(e){
+        if(this.printErrors){
+          console.error(e);
+        }
+        response = null;
       }
-      response = null;
+      return response;
     }
-    return response;
   }
 }
 
@@ -79,3 +85,7 @@ const database = new DataBase();
 exports.dbQuery = async function(sql,object){
   return await database.query(sql,object);
 };
+
+exports.dbChangeEnable = function(bool){
+  database.setEnabled(bool);
+}
