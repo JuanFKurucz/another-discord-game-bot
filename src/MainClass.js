@@ -8,8 +8,8 @@
   Here we just call for Bot and DataBase classes and start them.
 **/
 
-  const Bot = new require(__dirname+"/BotClass.js");
-const {Logger} = new require(__dirname+"/Logger.js");
+const Bot = new require(__dirname+"/BotClass.js");
+const Logger = new require(__dirname+"/LoggerClass.js");
 const { dbChangeEnable } = require(__dirname+"/DataBaseClass.js");
 const token = 'NTE4NDc3Nzc3NTcwMTAzMjk2.DuRVpw.FrIJP52YjMI_ZRr2Jr_VI0ZzhmI';
 

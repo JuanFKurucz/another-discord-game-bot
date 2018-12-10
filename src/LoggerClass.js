@@ -13,7 +13,7 @@ const fs = require('fs'), util = require('util');
 
 let LogObject = null;
 
-class Logger {
+module.exports = class Logger {
   static get(){
     return LogObject;
   }
@@ -70,16 +70,5 @@ class Logger {
       ss = date.getSeconds();
     }
     this.output(message,lvl);
-  }
-}
-
-module.exports = {
-  Logger:Logger,
-  log:(message,lvl) => {
-    if(LogObject){
-      LogObject.log(message,lvl);
-    } else {
-      console.error("LogObject not created");
-    }
   }
 }
