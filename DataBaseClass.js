@@ -8,7 +8,8 @@ const mysql = require('mysql');
 class DataBase {
 
   constructor(){
-    this.connection=mysql.createConnection({
+    this.printErrors=true;
+    this.options = {
       connectionLimit: 100,
       /*host: "localhost",
       user: "root",
@@ -19,13 +20,20 @@ class DataBase {
       password: "alpaca123456",
       database: "notagame",
       debug: false
-    });
+    };
     this.start();
   }
   start(){
-    this.connection.connect(function(err) {
-      if (err) throw err;
-      console.log("Connected!");
+    this.connection=mysql.createConnection(this.options);
+    this.connection.connect((err) => {
+      if (err) {
+        if(this.printErrors){
+          console.error(err);
+        }
+        this.connection=null;
+      } else{
+        console.log("Connected!");
+      }
     });
   }
   queryPromise(sql,args) {
@@ -48,11 +56,18 @@ class DataBase {
   }
 
   async query(sql,object){
+    if(this.connection===null){
+      return await (new Promise((resolve, reject) => {
+        resolve(null);
+      }));
+    }
     let response;
     try {
       response = await this.queryPromise(sql,object);
     } catch(e){
-      console.error(e);
+      if(this.printErrors){
+        console.error(e);
+      }
       response = null;
     }
     return response;

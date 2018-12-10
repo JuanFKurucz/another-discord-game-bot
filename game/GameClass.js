@@ -36,29 +36,33 @@ module.exports = class Game {
         upgrade=null,
         buildingConstractor = new BuildingConstructor(),
         upgradeConstractor = new UpgradeConstructor();
+    if(userResults){
+      for(var ur in userResults){
+        user = new User(userResults[ur].id_user);
+        user.cookies = userResults[ur].cookies;
 
-    for(var ur in userResults){
-      user = new User(userResults[ur].id_user);
-      user.cookies = userResults[ur].cookies;
-
-      buildingResults=await dbQuery("SELECT id_building, level FROM user_building LEFT JOIN user ON user.id_user = user_building.id_user");
-      for(var br in buildingResults){
-        building = buildingConstractor.create(buildingResults[br].id_building);
-        building.owner = user;
-        for(var i=0;i<buildingResults[br].level;i++){
-          building.levelUp();
+        buildingResults=await dbQuery("SELECT id_building, level FROM user_building LEFT JOIN user ON user.id_user = user_building.id_user");
+        if(buildingResults){
+          for(var br in buildingResults){
+            building = buildingConstractor.create(buildingResults[br].id_building);
+            building.owner = user;
+            for(var i=0;i<buildingResults[br].level;i++){
+              building.levelUp();
+            }
+            user.buildings[buildingResults[br].id_building]=building;
+          }
         }
-        user.buildings[buildingResults[br].id_building]=building;
+        if(upgradeResults){
+          upgradeResults=await dbQuery("SELECT id_upgrade FROM user_upgrade LEFT JOIN user ON user.id_user = user_upgrade.id_user");
+          for(var upr in upgradeResults){
+            upgrade = upgradeConstractor.create(upgradeResults[upr].id_upgrade);
+            upgrade.owner = user;
+            upgrade.apply();
+            user.upgrades[upgradeResults[upr].id_upgrade] = upgrade;
+          }
+        }
+        this.users[userResults[ur].id_user] = user;
       }
-
-      upgradeResults=await dbQuery("SELECT id_upgrade FROM user_upgrade LEFT JOIN user ON user.id_user = user_upgrade.id_user");
-      for(var upr in upgradeResults){
-        upgrade = upgradeConstractor.create(upgradeResults[upr].id_upgrade);
-        upgrade.owner = user;
-        upgrade.apply();
-        user.upgrades[upgradeResults[upr].id_upgrade] = upgrade;
-      }
-      this.users[userResults[ur].id_user] = user;
     }
   }
 

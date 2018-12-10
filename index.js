@@ -10,9 +10,9 @@
 
 const Bot = new require(__dirname+"/BotClass.js");
 const token = 'NTE4NDc3Nzc3NTcwMTAzMjk2.DuRVpw.FrIJP52YjMI_ZRr2Jr_VI0ZzhmI';
-
+console.log("Starting bot please wait...");
 let botObject = Bot.get();
-
+console.log("Bot created");
 
 
 process.stdin.resume();//so the program will not close instantly
@@ -36,3 +36,4 @@ process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
 
 
 botObject.start(token);
+console.log("Bot initiated");
