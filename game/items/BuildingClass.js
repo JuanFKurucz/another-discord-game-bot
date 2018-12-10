@@ -23,6 +23,14 @@ module.exports = class Building extends ShopItem {
     return this.cps;
   }
 
+  getDataBaseObject(user){
+    let o = {};
+    o["id_"+this.constructor.name.toLowerCase()]=this.id;
+    o["id_user"]=user.getId();
+    o["level"]=this.level;
+    return o;
+  }
+
   nextLevelInfo(){
     var response = {
       level:this.level+1,
@@ -38,15 +46,17 @@ module.exports = class Building extends ShopItem {
     return response;
   }
 
-  apply(){
+  apply(reduce){
     this.level++;
-    this.cost *= this.costMultiplier;
+    if(reduce){
+      this.cost *= this.costMultiplier;
+    }
     this.cps *= this.cpsMultiplier;
   }
 
-  levelUp(){
-    if(this.owner && this.canPurchase(this.owner)){
-      this.apply();
+  levelUp(reduce=true){
+    if(this.owner && (this.canPurchase(this.owner)|| !reduce)){
+      this.apply(reduce);
       return true;
     }
     return false;

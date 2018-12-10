@@ -3,7 +3,7 @@ module.exports = class User {
   constructor(id) {
     this.mention="<@!"+id+">";
     this.id=id;
-    this.cookies = 100000;
+    this.cookies = 0;
     this.cpm = 1;
 
     this.multipliers={
@@ -15,6 +15,14 @@ module.exports = class User {
     this.buildings={};
     this.upgrades={};
     this.info=null;
+  }
+
+  getId(){
+    return this.id;
+  }
+
+  getCookies(){
+    return this.cookies;
   }
 
   setInfo(info){

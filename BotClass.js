@@ -38,7 +38,12 @@ module.exports = class Bot {
     },1000);
   }
 
-  start(token){
+  async saveDatabase(){
+    await this.game.saveUsers();
+  }
+
+  async start(token){
+    await this.game.loadUsers();
     this.client.on('ready', () => {
       console.log(`Logged in as ${this.client.user.tag}!`);
     });
@@ -48,10 +53,10 @@ module.exports = class Bot {
     this.client.login(token);
   }
 
-  commandHandler(msg){
+  async commandHandler(msg){
     let response = null;
     let text = msg.content+"";
-    var user=this.game.getUser(msg.author);
+    var user=await this.game.getUser(msg.author);
 
     if(text.indexOf(this.prefix)===0){
       text=text.substring(this.prefix.length,text.length).toLowerCase();
@@ -69,9 +74,9 @@ module.exports = class Bot {
     return response;
   }
 
-  onMessage(msg){
+  async onMessage(msg){
     if(msg.hasOwnProperty("author") && !msg.author.bot){
-      let response=this.commandHandler(msg);
+      let response=await this.commandHandler(msg);
       if(response!==null){
         response.setFooter(this.client.user.username);
         response.setTimestamp(new Date());

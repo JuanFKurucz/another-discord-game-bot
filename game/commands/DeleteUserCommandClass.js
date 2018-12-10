@@ -1,5 +1,6 @@
 'use strict';
 const Command = require("../CommandClass.js");
+const { dbQuery } = require("../../DataBaseClass.js");
 
 module.exports = class ErrorCommand extends Command {
   constructor(id,name,description) {
@@ -7,8 +8,8 @@ module.exports = class ErrorCommand extends Command {
   }
 
   execute(m,user,command){
-    let prefix = new require("../../BotClass.js").get().getPrefix();
-    m.setTitle("Unknown command");
-    m.setDescription("Please write "+prefix+"help to see the command list"); 
+    new require("../../BotClass.js").get().game.deleteUser(user);
+    m.setTitle("Delete user");
+    m.setDescription("User deleted successfully");
   }
 }

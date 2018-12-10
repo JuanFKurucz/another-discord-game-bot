@@ -5,6 +5,11 @@ const Constructor = require("../ConstructorClass.js");
 module.exports = class CommandConstructor extends Constructor {
   constructor(){
     super({
+      "-2":{
+        name:"deleteuser",
+        description:"Removes yourself from the game database",
+        constructor:require("../commands/DeleteUserCommandClass.js")
+      },
       "-1":{
         name:"error",
         description:"Default error message for unknown commands",
