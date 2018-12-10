@@ -15,13 +15,9 @@ const token = 'NTE4NDc3Nzc3NTcwMTAzMjk2.DuRVpw.FrIJP52YjMI_ZRr2Jr_VI0ZzhmI';
 var argumentDatabase = process.argv[2];
 if(argumentDatabase){
   var bool = argumentDatabase.split("=")[1];
-  if(bool == 'false'){
-    console.log("DataBase disabled");
-    dbChangeEnable(false);
-  } else {
-    console.log("DataBase enabled");
-    dbChangeEnable(true);
-  }
+  var boolValue = bool == 'true';
+  dbChangeEnable(boolValue);
+  console.log("DataBase set to "+boolValue);
 } else {
   console.log("DataBase configuration is as default");
 }
