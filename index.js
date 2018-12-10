@@ -31,8 +31,8 @@ console.log("Bot created");
 
 process.stdin.resume();//so the program will not close instantly
 
-function exitHandler(options, exitCode) {
-    botObject.saveDatabase();
+async function exitHandler(options, exitCode) {
+    await botObject.saveDatabase();
     if (options.cleanup) console.log('clean');
     if (exitCode || exitCode === 0) console.log(exitCode);
     if (options.exit) process.exit();
