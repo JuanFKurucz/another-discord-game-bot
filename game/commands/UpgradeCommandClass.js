@@ -41,7 +41,7 @@ module.exports = class UpgradeCommand extends Command {
       if(!upgrade){
         upgrade= this.constructor.create(v);
       }
-      if(!upgrade.isAcquired()){
+      if(!upgrade.getOwner()){
         if(!upgrade.canPurchase(user)){
           tmp = " (Not affordable yet)";
         } else {
