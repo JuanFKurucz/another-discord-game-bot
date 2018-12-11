@@ -53,7 +53,7 @@ module.exports = class Main {
       }
     });
 
-    Logger.init(this.data["level"]);
+    Logger.init(this.data["level"],this.data["maxTrace"]);
     dbChangeEnable(this.data["database"]);
 
     console.log("Configuration of Logger at level "+Logger.get().getLevel());

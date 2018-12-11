@@ -18,24 +18,33 @@ module.exports = class Logger {
     return LogObject;
   }
 
-  static init(level){
-    let l = (level) ? level : 3
-    LogObject = new Logger(l);
+  static init(level,maxTrace){
+    let l = (level) ? level : 3;
+    let mT = (maxTrace) ? maxTrace : 1;
+    LogObject = new Logger(l,mT);
   }
 
   getFileAndLine() {
+    if(this.maxTrace===0){
+      return "";
+    }
     var obj = {};
     Error.captureStackTrace(obj, this.getFileAndLine);
     let stackTrace = obj.stack.split("\n");
     let response = "Trace";
-    for(let i=3;i<stackTrace.length;i++){
+    let tope = 3+this.maxTrace;
+    if(stackTrace.length<tope){
+      tope = stackTrace.length;
+    }
+    for(let i=3;i<tope;i++){
       response+=" -> "+stackTrace[i].substring(stackTrace[i].indexOf("(")+1,stackTrace[i].indexOf(")")).replace(/^.*[\\\/]/, '');
     }
-    return response;
+    return response+"\n";
   };
 
-  constructor(level) {
+  constructor(level,maxTrace) {
     this.level = level;
+    this.maxTrace = maxTrace;
     this.outputFile = "./output/output-"+Date.now()+".txt";
     var self = this;
     console.log = function() {
@@ -65,7 +74,7 @@ module.exports = class Logger {
         mm = (date.getMinutes()+'').padStart(2,"0"),
         ss = (date.getSeconds()+'').padStart(2,"0");
 
-    result += "("+lvl+") ["+Dd+"-"+Mm+"-"+Yyyy+" "+hh+":"+mm+":"+ss+"] "+message+" \n"+this.getFileAndLine()+"\n\n";
+    result += "("+lvl+") ["+Dd+"-"+Mm+"-"+Yyyy+" "+hh+":"+mm+":"+ss+"] "+message+" \n"+this.getFileAndLine()+"\n";
 
     return result;
   }
