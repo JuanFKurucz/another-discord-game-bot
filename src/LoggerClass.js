@@ -33,10 +33,10 @@ module.exports = class Logger {
       response = "";
       end = "";
     }
-    var obj = {};
+    let obj = {};
     Error.captureStackTrace(obj, this.getFileAndLine);
-    let stackTrace = obj.stack.split("\n");
 
+    let stackTrace = obj.stack.split("\n");
     let tope = 3+this.maxTrace;
     if(stackTrace.length<tope){
       tope = stackTrace.length;
@@ -51,7 +51,7 @@ module.exports = class Logger {
     this.level = level;
     this.maxTrace = maxTrace;
     this.outputFile = "./output/output-"+Date.now()+".txt";
-    var self = this;
+    let self = this;
     console.log = function() {
       let l = 3;
       if(!isNaN(arguments[arguments.length-1])){
@@ -62,7 +62,7 @@ module.exports = class Logger {
       self.output(cute);
       process.stdout.write(cute);
     };
-    //console.error = console.log;
+    console.error = console.log;
   }
 
   getLevel(){

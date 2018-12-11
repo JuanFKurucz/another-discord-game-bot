@@ -20,16 +20,16 @@ module.exports = class Main {
   constructor() {
     this.data = {};
     this.configuration();
-    console.log("Starting bot please wait...");
+    console.log("Starting bot please wait...",1);
     this.botObject = Bot.get();
-    console.log("Bot created");
+    console.log("Bot created",1);
     process.stdin.resume();//so the program will not close instantly
   }
 
   async exitHandler(options, exitCode) {
       await Bot.get().saveDatabase();
-      if (options.cleanup) console.log('clean');
-      if (exitCode || exitCode === 0) console.log(exitCode);
+      if (options.cleanup) console.log('clean',0);
+      if (exitCode || exitCode === 0) console.log("exitCode",exitCode,0);
       if (options.exit) process.exit();
   }
 
@@ -46,9 +46,10 @@ module.exports = class Main {
   }
 
   configuration(){
+    let d;
     process.argv.forEach((val, index) => {
       if(val.includes("=")){
-        let d = argumentDatabase.split("=");
+        d = argumentDatabase.split("=");
         this.data[d[0]]=d[1];
       }
     });
@@ -56,12 +57,12 @@ module.exports = class Main {
     Logger.init(this.data["level"],this.data["maxTrace"]);
     dbChangeEnable(this.data["database"]);
 
-    console.log("Configuration of Logger at level "+Logger.get().getLevel());
+    console.log("Configuration of Logger at level "+Logger.get().getLevel(),1);
   }
 
   start(token){
     this.onExit();
     this.botObject.start(token);
-    console.log("Bot initiated");
+    console.log("Bot initiated",1);
   }
 }
