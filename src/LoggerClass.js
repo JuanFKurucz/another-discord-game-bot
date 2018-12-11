@@ -25,13 +25,18 @@ module.exports = class Logger {
   }
 
   getFileAndLine() {
+    let response = "\nTrace";
+    let end = "\n";
     if(this.maxTrace===0){
       return "";
+    } else if(this.maxTrace===1){
+      response = "";
+      end = "";
     }
     var obj = {};
     Error.captureStackTrace(obj, this.getFileAndLine);
     let stackTrace = obj.stack.split("\n");
-    let response = "Trace";
+
     let tope = 3+this.maxTrace;
     if(stackTrace.length<tope){
       tope = stackTrace.length;
@@ -39,7 +44,7 @@ module.exports = class Logger {
     for(let i=3;i<tope;i++){
       response+=" -> "+stackTrace[i].substring(stackTrace[i].indexOf("(")+1,stackTrace[i].indexOf(")")).replace(/^.*[\\\/]/, '');
     }
-    return response+"\n";
+    return response+end;
   };
 
   constructor(level,maxTrace) {
@@ -74,7 +79,7 @@ module.exports = class Logger {
         mm = (date.getMinutes()+'').padStart(2,"0"),
         ss = (date.getSeconds()+'').padStart(2,"0");
 
-    result += "("+lvl+") ["+Dd+"-"+Mm+"-"+Yyyy+" "+hh+":"+mm+":"+ss+"] "+message+" \n"+this.getFileAndLine()+"\n";
+    result += "("+lvl+") ["+Dd+"-"+Mm+"-"+Yyyy+" "+hh+":"+mm+":"+ss+"] "+message+" "+this.getFileAndLine()+"\n";
 
     return result;
   }
