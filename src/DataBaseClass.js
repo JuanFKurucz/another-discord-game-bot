@@ -43,11 +43,15 @@ class DataBase {
   }
   queryPromise(sql,args) {
     return new Promise((resolve,reject ) => {
-      this.connection.query(sql,args,(err,rows) => {
-        if (err)
-          return reject(err);
-        resolve(rows);
-      });
+      if(this.connection===null || this.enabled===false){
+        reject(null);
+      } else {
+        this.connection.query(sql,args,(err,rows) => {
+          if (err)
+            return reject(err);
+          resolve(rows);
+        });
+      }
     });
   }
   close() {
@@ -61,22 +65,27 @@ class DataBase {
   }
 
   async query(sql,object){
-    if(this.connection===null || !this.enabled){
-      return await (new Promise((resolve, reject) => {
-        resolve(null);
-      }));
-    } else {
-      let response;
-      try {
-        response = await this.queryPromise(sql,object);
+    console.log(sql);
+    let response;
+    try {
+      response = await this.queryPromise(sql,object);
+    } catch(e){
+      if(this.printErrors){
+        console.error(e);
+      }
+      response = null;
+    }
+    if(response !== null){
+      try{
+        response = response[Symbol.iterator]();
       } catch(e){
         if(this.printErrors){
           console.error(e);
         }
-        response = null;
+        response=null;
       }
-      return response;
     }
+    return response;
   }
 }
 
