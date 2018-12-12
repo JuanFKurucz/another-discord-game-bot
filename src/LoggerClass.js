@@ -48,21 +48,59 @@ module.exports = class Logger {
   };
 
   constructor(level,maxTrace) {
+    this.style={
+      "type":{
+        "reset":"\x1b[0m",
+        "bright":"\x1b[1m",
+        "dim":"\x1b[2m",
+        "underscore":"\x1b[4m",
+        "blink":"\x1b[5m",
+        "reverse":"\x1b[7m",
+        "hidden":"\x1b[8m"
+      },
+      "font":{
+        "black":"\x1b[30m",
+        "red":"\x1b[31m",
+        "green":"\x1b[32m",
+        "yellow":"\x1b[33m",
+        "blue":"\x1b[34m",
+        "magenta":"\x1b[35m",
+        "cyan":"\x1b[36m",
+        "white":"\x1b[37m"
+      },
+      "background":{
+        "back":"\x1b[40m",
+        "red":"\x1b[41m",
+        "green":"\x1b[42m",
+        "yellow":"\x1b[43m",
+        "blue":"\x1b[44m",
+        "magenta":"\x1b[45m",
+        "cyan":"\x1b[46m",
+        "white":"\x1b[47m"
+      }
+    };
+
     this.level = level;
     this.maxTrace = maxTrace;
     this.outputFile = "./output/output-"+Date.now()+".txt";
     let self = this;
     console.log = function() {
-      let l = 3;
-      if(!isNaN(arguments[arguments.length-1])){
-        l = parseInt(arguments[arguments.length-1]);
-      }
-      let r = util.format.apply(null, arguments);
-      let cute = self.parseOutput(r,l);
-      self.output(cute);
-      process.stdout.write(cute);
+      self.console(arguments);
     };
-    console.error = console.log;
+    console.error = function(){
+      self.console(arguments,"red");
+    };
+  }
+
+  console(args,color="white"){
+    let l = 3;
+    if(!isNaN(args[args.length-1])){
+      l = parseInt(args[args.length-1]);
+    }
+    let r = util.format.apply(null, args);
+    let cute = this.parseOutput(r,l);
+    this.output(cute);
+    process.stdout.write(this.style.font[color]+cute);
   }
 
   getLevel(){
