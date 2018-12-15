@@ -49,7 +49,7 @@ module.exports = class Main {
     let d;
     process.argv.forEach((val, index) => {
       if(val.includes("=")){
-        d = argumentDatabase.split("=");
+        d = val.split("=");
         this.data[d[0]]=d[1];
       }
     });

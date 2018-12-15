@@ -181,18 +181,24 @@ if(database.connection !== null && localDatabase.connection !== null){
 }
 
 exports.dbQuery = async function(sql,object){
-  let result=null,
-      temp;
-  if(database.connection){
-    result = await database.query(sql,object);
+  if(database.enabled===false){
+    return new Promise((resolve,reject) => {
+      reject(null);
+    })
+  } else {
+    let result=null,
+        temp;
+    if(database.connection){
+      result = await database.query(sql,object);
+    }
+    if(localDatabase.connection){
+      temp = await localDatabase.query(sql,object);
+    }
+    if(result===null){
+      result=temp;
+    }
+    return result;
   }
-  if(localDatabase.connection){
-    temp = await localDatabase.query(sql,object);
-  }
-  if(result===null){
-    result=temp;
-  }
-  return result;
 };
 
 exports.dbChangeEnable = function(bool){
