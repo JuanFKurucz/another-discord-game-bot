@@ -37,11 +37,11 @@ module.exports = class Logger {
     Error.captureStackTrace(obj, this.getFileAndLine);
 
     let stackTrace = obj.stack.split("\n");
-    let tope = 3+this.maxTrace;
+    let tope = 5+this.maxTrace;
     if(stackTrace.length<tope){
       tope = stackTrace.length;
     }
-    for(let i=3;i<tope;i++){
+    for(let i=5;i<tope;i++){
       response+=" -> "+stackTrace[i].substring(stackTrace[i].indexOf("(")+1,stackTrace[i].indexOf(")")).replace(/^.*[\\\/]/, '');
     }
     return response+end;

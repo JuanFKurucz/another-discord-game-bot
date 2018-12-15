@@ -4,9 +4,9 @@
   This currently does nothing
 **/
 const mysql = require('mysql');
-const structure = ["building","upgrade","user","user_building","user_upgrade"];
 
 class DataBase {
+  static structure(){}
 
   constructor(config,enabled=true){
     this.enabled = enabled;
@@ -54,8 +54,8 @@ class DataBase {
     });
   }
 
-  async query(sql,object){
-    console.log(sql);
+  async query(sql,object,iterator=true){
+    console.log(this.options.host+": "+sql);
     let response;
     try {
       response = await this.queryPromise(sql,object);
@@ -67,7 +67,9 @@ class DataBase {
     }
     if(response !== null){
       try{
-        response = response[Symbol.iterator]();
+        if(iterator){
+          response = response[Symbol.iterator]();
+        }
       } catch(e){
         if(this.printErrors){
         //  console.error(e);
@@ -86,8 +88,8 @@ class DataBase {
           id,
           idName,
           tempResult;
-      for(let s=0;s<structure.length;s++){
-        table = structure[s];
+      for(let s=0;s<DataBase.structure.length;s++){
+        table = DataBase.structure[s];
         for(let userResult of (await db.query("SELECT * FROM "+table))){
           underscore = table.split("_");
           condition="";
@@ -102,12 +104,55 @@ class DataBase {
 
           tempResult=await this.query("SELECT * FROM "+table+" WHERE "+condition);
           if(!tempResult.next().done){
-            this.query("UPDATE "+table+" SET ? WHERE "+condition,userResult);
+            await this.query("UPDATE "+table+" SET ? WHERE "+condition,userResult);
           } else {
-            this.query("INSERT INTO "+table+" SET ?",userResult);
+            await this.query("INSERT INTO "+table+" SET ?",userResult);
           }
         }
       }
+      return new Promise((resolve,reject) => {
+        resolve();
+      })
+    } else {
+      return new Promise((resolve,reject) => {
+        reject();
+      })
+    }
+  }
+
+  static async update(db1,db2){
+    DataBase.structure = [];
+    if(db1.connection!=null && db2.connection!=null){
+      let dbname1=db1.options.database,
+          dbname2=db2.options.database,
+          times1=await db1.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname1+"'",{},false),
+          times2=await db2.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname2+"'",{},false);
+
+      let aux1=0;
+      let aux2=0;
+      let mayor=null;
+      let menor=null;
+
+      while(aux1<times1.length || aux2<times2.length){
+        DataBase.structure.push(times1[aux1]["TABLE_NAME"]);
+        if(mayor===null && menor===null){
+          if(times1[aux1]["UPDATE_TIME"]>times2[aux2]["UPDATE_TIME"]){
+            mayor=db1;
+            menor=db2;
+          } else if(times2[aux2]["UPDATE_TIME"]>times1[aux1]["UPDATE_TIME"]){
+            mayor=db2;
+            menor=db1;
+          }
+        }
+        aux1++;
+        aux2++;
+      }
+
+      return await menor.copyDatabase(mayor);
+    } else {
+      return new Promise((resolve,reject) => {
+        reject();
+      })
     }
   }
 }
@@ -131,8 +176,9 @@ const localDatabase = new DataBase({
   debug: false
 });
 
-
-localDatabase.copyDatabase(database);
+if(database.connection !== null && localDatabase.connection !== null){
+  //DataBase.update(database,localDatabase);
+}
 
 exports.dbQuery = async function(sql,object){
   let result=null,
