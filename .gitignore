@@ -60,4 +60,8 @@ typings/
 # next.js build output
 .next
 
-/output/*
+# exclude everything
+output/*
+
+# exception to the rule
+!output/.gitkeep 
