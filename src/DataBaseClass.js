@@ -37,10 +37,6 @@ class DataBase {
         aux2++;
       }
       await menor.copyDatabase(mayor)
-    } else {
-      await new Promise((resolve,reject) => {
-        resolve(null);
-      })
     }
   }
 
@@ -74,10 +70,6 @@ class DataBase {
           }
         });
       });
-    } else {
-      return await new Promise((resolve,reject) => {
-        resolve(false);
-      })
     }
   }
   queryPromise(sql,args) {
@@ -173,10 +165,6 @@ class DataBase {
         });
       });
       await Promise.all(promises);
-    } else {
-      await new Promise((resolve,reject) => {
-        resolve(null);
-      })
     }
   }
 
@@ -194,11 +182,7 @@ class DataBase {
 }
 
 exports.dbQuery = async function(sql,object){
-  if(database.enabled===false){
-    return new Promise((resolve,reject) => {
-      resolve(null);
-    })
-  } else {
+  if(database && database.enabled){
     let result=null,
         temp;
     if(database&&database.connection){
@@ -249,9 +233,5 @@ exports.dbChangeEnable = async function (bool="true"){
       await DataBase.update(database,localDatabase);
       console.log("Finished updating databases");
     }
-  } else {
-    await new Promise((resolve,reject) => {
-      resolve();
-    });
   }
 }
