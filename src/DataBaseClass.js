@@ -229,13 +229,9 @@ exports.dbChangeEnable = async function (bool="true"){
 
     database = new DataBase({
       connectionLimit: 100,
-    /*  host: "db4free.net",
+      host: "db4free.net",
       user: "notagame_jfk",
       password: "alpaca123456",
-      */
-      host: "192.168.1.111",
-      user: "test",
-      password: "",
       database: "notagame",
       acquireTimeout: 10000,
       debug: false
