@@ -57,7 +57,7 @@ module.exports = class UpgradeCommand extends Command {
     }
   }
 
-  execute(m,user,command){
+  async execute(m,user,command){
     if(command.length>1){
       this.buyUpgrade(m,user,command);
     } else {

@@ -7,7 +7,7 @@ module.exports = class ErrorCommand extends Command {
     super(id,name,description);
   }
 
-  execute(m,user,command){
+  async execute(m,user,command){
     new require("../../BotClass.js").get().game.deleteUser(user);
     m.setTitle("Delete user");
     m.setDescription("User deleted successfully");

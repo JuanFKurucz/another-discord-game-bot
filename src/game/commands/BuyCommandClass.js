@@ -8,7 +8,7 @@ module.exports = class BuyCommand extends Command {
     this.constructor = new BuildingConstructor();
   }
 
-  buyBuilding(m,command,user){
+  async buyBuilding(m,command,user){
     let response="",
         id_building = parseInt(command[1]),
         userBuilding = user.getBuilding(id_building);
@@ -24,7 +24,7 @@ module.exports = class BuyCommand extends Command {
       } else {
         response = "This building doesn't exist";
       }
-    } else if(userBuilding.levelUp(user)){
+    } else if(await userBuilding.levelUp(user)){
       response="You upgraded your building !";
     } else {
       response=user.mention+" don't have enough cookies...";
@@ -61,11 +61,11 @@ module.exports = class BuyCommand extends Command {
     }
   }
 
-  execute(m,user,command){
+  async execute(m,user,command){
     if(command.length>1){
-      this.buyBuilding(m,command,user)
+      await this.buyBuilding(m,command,user)
     } else {
-      this.displayBuildingList(m,user);
+      await this.displayBuildingList(m,user);
     }
   }
 }

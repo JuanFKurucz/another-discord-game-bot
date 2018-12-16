@@ -1,6 +1,7 @@
 'use strict';
 
 const ShopItem = require("../ShopItemClass.js");
+const { dbQuery } = require("../../DataBaseClass.js");
 
 module.exports = class Building extends ShopItem {
   constructor(id,name,cost,costMultiplier,cps,cpsMultiplier) {
@@ -54,9 +55,10 @@ module.exports = class Building extends ShopItem {
     this.cps *= this.cpsMultiplier;
   }
 
-  levelUp(reduce=true){
+  async levelUp(reduce=true){
     if(this.owner && (this.canPurchase(this.owner)|| !reduce)){
       this.apply(reduce);
+      await dbQuery("UPDATE user_"+this.constructor.name.toLowerCase() + " SET ? WHERE id_user = '"+this.owner.getId()+"' AND id_"+this.constructor.name.toLowerCase()+"= "+this.id,{"level":this.level});
       return true;
     }
     return false;

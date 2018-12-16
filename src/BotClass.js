@@ -75,9 +75,9 @@ module.exports = class Bot {
       let commandFunc = this.game.getCommand(call);
       response = new Message();
       if(!commandFunc){
-        commandFunc=this.game.getCommand("error");
+        commandFunc= this.game.getCommand("error");
       }
-      commandFunc.execute(response,user,command);
+      await commandFunc.execute(response,user,command);
     }
 
     return response;

@@ -25,7 +25,7 @@ module.exports = class InfoCommand extends Command {
     }
   }
 
-  execute(m,user,command){
+  async execute(m,user,command){
     let response="You have "+user.cookies+" cookies" + "\n" +
                   "CPS: "+user.getTotalCps() + "\n"+
                   "CPM: "+user.getTotalCpm();
