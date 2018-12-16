@@ -32,28 +32,38 @@ module.exports = class Game {
         building=null,
         upgrade=null,
         buildingConstractor = new BuildingConstructor(),
-        upgradeConstractor = new UpgradeConstructor();
+        upgradeConstractor = new UpgradeConstructor(),
+        userResults = await dbQuery("SELECT * FROM user"),
+        buildingResults = null,
+        upgradeResults = null;
+    if(userResults){
+      for(let userResult in userResults) {
+        user = new User(userResults[userResult].id_user);
+        user.cookies = userResults[userResult].cookies;
 
-    for(let userResult of (await dbQuery("SELECT * FROM user"))){
-      user = new User(userResult.id_user);
-      user.cookies = userResult.cookies;
-
-      for(let buildingResult of (await dbQuery("SELECT id_building, level FROM user_building LEFT JOIN user ON user.id_user = user_building.id_user"))){
-        building = buildingConstractor.create(buildingResult.id_building);
-        building.owner = user;
-        for(var i=0;i<buildingResult.level;i++){
-          building.levelUp();
+        buildingResults=await dbQuery("SELECT id_building, level FROM user_building LEFT JOIN user ON user.id_user = user_building.id_user");
+        if(buildingResults){
+          for(let buildingResult in buildingResults){
+            building = buildingConstractor.create(buildingResults[buildingResult].id_building);
+            building.owner = user;
+            for(var i=0;i<buildingResults[buildingResult].level;i++){
+              building.levelUp();
+            }
+            user.buildings[buildingResults[buildingResult].id_building]=building;
+          }
         }
-        user.buildings[buildingResult.id_building]=building;
-      }
 
-      for(let upgradeResult of (await dbQuery("SELECT id_upgrade FROM user_upgrade LEFT JOIN user ON user.id_user = user_upgrade.id_user"))){
-        upgrade = upgradeConstractor.create(upgradeResult.id_upgrade);
-        upgrade.owner = user;
-        upgrade.apply();
-        user.upgrades[upgradeResult.id_upgrade] = upgrade;
+        upgradeResults=await dbQuery("SELECT id_upgrade FROM user_upgrade LEFT JOIN user ON user.id_user = user_upgrade.id_user");
+        if(upgradeResults){
+          for(let upgradeResult in upgradeResults){
+            upgrade = upgradeConstractor.create(upgradeResults[upgradeResult].id_upgrade);
+            upgrade.owner = user;
+            upgrade.apply();
+            user.upgrades[upgradeResults[upgradeResult].id_upgrade] = upgrade;
+          }
+        }
+        this.users[userResults[userResult].id_user] = user;
       }
-      this.users[userResult.id_user] = user;
     }
   }
 

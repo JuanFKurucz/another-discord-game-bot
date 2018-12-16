@@ -9,32 +9,35 @@ class DataBase {
   static structure(){}
 
   constructor(config,enabled=true){
+    this.connection=null;
     this.enabled = enabled;
     this.printErrors=true;
     this.options = config;
-    this.start();
   }
+
   setEnabled(bool){
     this.enabled=bool;
   }
 
   start(){
-    this.connection=mysql.createConnection(this.options);
-    this.connection.connect((err) => {
-      if (err) {
-        if(this.printErrors){
-          console.error(err);
+    if(this.enabled){
+      this.connection=mysql.createConnection(this.options);
+      this.connection.connect((err) => {
+        if (err) {
+          if(this.printErrors){
+            console.error(err);
+          }
+          this.connection=null;
+        } else{
+          console.log("Connected!");
         }
-        this.connection=null;
-      } else{
-        console.log("Connected!");
-      }
-    });
+      });
+    }
   }
   queryPromise(sql,args) {
     return new Promise((resolve,reject ) => {
       if(this.connection===null || this.enabled===false){
-        reject(null);
+        resolve(null);
       } else {
         this.connection.query(sql,args,(err,rows) => {
           if (err)
@@ -54,7 +57,7 @@ class DataBase {
     });
   }
 
-  async query(sql,object,iterator=true){
+  async query(sql,object){
     console.log(this.options.host+": "+sql);
     let response;
     try {
@@ -64,18 +67,6 @@ class DataBase {
         console.error(e);
       }
       response = null;
-    }
-    if(response !== null){
-      try{
-        if(iterator){
-          response = response[Symbol.iterator]();
-        }
-      } catch(e){
-        if(this.printErrors){
-        //  console.error(e);
-        }
-        response=null;
-      }
     }
     return response;
   }
@@ -87,10 +78,12 @@ class DataBase {
           condition,
           id,
           idName,
-          tempResult;
+          tempResult,
+          promises=[];
       for(let s=0;s<DataBase.structure.length;s++){
         table = DataBase.structure[s];
-        for(let userResult of (await db.query("SELECT * FROM "+table))){
+        let userResults=await db.query("SELECT * FROM "+table);
+        for(let userResult in userResults){
           underscore = table.split("_");
           condition="";
           for(let u=0;u<underscore.length;u++){
@@ -98,24 +91,28 @@ class DataBase {
               condition+=" AND ";
             }
             idName="id_"+underscore[u];
-            id = userResult[idName];
+            id = userResults[userResult][idName];
             condition += idName+"="+id;
           }
 
           tempResult=await this.query("SELECT * FROM "+table+" WHERE "+condition);
-          if(!tempResult.next().done){
-            await this.query("UPDATE "+table+" SET ? WHERE "+condition,userResult);
-          } else {
-            await this.query("INSERT INTO "+table+" SET ?",userResult);
+          let call;
+          try{
+            if(tempResult){
+              call=this.query("UPDATE "+table+" SET ? WHERE "+condition,userResults[userResult]);
+            } else {
+              call=this.query("INSERT INTO "+table+" SET ?",userResults[userResult]);
+            }
+            promises.push(call);
+          }catch(e){
+            console.log(e);
           }
         }
       }
-      return new Promise((resolve,reject) => {
-        resolve();
-      })
+      await Promise.all(promises);
     } else {
       return new Promise((resolve,reject) => {
-        reject();
+        resolve(null);
       })
     }
   }
@@ -125,8 +122,8 @@ class DataBase {
     if(db1.connection!=null && db2.connection!=null){
       let dbname1=db1.options.database,
           dbname2=db2.options.database,
-          times1=await db1.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname1+"'",{},false),
-          times2=await db2.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname2+"'",{},false);
+          times1=await db1.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname1+"'"),
+          times2=await db2.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname2+"'");
 
       let aux1=0;
       let aux2=0;
@@ -151,7 +148,7 @@ class DataBase {
       return await menor.copyDatabase(mayor);
     } else {
       return new Promise((resolve,reject) => {
-        reject();
+        resolve(null);
       })
     }
   }
@@ -176,14 +173,11 @@ const localDatabase = new DataBase({
   debug: false
 });
 
-if(database.connection !== null && localDatabase.connection !== null){
-  //DataBase.update(database,localDatabase);
-}
 
 exports.dbQuery = async function(sql,object){
   if(database.enabled===false){
     return new Promise((resolve,reject) => {
-      reject(null);
+      resolve(null);
     })
   } else {
     let result=null,
@@ -201,6 +195,13 @@ exports.dbQuery = async function(sql,object){
   }
 };
 
-exports.dbChangeEnable = function(bool){
-  database.setEnabled(bool);
+exports.dbChangeEnable = function(bool="true"){
+  let boolValue = bool == "true";
+  database.setEnabled(boolValue);
+  localDatabase.setEnabled(boolValue);
+  database.start();
+  localDatabase.start();
+  if(database.connection !== null && localDatabase.connection !== null){
+  //  DataBase.update(database,localDatabase);
+  }
 }

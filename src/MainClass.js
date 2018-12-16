@@ -60,9 +60,9 @@ module.exports = class Main {
     console.log("Configuration of Logger at level "+Logger.get().getLevel(),1);
   }
 
-  start(token){
+  async start(token){
     this.onExit();
-    this.botObject.start(token);
+    await this.botObject.start(token);
     console.log("Bot initiated",1);
   }
 }
