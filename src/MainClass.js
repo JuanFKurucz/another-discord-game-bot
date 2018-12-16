@@ -19,11 +19,6 @@ const token = 'NTE4NDc3Nzc3NTcwMTAzMjk2.DuRVpw.FrIJP52YjMI_ZRr2Jr_VI0ZzhmI';
 module.exports = class Main {
   constructor() {
     this.data = {};
-    this.configuration();
-    console.log("Starting bot please wait...",1);
-    this.botObject = Bot.get();
-    console.log("Bot created",1);
-    process.stdin.resume();//so the program will not close instantly
   }
 
   async exitHandler(options, exitCode) {
@@ -45,7 +40,8 @@ module.exports = class Main {
     process.on('uncaughtException', this.exitHandler.bind(null,{exit:true}));
   }
 
-  configuration(){
+  async configuration(){
+    console.log("Loading configuration");
     let d;
     process.argv.forEach((val, index) => {
       if(val.includes("=")){
@@ -55,12 +51,19 @@ module.exports = class Main {
     });
 
     Logger.init(this.data["level"],this.data["maxTrace"]);
-    dbChangeEnable(this.data["database"]);
+    console.log("Logger started");
+    await dbChangeEnable(this.data["database"]);
 
     console.log("Configuration of Logger at level "+Logger.get().getLevel(),1);
   }
 
   async start(token){
+    console.log("Starting Everything");
+    await this.configuration();
+    console.log("Starting bot please wait...",1);
+    this.botObject = Bot.get();
+    console.log("Bot created",1);
+    process.stdin.resume();//so the program will not close instantly
     this.onExit();
     await this.botObject.start(token);
     console.log("Bot initiated",1);

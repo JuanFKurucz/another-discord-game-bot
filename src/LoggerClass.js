@@ -95,7 +95,15 @@ module.exports = class Logger {
   console(args,color="white"){
     let l = 3;
     if(!isNaN(args[args.length-1])){
-      l = parseInt(args[args.length-1]);
+      l = parseFloat(args[args.length-1]);
+      switch(l){
+        case 0.5:
+          color="green";
+          break;
+        default:
+          color="white";
+          break;
+      }
     }
     let r = util.format.apply(null, args);
     let cute = this.parseOutput(r,l);
