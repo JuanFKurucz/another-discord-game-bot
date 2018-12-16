@@ -51,7 +51,7 @@ module.exports = class Bot {
       if(this.debugMode){
         let trainingChannel = this.client.channels.get(this.debuggChannel);
         if(trainingChannel){
-          //trainingChannel.send("Everything is started for testing");
+          trainingChannel.send("Everything is started for testing");
         }
       }
     });
