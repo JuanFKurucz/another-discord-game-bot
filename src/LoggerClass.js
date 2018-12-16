@@ -123,6 +123,9 @@ module.exports = class Logger {
   }
 
   output(message){
+    if (!fs.existsSync("./output/")) {
+      fs.mkdirSync("./output/");
+    }
     fs.appendFileSync(this.outputFile, message);
   }
 }
