@@ -41,7 +41,7 @@ module.exports = class Game {
         user = new User(userResults[userResult].id_user);
         user.cookies = userResults[userResult].cookies;
 
-        buildingResults=await dbQuery("SELECT id_building, level FROM user_building LEFT JOIN user ON user.id_user = user_building.id_user");
+        buildingResults=await dbQuery("SELECT id_building, level FROM user_building LEFT JOIN user ON user.id_user = user_building.id_user WHERE user.id_user = "+user.getId());
         if(buildingResults){
           for(let buildingResult in buildingResults){
             building = buildingConstractor.create(buildingResults[buildingResult].id_building);
@@ -53,7 +53,7 @@ module.exports = class Game {
           }
         }
 
-        upgradeResults=await dbQuery("SELECT id_upgrade FROM user_upgrade LEFT JOIN user ON user.id_user = user_upgrade.id_user");
+        upgradeResults=await dbQuery("SELECT id_upgrade FROM user_upgrade LEFT JOIN user ON user.id_user = user_upgrade.id_user WHERE user.id_user = "+user.getId());
         if(upgradeResults){
           for(let upgradeResult in upgradeResults){
             upgrade = upgradeConstractor.create(upgradeResults[upgradeResult].id_upgrade);
