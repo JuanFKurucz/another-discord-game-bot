@@ -199,9 +199,11 @@ exports.dbQuery = async function(sql,object){
 };
 
 exports.dbChangeEnable = async function (bool="true"){
+  console.performance();
   let boolValue = bool == "true";
   console.log("Database enabled: "+boolValue);
   if(boolValue){
+    console.performance();
     localDatabase = new DataBase({
       connectionLimit: 100,
       host: "localhost",
@@ -210,7 +212,7 @@ exports.dbChangeEnable = async function (bool="true"){
       database: "notagame",
       debug: false
     });
-
+    console.performance();
     database = new DataBase({
       connectionLimit: 100,
     /*  host: "db4free.net",
@@ -223,14 +225,18 @@ exports.dbChangeEnable = async function (bool="true"){
       database: "notagame",
       debug: false
     });
-
+    console.performance();
 
     await localDatabase.start();
+    console.performance();
     await database.start();
+    console.performance();
     console.log("Finished loading databases");
     if(database.connection !== null && localDatabase.connection !== null){
       console.log("Updating databases");
+      console.performance();
       await DataBase.update(database,localDatabase);
+      console.performance();
       console.log("Finished updating databases");
     }
   }

@@ -58,10 +58,12 @@ module.exports = class UpgradeCommand extends Command {
   }
 
   async execute(m,user,command){
+    console.performance();
     if(command.length>1){
       this.buyUpgrade(m,user,command);
     } else {
       this.displayUpgradeList(m,user);
     }
+    console.performance();
   }
 }

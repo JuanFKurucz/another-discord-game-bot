@@ -7,6 +7,7 @@ module.exports = class HelpCommand extends Command {
   }
 
   async execute(m,user,command){
+    console.performance();
     let bot = new require("../../BotClass.js").get(),
         commandList = bot.game.getCommands();
 
@@ -18,5 +19,6 @@ module.exports = class HelpCommand extends Command {
         commandList[i].getDescription().replace(/{name}/g,commandList[i].getName()).replace(/{prefix}/g,bot.getPrefix())
       );
     }
+    console.performance();
   }
 }

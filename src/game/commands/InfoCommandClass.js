@@ -26,6 +26,7 @@ module.exports = class InfoCommand extends Command {
   }
 
   async execute(m,user,command){
+    console.performance();
     let response="You have "+user.cookies+" cookies" + "\n" +
                   "CPS: "+user.getTotalCps() + "\n"+
                   "CPM: "+user.getTotalCpm();
@@ -34,5 +35,6 @@ module.exports = class InfoCommand extends Command {
     m.setDescription(response);
     this.addList(m,"Buildings owned",user.buildings);
     this.addList(m,"Upgrades owned",user.upgrades);
+    console.performance();
   }
 }

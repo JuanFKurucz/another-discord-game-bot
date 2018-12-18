@@ -9,8 +9,7 @@ Levels of logs:
 
 **/
 
-const fs = require('fs'), util = require('util');
-
+const fs = require('fs'), util = require('util'), { performance } = require('perf_hooks');
 let LogObject = null;
 
 module.exports = class Logger {
@@ -24,7 +23,8 @@ module.exports = class Logger {
     LogObject = new Logger(l,mT);
   }
 
-  getFileAndLine() {
+  getFileAndLine(rec=0) {
+    let recursion = 5 - rec*2;
     let response = "\nTrace";
     let end = "\n";
     if(this.maxTrace===0){
@@ -37,11 +37,11 @@ module.exports = class Logger {
     Error.captureStackTrace(obj, this.getFileAndLine);
 
     let stackTrace = obj.stack.split("\n");
-    let tope = 5+this.maxTrace;
+    let tope = recursion+this.maxTrace;
     if(stackTrace.length<tope){
       tope = stackTrace.length;
     }
-    for(let i=5;i<tope;i++){
+    for(let i=recursion;i<tope;i++){
       response+=" -> "+stackTrace[i].substring(stackTrace[i].indexOf("(")+1,stackTrace[i].indexOf(")")).replace(/^.*[\\\/]/, '');
     }
     return response+end;
@@ -83,6 +83,7 @@ module.exports = class Logger {
     this.level = level;
     this.maxTrace = maxTrace;
     this.outputFile = "./output/output-"+Date.now()+".txt";
+    this.lastTime = performance.now();
     let self = this;
     console.log = function() {
       self.console(arguments);
@@ -90,6 +91,20 @@ module.exports = class Logger {
     console.error = function(){
       self.console(arguments,"red");
     };
+    console.performance = function(){
+      self.performance(arguments);
+    }
+  }
+
+  performance(args){
+    let time = performance.now();
+    this.sendConsole(time + " Last Diff: "+(time-this.lastTime) + this.getFileAndLine(1)+"\n","yellow");
+    this.lastTime=time;
+  }
+
+  sendConsole(text,color="white"){
+    this.output(text);
+    process.stdout.write(this.style.font[color]+text);
   }
 
   console(args,color="white"){
@@ -107,8 +122,7 @@ module.exports = class Logger {
     }
     let r = util.format.apply(null, args);
     let cute = this.parseOutput(r,l);
-    this.output(cute);
-    process.stdout.write(this.style.font[color]+cute);
+    this.sendConsole(cute,color);
   }
 
   getLevel(){
