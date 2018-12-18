@@ -11,7 +11,7 @@ class DataBase {
   static structure(){}
   static async update(db1,db2){
     DataBase.structure = [];
-    if(db1.connection!=null && db2.connection!=null){
+    if(db1&&db2&&db1.connection!=null && db2.connection!=null){
       let dbname1=db1.options.database,
           dbname2=db2.options.database,
           times1=await db1.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname1+"'"),
@@ -35,6 +35,10 @@ class DataBase {
         }
         aux1++;
         aux2++;
+      }
+      if(menor==null){
+        menor=db2;
+        mayor=db1;
       }
       await menor.copyDatabase(mayor)
     }
