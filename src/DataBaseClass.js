@@ -40,7 +40,7 @@ class DataBase {
         menor=db2;
         mayor=db1;
       }
-      await menor.copyDatabase(mayor)
+      await menor.copyDatabase(mayor);
     }
   }
 
@@ -222,10 +222,7 @@ exports.dbChangeEnable = async function (bool="true"){
       host: "db4free.net",
       user: "notagame_jfk",
       password: "alpaca123456",
-      /*host: "192.168.1.111",
-      user: "test",
-      password: "",
-      database: "notagame",*/
+      database: "notagame",
       debug: false
     });
     console.performance();
@@ -235,7 +232,7 @@ exports.dbChangeEnable = async function (bool="true"){
     await database.start();
     console.performance();
     console.log("Finished loading databases");
-    if(database.connection !== null && localDatabase.connection !== null){
+    if(database && localDatabase && database.connection !== null && localDatabase.connection !== null){
       console.log("Updating databases");
       console.performance();
       await DataBase.update(database,localDatabase);
