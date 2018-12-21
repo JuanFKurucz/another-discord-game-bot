@@ -36,6 +36,7 @@ module.exports = class Game {
         upgrade = null,
         buildingResults = null,
         upgradeResults = null;
+    
     if(userResults !== null){
       for(let userResult in userResults) {
         user = new User(userResults[userResult].id_user);
@@ -78,7 +79,7 @@ module.exports = class Game {
   }
 
   getCommand(command){
-    const realCommand = (this.commands[command]) ? command : "error";
+    const realCommand = (this.commands.hasOwnProperty(command) === true) ? command : "error";
     return this.commands[realCommand];
   }
 
@@ -89,7 +90,7 @@ module.exports = class Game {
   }
 
   async getUser(info){
-    if(!this.users.hasOwnProperty(info.id)){
+    if(this.users.hasOwnProperty(info.id) === false){
       this.users[info.id] = new User(info.id);
       await dbQuery("INSERT INTO user SET ?",{
         "id_user":info.id,

@@ -72,13 +72,10 @@ module.exports = class Bot {
     With this Message it will decide if the content of the message is a command for the bot (if it starts with the prefix).
     It will execute the command for the prefix if it has one, if it doesn't it will do nothing instead.
   **/
-  async commandHandler(msg){
-    const user = await this.game.getUser(msg.author),
-          text = msg.content+"";
+  async commandHandler(msg,user){
+    const text = msg.content+"";
     let response = null,
         command;
-
-    this.game.onMessage(user); //handles what to do when a user send a message (Ex: gives cookies);
 
     if(this.isACommand(text)){
       response = new Message(); //Instances a new discord RichEmbed;
@@ -95,15 +92,15 @@ module.exports = class Bot {
     return response;
   }
 
-  getUserIcon(author){
-    return 'https://cdn.discordapp.com/avatars/'+author.id+'/'+author.avatar+'.webp?size=128';
-  }
-
   async onMessage(msg){
     if(msg.hasOwnProperty("author") && !msg.author.bot && (!this.debugMode || (this.debugMode && msg.channel.id === this.debuggChannel))){
-      let response=await this.commandHandler(msg);
+
+      const user = await this.game.getUser(msg.author);
+      this.game.onMessage(user); //handles what to do when a user send a message (Ex: gives cookies);
+      const response=await this.commandHandler(msg,user);
+
       if(response!==null){
-        response.setFooter(msg.author.username,this.getUserIcon(msg.author));
+        response.setFooter(user.getName(),user.getAvatar());
         response.setTimestamp(new Date());
         msg.channel.send(response)
         .then(message => console.log(`Reply message: ${response}`))

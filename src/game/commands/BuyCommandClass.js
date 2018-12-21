@@ -22,7 +22,7 @@ module.exports = class BuyCommand extends Command {
           response = "You bought a building "+id_building+"!";
         }
       } else {
-        response = user.mention+" don't have enough cookies...";
+        response = user.mention+" you don't have enough cookies...";
       }
     } else {
       response = "This building doesn't exist";

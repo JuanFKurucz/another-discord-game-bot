@@ -8,7 +8,7 @@ module.exports = class UpgradeCommand extends Command {
     this.constructor = new UpgradeConstructor();
   }
 
-  buyUpgrade(m,user,command){
+  async buyUpgrade(m,user,command){
     const id_upgrade = parseInt(command[1]),
           userUpgrade = user.getItem(this.constructor.getObjectName(),id_upgrade),
           upgrade = (userUpgrade === null) ? this.constructor.create(id_upgrade) : null;
@@ -16,10 +16,10 @@ module.exports = class UpgradeCommand extends Command {
     let response="";
 
     if(upgrade !== null){
-      if(upgrade.acquire(user)){
+      if(await upgrade.acquire(user) === true){
         response = "You bought an upgrade " + id_upgrade + "!";
       } else {
-        response = user.mention + " don't have enough cookies...";
+        response = user.mention + " you don't have enough cookies...";
       }
     } else {
       response = "This upgrade doesn't exist";
@@ -34,13 +34,13 @@ module.exports = class UpgradeCommand extends Command {
         upgrade = null,
         tmp = "",
         i=1;
-    
+
     m.setTitle("List of upgrades");
     for(let v in this.constructor.elements){
       userUpgrade = user.getItem(this.constructor.getObjectName(),v);
       if(userUpgrade === null){
         upgrade = this.constructor.create(v);
-        if(!upgrade.canPurchase(user)){
+        if(upgrade.canPurchase(user) === false){
           tmp = " (Not affordable yet)";
         } else {
           tmp = "";
@@ -58,9 +58,9 @@ module.exports = class UpgradeCommand extends Command {
   async execute(m,user,command){
     console.performance();
     if(command.length>1){
-      this.buyUpgrade(m,user,command);
+      await this.buyUpgrade(m,user,command);
     } else {
-      this.displayUpgradeList(m,user);
+      await this.displayUpgradeList(m,user);
     }
     console.performance();
   }

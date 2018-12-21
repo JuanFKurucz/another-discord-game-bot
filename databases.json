@@ -1,0 +1,22 @@
+[{
+  "enabled":true,
+  "options":{
+    "connectionLimit": 100,
+    "host": "db4free.net",
+    "user": "notagame_jfk",
+    "password": "alpaca123456",
+    "database": "notagame",
+    "debug": false
+  }
+},
+{
+  "enabled":true,
+  "options":{
+    "connectionLimit": 100,
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "database": "notagame",
+    "debug": false
+  }
+}]

@@ -3,7 +3,7 @@ module.exports = class User {
   constructor(id) {
     this.mention="<@!"+id+">";
     this.id=id;
-    this.cookies = 100;
+    this.cookies = 1000;
     this.cpm = 1;
 
     this.multipliers={
@@ -24,6 +24,14 @@ module.exports = class User {
 
   getCookies(){
     return this.cookies;
+  }
+
+  getName(){
+    return (this.info !== null) ? this.info.username : null;
+  }
+
+  getAvatar(){
+    return (this.info !== null) ? 'https://cdn.discordapp.com/avatars/'+this.getId()+'/'+this.info.avatar+'.webp?size=128' : null;
   }
 
   setInfo(info){
@@ -54,7 +62,7 @@ module.exports = class User {
 
   getItem(type,id){
     const typeName=type.toLowerCase();
-    if(typeof this.items[typeName] !== "undefined" && typeof this.items[typeName][id] !== "undefined"){
+    if(this.items.hasOwnProperty(typeName) === true && this.items[typeName].hasOwnProperty(id) === true){
       return this.items[typeName][id];
     }
     return null;
@@ -62,8 +70,17 @@ module.exports = class User {
 
   addItem(type,item){
     const typeName=type.toLowerCase();
-    if(typeof this.items[typeName] !== "undefined"){
+    if(this.items.hasOwnProperty(typeName) === true){
       this.items[typeName][item.getId()]=item;
+      return true;
+    }
+    return false;
+  }
+
+  removeItem(type,item){
+    const typeName=type.toLowerCase();
+    if(this.items.hasOwnProperty(typeName) === true && this.items[typeName].hasOwnProperty(id) === true){
+      delete this.items[typeName][item.getId()];
       return true;
     }
     return false;

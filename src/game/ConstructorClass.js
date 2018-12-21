@@ -11,12 +11,11 @@ module.exports = class Constructor {
   }
 
   getElement(id){
-    const element = this.elements[id];
-    return (typeof element !== "undefined") ? element : null;
+    return (this.elements.hasOwnProperty(id) === true) ? this.elements[id] : null;
   }
 
   checkExists(id){
-    return typeof this.getElement(id) !== null;
+    return this.getElement(id) !== null;
   }
 
   createObject(id,info){
@@ -24,7 +23,6 @@ module.exports = class Constructor {
   }
 
   create(id){
-    const element = this.getElement(id);
-    return (typeof element !== "undefined") ? this.createObject(id,element) : null;
+    return (this.checkExists(id) === true) ? this.createObject(id,this.getElement(id)) : null;
   }
 }

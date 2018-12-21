@@ -33,7 +33,7 @@ module.exports = class ShopItem {
   }
 
   canPurchase(user){
-    return user.cookies>=this.cost;
+    return parseFloat(user.cookies) >= parseFloat(this.cost);
   }
 
   getDataBaseObject(user){
@@ -49,23 +49,22 @@ module.exports = class ShopItem {
 
   async purchase(user){
     this.owner=user;
-    if(!this.owner.addItem(this.constructor.name,this)){
+    if(this.owner.addItem(this.constructor.name,this) === false || this.apply() === false){
+      this.owner.removeItem(this.constructor.name,this);
+      this.owner=null;
       return false;
     }
     this.owner.cookies-=this.cost;
-    this.apply();
-
     await dbQuery("INSERT INTO user_"+this.constructor.name.toLowerCase() + " SET ?",this.getDataBaseObject(user));
+    return true;
   }
 
   async acquire(user){
-    if(this.canPurchase(user)){
+    if(this.canPurchase(user) === true){
       if(user.getItem(this.constructor.name,this.id) === null){
-        await this.purchase(user);
-      } else {
-        await this.levelUp();
+        return await this.purchase(user);
       }
-      return true;
+      return await this.levelUp();
     }
     return false;
   }

@@ -3,43 +3,49 @@
 /**
   This currently does nothing
 **/
-const mysql = require('mysql');
-let database=null,
-    localDatabase=null;
+const mysql = require('mysql'),
+      fs = require('fs');
 
 class DataBase {
+  static enabled(){}
+  static databases(){}
   static structure(){}
   static async update(db1,db2){
     DataBase.structure = [];
-    if(db1&&db2&&db1.connection!=null && db2.connection!=null){
-      const dbname1=db1.options.database,
-            dbname2=db2.options.database,
-            times1=await db1.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname1+"'"),
-            times2=await db2.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname2+"'");
-      let aux1=0,
-          aux2=0,
-          mayor=null,
-          menor=null;
-
-      while(aux1<times1.length && aux2<times2.length){
-        DataBase.structure.push(times1[aux1]["TABLE_NAME"]);
-        if(mayor===null && menor===null){
-          if(times1[aux1]["UPDATE_TIME"]>times2[aux2]["UPDATE_TIME"]){
-            mayor=db1;
-            menor=db2;
-          } else if(times2[aux2]["UPDATE_TIME"]>times1[aux1]["UPDATE_TIME"]){
-            mayor=db2;
-            menor=db1;
+    if(DataBase.enabled === true && DataBase.databases.length>1){
+      let times = [];
+      for(let d in DataBase.databases){
+        let db = DataBase.databases[d];
+        let timeInfo = await db.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+db.options.database+"'");
+        times.push(timeInfo);
+      }
+      for(let t in times[0]){
+        DataBase.structure.push(times[0][t]["TABLE_NAME"]);
+      }
+      let lengthTimes = times.length;
+      let mayor = DataBase.databases[0];
+      let mayorData = times[0];
+      for(let tMain=1; tMain<lengthTimes;tMain++){
+        if(times[tMain].length === times[tMain-1].length){
+          let aux=0,
+              tempLength = times[tMain].length;
+          while(aux<tempLength){
+            if(times[tMain][aux]["UPDATE_TIME"]>mayorData[aux]["UPDATE_TIME"]){
+              mayor = DataBase.databases[tMain];
+              mayorData = times[tMain];
+              break;
+            } else if(mayorData[aux]["UPDATE_TIME"]>times[tMain][aux]["UPDATE_TIME"]){
+              break;
+            }
+            aux++;
           }
         }
-        aux1++;
-        aux2++;
       }
-      if(menor==null){
-        menor=db2;
-        mayor=db1;
+      for(let d in DataBase.databases){
+        if(DataBase.databases[d].id !== mayor.id){
+          await DataBase.databases[d].copyDatabase(mayor);
+        }
       }
-      await menor.copyDatabase(mayor);
     }
   }
 
@@ -48,6 +54,8 @@ class DataBase {
     this.enabled = enabled;
     this.printErrors=true;
     this.options = config;
+    this.id=DataBase.databases.length;
+    DataBase.databases.push(this);
   }
 
   setEnabled(bool){
@@ -75,6 +83,7 @@ class DataBase {
       });
     }
   }
+
   queryPromise(sql,args) {
     return new Promise((resolve,reject ) => {
       if(this.connection===null || this.enabled===false){
@@ -88,6 +97,7 @@ class DataBase {
       }
     });
   }
+
   close() {
     return new Promise((resolve,reject) => {
       this.connection.end(err => {
@@ -180,63 +190,52 @@ class DataBase {
     }
     return call;
   }
-
-
 }
 
+DataBase.databases=[];
+
 exports.dbQuery = async function(sql,object){
-  if(database && database.enabled){
-    let result=null,
-        temp;
-    if(database&&database.connection){
-      result = await database.query(sql,object);
+  let result = null;
+  if(DataBase.enabled === true && DataBase.databases.length > 0){
+    for(let d in DataBase.databases){
+      let db = DataBase.databases[d];
+      if(db !== null && db.enabled === true && db.connection !== null){
+        let temp = await db.query(sql,object);
+        if(result === null){
+          result = temp;
+        }
+      }
     }
-    if(localDatabase&&localDatabase.connection){
-      temp = await localDatabase.query(sql,object);
-    }
-    if(result===null){
-      result=temp;
-    }
-    return result;
   }
+  return result;
 };
 
 exports.dbChangeEnable = async function (bool="true"){
   console.performance();
   let boolValue = bool == "true";
   console.log("Database enabled: "+boolValue);
-  if(boolValue){
-    console.performance();
-    localDatabase = new DataBase({
-      connectionLimit: 100,
-      host: "localhost",
-      user: "root",
-      password: "",
-      database: "notagame",
-      debug: false
-    });
-    console.performance();
-    database = new DataBase({
-      connectionLimit: 100,
-      host: "db4free.net",
-      user: "notagame_jfk",
-      password: "alpaca123456",
-      database: "notagame",
-      debug: false
-    });
-    console.performance();
-
-    await localDatabase.start();
-    console.performance();
-    await database.start();
-    console.performance();
-    console.log("Finished loading databases");
-    if(database && localDatabase && database.connection !== null && localDatabase.connection !== null){
-      console.log("Updating databases");
-      console.performance();
-      await DataBase.update(database,localDatabase);
-      console.performance();
-      console.log("Finished updating databases");
+  DataBase.enabled = boolValue;
+  if(boolValue === true){
+    let configFile = './databases.json';
+    if (fs.existsSync(configFile) === true) {
+      console.log("Reading databases config file");
+      let databaseConfig = JSON.parse(fs.readFileSync(configFile, 'utf8'));
+      console.log("Finished reading databases, starting loading them");
+      for(let dc in databaseConfig){
+        if(databaseConfig[dc].enabled === true){
+          console.performance();
+          let tempDb = new DataBase(databaseConfig[dc].options);
+          console.performance();
+          await tempDb.start();
+          console.performance();
+        }
+      }
+      console.log("Finished loading databases");
+      console.log("Starting database merge");
+      DataBase.update();
+      console.log("Database merge ended");
+    } else {
+      console.error("Couldn't find database config file");
     }
   }
 }
