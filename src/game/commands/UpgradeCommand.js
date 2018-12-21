@@ -3,7 +3,8 @@ const Command = require("../Command.js");
 const UpgradeConstructor = require("../constructors/UpgradeConstructor.js");
 
 module.exports = class UpgradeCommand extends Command {
-  constructor(id,name,description) {
+  constructor(id,name) {
+    const description = "Use to upgrades that will boost you in different ways\nThrow *{prefix}{name}* to see the list of upgrades\nThrow *{prefix}{name} number* to buy an upgrade";
     super(id,name,description);
     this.constructor = new UpgradeConstructor();
   }

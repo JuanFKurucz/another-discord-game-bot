@@ -2,7 +2,8 @@
 const Command = require("../Command.js");
 
 module.exports = class InfoCommand extends Command {
-  constructor(id,name,description) {
+  constructor(id,name) {
+    const description = "Use to retrieve user profile and information";
     super(id,name,description);
   }
 

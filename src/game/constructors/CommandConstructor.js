@@ -1,41 +1,31 @@
 'use strict';
 
-const Constructor = require("../Constructor.js");
+const Constructor = require("../Constructor.js"),
+      fs = require('fs');
 
 module.exports = class CommandConstructor extends Constructor {
   constructor(){
-    super("Command",{
-      "-2":{
-        name:"deleteuser",
-        description:"Removes yourself from the game database",
-        constructor:require("../commands/DeleteUserCommand.js")
-      },
-      "-1":{
-        name:"error",
-        description:"Default error message for unknown commands",
-        constructor:require("../commands/ErrorCommand.js")
-      },
-      "0":{
-        name:"help",
-        description:"Use to retrieve list of commands",
-        constructor:require("../commands/HelpCommand.js")
-      },
-      "1":{
-        name:"info",
-        description:"Use to retrieve user profile and information",
-        constructor:require("../commands/InfoCommand.js")
-      },
-      "2":{
-        name:"buy",
-        description:"Use to buy structures that will give you CPS\nThrow *{prefix}{name}* to see the list of buildings\nThrow *{prefix}{name} number* to buy a building",
-        constructor:require("../commands/BuyCommand.js")
-      },
-      "3":{
-        name:"upgrade",
-        description:"Use to upgrades that will boost you in different ways\nThrow *{prefix}{name}* to see the list of upgrades\nThrow *{prefix}{name} number* to buy an upgrade",
-        constructor:require("../commands/UpgradeCommand.js")
+    const commandsFolder = "./src/game/commands/",
+          files = fs.readdirSync(commandsFolder),
+          elements = {},
+          namesCheck = {};
+    let i=0;
+
+    files.forEach(function(filename) {
+      let name = filename.substring(0,filename.lastIndexOf('Command')).toLowerCase();
+      if(namesCheck.hasOwnProperty(name) === false){
+        elements[i]={
+          "name":name,
+          "constructor":require("../commands/"+filename)
+        };
+        namesCheck[name]=true;
+        i++;
+      } else {
+        console.error(name+" already exists as a command. DUPLICATED COMMAND NAME",0);
       }
     });
+
+    super("Command",elements);
   }
 
   initCommands(){
@@ -51,10 +41,6 @@ module.exports = class CommandConstructor extends Constructor {
   }
 
   createObject(id,commandInfo){
-    return new commandInfo.constructor(
-      id,
-      commandInfo.name,
-      commandInfo.description
-    );
+    return new commandInfo.constructor(id,commandInfo.name);
   }
 }

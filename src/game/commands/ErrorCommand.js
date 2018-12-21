@@ -2,7 +2,8 @@
 const Command = require("../Command.js");
 
 module.exports = class ErrorCommand extends Command {
-  constructor(id,name,description) {
+  constructor(id,name) {
+    const description = "Default error message for unknown commands";
     super(id,name,description);
   }
 

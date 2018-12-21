@@ -2,7 +2,8 @@
 const Command = require("../Command.js");
 
 module.exports = class HelpCommand extends Command {
-  constructor(id,name,description) {
+  constructor(id,name) {
+    const description = "Use to retrieve list of commands";
     super(id,name,description);
   }
 

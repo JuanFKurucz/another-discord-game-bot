@@ -3,7 +3,8 @@ const Command = require("../Command.js");
 const BuildingConstructor = require("../constructors/BuildingConstructor.js");
 
 module.exports = class BuyCommand extends Command {
-  constructor(id,name,description) {
+  constructor(id,name) {
+    const description = "Use to buy structures that will give you CPS\nThrow *{prefix}{name}* to see the list of buildings\nThrow *{prefix}{name} number* to buy a building";
     super(id,name,description);
     this.constructor = new BuildingConstructor();
   }
@@ -42,12 +43,12 @@ module.exports = class BuyCommand extends Command {
     for(let w in this.constructor.elements){
       tmp="";
       building=user.getItem(this.constructor.getObjectName(),w);
-      if(!building){
+      if(building === null){
         building=this.constructor.create(w);
       }
       buildingInfo=building.nextLevelInfo();
 
-      if(!building.canPurchase(user)){
+      if(building.canPurchase(user) === false){
         tmp = " (Not affordable yet)";
       }
 

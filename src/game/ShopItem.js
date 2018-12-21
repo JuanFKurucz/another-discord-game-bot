@@ -61,10 +61,11 @@ module.exports = class ShopItem {
 
   async acquire(user){
     if(this.canPurchase(user) === true){
-      if(user.getItem(this.constructor.name,this.id) === null){
+      const item = user.getItem(this.constructor.name,this.id);
+      if(item === null){
         return await this.purchase(user);
       }
-      return await this.levelUp();
+      return await item.levelUp();
     }
     return false;
   }

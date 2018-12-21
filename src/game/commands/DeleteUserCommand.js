@@ -3,7 +3,8 @@ const Command = require("../Command.js");
 const { dbQuery } = require("../../DataBase.js");
 
 module.exports = class ErrorCommand extends Command {
-  constructor(id,name,description) {
+  constructor(id,name) {
+    const description = "Removes yourself from the game database";
     super(id,name,description);
   }
 
