@@ -10,6 +10,7 @@ Levels of logs:
 **/
 
 const fs = require('fs'), util = require('util'), { performance } = require('perf_hooks');
+
 let LogObject = null;
 
 module.exports = class Logger {
@@ -21,6 +22,17 @@ module.exports = class Logger {
     const l = (level) ? level : 3;
     const mT = (maxTrace) ? maxTrace : 1;
     LogObject = new Logger(l,mT);
+  }
+
+  parseStackLine(line){
+    return line.substring(line.indexOf("(")+1,line.indexOf(")")).replace(/^.*[\\\/]/, '');
+  }
+
+  getLineNumber(){
+    const obj = {};
+    Error.captureStackTrace(obj, this.getLineNumber);
+    let stackTrace = obj.stack.split("\n")[1];
+    return this.parseStackLine(stackTrace).split(":")[1];
   }
 
   getFileAndLine(rec=0) {
@@ -43,16 +55,17 @@ module.exports = class Logger {
     let start=false;
     let count=0;
     for(let i=0;i<stackTrace.length;i++){
-      let tracePath = stackTrace[i].substring(stackTrace[i].indexOf("(")+1,stackTrace[i].indexOf(")"));
+      let tracePath = this.parseStackLine(stackTrace[i]);
       if(start === false){
-        if(tracePath.indexOf("Logger.js:10") !== -1){ //  line for self.console(arguments);
+        let lineNumber = tracePath.split(":")[1];
+        if(lineNumber>= this.linePrinting[0] && lineNumber <= this.linePrinting[1]){
           start=true;
         }
       } else {
         if(count>=tope){
           break;
         } else {
-          response += " -> "+tracePath.replace(/^.*[\\\/]/, '');
+          response += " -> "+tracePath;
           count++;
         }
       }
@@ -61,6 +74,7 @@ module.exports = class Logger {
   };
 
   constructor(level,maxTrace) {
+    this.linePrinting=[];
     this.fileNames={};
     this.style={
       "type":{
@@ -99,9 +113,12 @@ module.exports = class Logger {
     this.outputFile = "./output/output-"+Date.now()+".txt";
     this.lastTime = performance.now();
     const self = this;
+
+    this.linePrinting.push(this.getLineNumber());
     console.log = function() { self.console(arguments) };
     console.error = function(){ self.console(arguments,"red") };
     console.performance = function(){ self.performance(arguments) }
+    this.linePrinting.push(this.getLineNumber());
   }
 
   performance(args){
