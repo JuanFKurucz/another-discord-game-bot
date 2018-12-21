@@ -1,5 +1,5 @@
 'use strict';
-const Command = require("../CommandClass.js");
+const Command = require("../Command.js");
 
 module.exports = class HelpCommand extends Command {
   constructor(id,name,description) {
@@ -8,7 +8,7 @@ module.exports = class HelpCommand extends Command {
 
   async execute(m,user,command){
     console.performance();
-    const bot = new require("../../BotClass.js").get(),
+    const bot = new require("../../Bot.js").get(),
         commandList = bot.game.getCommands();
 
     m.setTitle("Help");

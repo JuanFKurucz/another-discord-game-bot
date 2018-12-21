@@ -1,7 +1,7 @@
 'use strict';
 
-const ShopItem = require("../ShopItemClass.js");
-const { dbQuery } = require("../../DataBaseClass.js");
+const ShopItem = require("../ShopItem.js");
+const { dbQuery } = require("../../DataBase.js");
 
 module.exports = class Building extends ShopItem {
   constructor(id,name,cost,costMultiplier,cps,cpsMultiplier) {

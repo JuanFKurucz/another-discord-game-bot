@@ -1,5 +1,5 @@
 'use strict';
-const { dbQuery } = require("../DataBaseClass.js");
+const { dbQuery } = require("../DataBase.js");
 module.exports = class ShopItem {
   constructor(id,name,cost) {
     this.owner=null;

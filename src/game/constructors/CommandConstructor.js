@@ -1,6 +1,6 @@
 'use strict';
 
-const Constructor = require("../ConstructorClass.js");
+const Constructor = require("../Constructor.js");
 
 module.exports = class CommandConstructor extends Constructor {
   constructor(){
@@ -8,32 +8,32 @@ module.exports = class CommandConstructor extends Constructor {
       "-2":{
         name:"deleteuser",
         description:"Removes yourself from the game database",
-        constructor:require("../commands/DeleteUserCommandClass.js")
+        constructor:require("../commands/DeleteUserCommand.js")
       },
       "-1":{
         name:"error",
         description:"Default error message for unknown commands",
-        constructor:require("../commands/ErrorCommandClass.js")
+        constructor:require("../commands/ErrorCommand.js")
       },
       "0":{
         name:"help",
         description:"Use to retrieve list of commands",
-        constructor:require("../commands/HelpCommandClass.js")
+        constructor:require("../commands/HelpCommand.js")
       },
       "1":{
         name:"info",
         description:"Use to retrieve user profile and information",
-        constructor:require("../commands/InfoCommandClass.js")
+        constructor:require("../commands/InfoCommand.js")
       },
       "2":{
         name:"buy",
         description:"Use to buy structures that will give you CPS\nThrow *{prefix}{name}* to see the list of buildings\nThrow *{prefix}{name} number* to buy a building",
-        constructor:require("../commands/BuyCommandClass.js")
+        constructor:require("../commands/BuyCommand.js")
       },
       "3":{
         name:"upgrade",
         description:"Use to upgrades that will boost you in different ways\nThrow *{prefix}{name}* to see the list of upgrades\nThrow *{prefix}{name} number* to buy an upgrade",
-        constructor:require("../commands/UpgradeCommandClass.js")
+        constructor:require("../commands/UpgradeCommand.js")
       }
     });
   }

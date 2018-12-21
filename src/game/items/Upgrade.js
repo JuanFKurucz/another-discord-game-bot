@@ -1,6 +1,6 @@
 'use strict';
 
-const ShopItem = require("../ShopItemClass.js");
+const ShopItem = require("../ShopItem.js");
 
 module.exports = class Upgrade extends ShopItem {
   constructor(id,name,cost,multiplierName,multiplier) {

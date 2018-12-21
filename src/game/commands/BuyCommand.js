@@ -1,6 +1,6 @@
 'use strict';
-const Command = require("../CommandClass.js");
-const BuildingConstructor = require("../constructors/BuildingConstructorClass.js");
+const Command = require("../Command.js");
+const BuildingConstructor = require("../constructors/BuildingConstructor.js");
 
 module.exports = class BuyCommand extends Command {
   constructor(id,name,description) {

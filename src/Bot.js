@@ -9,7 +9,7 @@
 
 const Discord = require('discord.js');
 const Message = require('discord.js').RichEmbed; //https://discord.js.org/#/docs/main/stable/class/RichEmbed
-const Game = require(__dirname+"/game/GameClass.js");
+const Game = require(__dirname+"/game/Game.js");
 
 let BotObject = null;
 

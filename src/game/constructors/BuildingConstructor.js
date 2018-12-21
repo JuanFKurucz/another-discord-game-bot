@@ -1,7 +1,7 @@
 'use strict';
 
-const Constructor = require("../ConstructorClass.js");
-const Building = require("../items/BuildingClass.js");
+const Constructor = require("../Constructor.js");
+const Building = require("../items/Building.js");
 
 module.exports = class BuildingConstructor extends Constructor {
   constructor(){

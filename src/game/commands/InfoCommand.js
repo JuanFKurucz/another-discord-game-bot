@@ -1,5 +1,5 @@
 'use strict';
-const Command = require("../CommandClass.js");
+const Command = require("../Command.js");
 
 module.exports = class InfoCommand extends Command {
   constructor(id,name,description) {

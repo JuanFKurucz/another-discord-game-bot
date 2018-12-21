@@ -7,9 +7,9 @@ Every message from Discord is setn to read function, where it creates the player
 and handles the message with commandHandler.
 **/
 
-const User = require(__dirname+"/UserClass.js");
-const { dbQuery } = require("../DataBaseClass.js");
-const CommandConstructor = require(__dirname+"/constructors/CommandConstructorClass.js");
+const User = require(__dirname+"/User.js");
+const { dbQuery } = require("../DataBase.js");
+const CommandConstructor = require(__dirname+"/constructors/CommandConstructor.js");
 
 module.exports = class Game {
   constructor() {
@@ -26,8 +26,8 @@ module.exports = class Game {
   }
 
   async loadUsers(){
-    const BuildingConstructor = require(__dirname+"/constructors/BuildingConstructorClass.js"),
-          UpgradeConstructor = require(__dirname+"/constructors/UpgradeConstructorClass.js");
+    const BuildingConstructor = require(__dirname+"/constructors/BuildingConstructor.js"),
+          UpgradeConstructor = require(__dirname+"/constructors/UpgradeConstructor.js");
     const buildingConstractor = new BuildingConstructor(),
           upgradeConstractor = new UpgradeConstructor(),
           userResults = await dbQuery("SELECT * FROM user");
@@ -36,7 +36,7 @@ module.exports = class Game {
         upgrade = null,
         buildingResults = null,
         upgradeResults = null;
-    
+
     if(userResults !== null){
       for(let userResult in userResults) {
         user = new User(userResults[userResult].id_user);

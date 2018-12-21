@@ -1,5 +1,5 @@
 'use strict';
-const Command = require("../CommandClass.js");
+const Command = require("../Command.js");
 
 module.exports = class ErrorCommand extends Command {
   constructor(id,name,description) {
@@ -8,7 +8,7 @@ module.exports = class ErrorCommand extends Command {
 
   async execute(m,user,command){
     console.performance();
-    const prefix = new require("../../BotClass.js").get().getPrefix();
+    const prefix = new require("../../Bot.js").get().getPrefix();
     m.setTitle("Unknown command");
     m.setDescription("Please write "+prefix+"help to see the command list");
     console.performance();

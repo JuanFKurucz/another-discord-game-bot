@@ -1,6 +1,6 @@
 'use strict';
-const Command = require("../CommandClass.js");
-const { dbQuery } = require("../../DataBaseClass.js");
+const Command = require("../Command.js");
+const { dbQuery } = require("../../DataBase.js");
 
 module.exports = class ErrorCommand extends Command {
   constructor(id,name,description) {
@@ -9,7 +9,7 @@ module.exports = class ErrorCommand extends Command {
 
   async execute(m,user,command){
     console.performance();
-    new require("../../BotClass.js").get().game.deleteUser(user);
+    new require("../../Bot.js").get().game.deleteUser(user);
     m.setTitle("Delete user");
     m.setDescription("User deleted successfully");
     console.performance();
