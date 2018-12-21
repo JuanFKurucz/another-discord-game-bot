@@ -24,7 +24,6 @@ module.exports = class Logger {
   }
 
   getFileAndLine(rec=0) {
-    const recursion = 5 - rec*2;
     let response = "\nTrace";
     let end = "\n";
     if(this.maxTrace===0){
@@ -37,17 +36,32 @@ module.exports = class Logger {
     Error.captureStackTrace(obj, this.getFileAndLine);
 
     let stackTrace = obj.stack.split("\n");
-    let tope = recursion+this.maxTrace;
+    let tope = this.maxTrace;
     if(stackTrace.length<tope){
       tope = stackTrace.length;
     }
-    for(let i=recursion;i<tope;i++){
-      response+=" -> "+stackTrace[i].substring(stackTrace[i].indexOf("(")+1,stackTrace[i].indexOf(")")).replace(/^.*[\\\/]/, '');
+    let start=false;
+    let count=0;
+    for(let i=0;i<stackTrace.length;i++){
+      let tracePath = stackTrace[i].substring(stackTrace[i].indexOf("(")+1,stackTrace[i].indexOf(")"));
+      if(start === false){
+        if(tracePath.indexOf("Logger.js:10") !== -1){ //  line for self.console(arguments);
+          start=true;
+        }
+      } else {
+        if(count>=tope){
+          break;
+        } else {
+          response += " -> "+tracePath.replace(/^.*[\\\/]/, '');
+          count++;
+        }
+      }
     }
     return response+end;
   };
 
   constructor(level,maxTrace) {
+    this.fileNames={};
     this.style={
       "type":{
         "reset":"\x1b[0m",
@@ -85,15 +99,9 @@ module.exports = class Logger {
     this.outputFile = "./output/output-"+Date.now()+".txt";
     this.lastTime = performance.now();
     const self = this;
-    console.log = function() {
-      self.console(arguments);
-    };
-    console.error = function(){
-      self.console(arguments,"red");
-    };
-    console.performance = function(){
-      self.performance(arguments);
-    }
+    console.log = function() { self.console(arguments) };
+    console.error = function(){ self.console(arguments,"red") };
+    console.performance = function(){ self.performance(arguments) }
   }
 
   performance(args){
