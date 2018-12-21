@@ -28,38 +28,38 @@ module.exports = class Game {
   async loadUsers(){
     const BuildingConstructor = require(__dirname+"/constructors/BuildingConstructorClass.js"),
           UpgradeConstructor = require(__dirname+"/constructors/UpgradeConstructorClass.js");
-    let user=null,
-        building=null,
-        upgrade=null,
-        buildingConstractor = new BuildingConstructor(),
-        upgradeConstractor = new UpgradeConstructor(),
-        userResults = await dbQuery("SELECT * FROM user"),
+    const buildingConstractor = new BuildingConstructor(),
+          upgradeConstractor = new UpgradeConstructor(),
+          userResults = await dbQuery("SELECT * FROM user");
+    let user = null,
+        building = null,
+        upgrade = null,
         buildingResults = null,
         upgradeResults = null;
-    if(userResults){
+    if(userResults !== null){
       for(let userResult in userResults) {
         user = new User(userResults[userResult].id_user);
         user.cookies = userResults[userResult].cookies;
 
         buildingResults=await dbQuery("SELECT id_building, level FROM user_building LEFT JOIN user ON user.id_user = user_building.id_user WHERE user.id_user = "+user.getId());
-        if(buildingResults){
+        if(buildingResults !== null){
           for(let buildingResult in buildingResults){
             building = buildingConstractor.create(buildingResults[buildingResult].id_building);
             building.owner = user;
-            for(var i=0;i<buildingResults[buildingResult].level;i++){
+            for(let i=0;i<buildingResults[buildingResult].level;i++){
               building.levelUp();
             }
-            user.buildings[buildingResults[buildingResult].id_building]=building;
+            user.addItem("building",building);
           }
         }
 
         upgradeResults=await dbQuery("SELECT id_upgrade FROM user_upgrade LEFT JOIN user ON user.id_user = user_upgrade.id_user WHERE user.id_user = "+user.getId());
-        if(upgradeResults){
+        if(upgradeResults !== null){
           for(let upgradeResult in upgradeResults){
             upgrade = upgradeConstractor.create(upgradeResults[upgradeResult].id_upgrade);
             upgrade.owner = user;
             upgrade.apply();
-            user.upgrades[upgradeResults[upgradeResult].id_upgrade] = upgrade;
+            user.addItem("upgrade",upgrade);
           }
         }
         this.users[userResults[userResult].id_user] = user;
@@ -68,7 +68,7 @@ module.exports = class Game {
   }
 
   async saveUsers(){
-    for(var u in this.users){
+    for(let u in this.users){
       await dbQuery("UPDATE `user` SET cookies='"+this.users[u].getCookies()+"' WHERE id_user='"+this.users[u].getId()+"'");
     }
   }
@@ -78,15 +78,12 @@ module.exports = class Game {
   }
 
   getCommand(command){
-    if(this.commands[command]){
-      return this.commands[command];
-    } else {
-      return null;
-    }
+    const realCommand = (this.commands[command]) ? command : "error";
+    return this.commands[realCommand];
   }
 
   claimCookiesUsers(){
-    for(var u in this.users){
+    for(let u in this.users){
       this.users[u].claimCookies();
     }
   }
@@ -100,8 +97,11 @@ module.exports = class Game {
       });
     }
     this.users[info.id].setInfo(info);
-    this.claimMessage(this.users[info.id]);
     return this.users[info.id];
+  }
+
+  onMessage(user){
+    this.claimMessage(user);
   }
 
   claimMessage(user){

@@ -4,7 +4,7 @@ const Constructor = require("../ConstructorClass.js");
 
 module.exports = class CommandConstructor extends Constructor {
   constructor(){
-    super({
+    super("Command",{
       "-2":{
         name:"deleteuser",
         description:"Removes yourself from the game database",

@@ -13,19 +13,16 @@ const Logger = new require(__dirname+"/LoggerClass.js");
 const { dbChangeEnable } = require(__dirname+"/DataBaseClass.js");
 const token = 'NTE4NDc3Nzc3NTcwMTAzMjk2.DuRVpw.FrIJP52YjMI_ZRr2Jr_VI0ZzhmI';
 
-
-
-
 module.exports = class Main {
   constructor() {
     this.data = {};
   }
 
   async exitHandler(options, exitCode) {
-      await Bot.get().saveDatabase();
-      if (options.cleanup) console.log('clean',0);
-      if (exitCode || exitCode === 0) console.log("exitCode",exitCode,0);
-      if (options.exit) process.exit();
+    await Bot.get().saveDatabase();
+    options.cleanup && console.log('clean',0);
+    (exitCode || exitCode === 0) && console.log("exitCode",exitCode,0);
+    options.exit && process.exit();
   }
 
   onExit(){
@@ -42,10 +39,10 @@ module.exports = class Main {
 
   async configuration(){
     console.log("Loading configuration");
-    let d;
+
     process.argv.forEach((val, index) => {
       if(val.includes("=")){
-        d = val.split("=");
+        let d = val.split("=");
         this.data[d[0]]=d[1];
       }
     });

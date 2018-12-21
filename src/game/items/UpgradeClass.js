@@ -21,7 +21,7 @@ module.exports = class Upgrade extends ShopItem {
   apply(){
     if(this.canBeApplied()){
       this.applyed=true;
-      this.owner.multipliers[this.multiplierName]+=this.multiplier;
+      this.getOwner().multipliers[this.multiplierName]+=this.multiplier;
       return true;
     }
     return false;

@@ -9,25 +9,23 @@ module.exports = class BuyCommand extends Command {
   }
 
   async buyBuilding(m,command,user){
-    let response="",
-        id_building = parseInt(command[1]),
-        userBuilding = user.getBuilding(id_building);
+    const id_building = parseInt(command[1]),
+          userBuilding = user.getItem(this.constructor.getObjectName(),id_building),
+          building = (userBuilding === null) ? this.constructor.create(id_building) : userBuilding;
+    let response="";
 
-    if(userBuilding== null) {
-      var building = this.constructor.create(id_building);
-      if(building!=null){
-        if(building.acquire(user)){
-          response="You bought a building "+id_building+"!";
+    if(building !== null){
+      if(await building.acquire(user)){
+        if(building.getLevel()>1){
+          response = "You upgraded your building !";
         } else {
-          response=user.mention+" don't have enough cookies...";
+          response = "You bought a building "+id_building+"!";
         }
       } else {
-        response = "This building doesn't exist";
+        response = user.mention+" don't have enough cookies...";
       }
-    } else if(await userBuilding.levelUp(user)){
-      response="You upgraded your building !";
     } else {
-      response=user.mention+" don't have enough cookies...";
+      response = "This building doesn't exist";
     }
 
     m.setTitle("Buy building");
@@ -41,9 +39,9 @@ module.exports = class BuyCommand extends Command {
 
     m.setTitle("List of buildings");
 
-    for(var w in this.constructor.elements){
+    for(let w in this.constructor.elements){
       tmp="";
-      building=user.getBuilding(w);
+      building=user.getItem(this.constructor.getObjectName(),w);
       if(!building){
         building=this.constructor.create(w);
       }
@@ -51,9 +49,8 @@ module.exports = class BuyCommand extends Command {
 
       if(!building.canPurchase(user)){
         tmp = " (Not affordable yet)";
-      } else {
-        tmp = "";
       }
+
       m.addField(
         w+". "+buildingInfo.name + " Level: "+buildingInfo.level + tmp,
         " Price: "+ buildingInfo.cost + "   " +" Cps: "+ buildingInfo.cps

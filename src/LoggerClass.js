@@ -18,13 +18,13 @@ module.exports = class Logger {
   }
 
   static init(level,maxTrace){
-    let l = (level) ? level : 3;
-    let mT = (maxTrace) ? maxTrace : 1;
+    const l = (level) ? level : 3;
+    const mT = (maxTrace) ? maxTrace : 1;
     LogObject = new Logger(l,mT);
   }
 
   getFileAndLine(rec=0) {
-    let recursion = 5 - rec*2;
+    const recursion = 5 - rec*2;
     let response = "\nTrace";
     let end = "\n";
     if(this.maxTrace===0){
@@ -33,7 +33,7 @@ module.exports = class Logger {
       response = "";
       end = "";
     }
-    let obj = {};
+    const obj = {};
     Error.captureStackTrace(obj, this.getFileAndLine);
 
     let stackTrace = obj.stack.split("\n");
@@ -84,7 +84,7 @@ module.exports = class Logger {
     this.maxTrace = maxTrace;
     this.outputFile = "./output/output-"+Date.now()+".txt";
     this.lastTime = performance.now();
-    let self = this;
+    const self = this;
     console.log = function() {
       self.console(arguments);
     };
@@ -97,7 +97,7 @@ module.exports = class Logger {
   }
 
   performance(args){
-    let time = performance.now();
+    const time = performance.now();
     this.sendConsole(time + " Last Diff: "+(time-this.lastTime) + this.getFileAndLine(1)+"\n","yellow");
     this.lastTime=time;
   }
@@ -120,8 +120,8 @@ module.exports = class Logger {
           break;
       }
     }
-    let r = util.format.apply(null, args);
-    let cute = this.parseOutput(r,l);
+    const r = util.format.apply(null, args),
+          cute = this.parseOutput(r,l);
     this.sendConsole(cute,color);
   }
 
@@ -130,16 +130,14 @@ module.exports = class Logger {
   }
 
   parseOutput(message,lvl){
-    let result = "",
-        date = new Date(),
+    const date = new Date(),
         Dd = (date.getDate()+'').padStart(2,"0"),
         Mm = ((date.getMonth()+1)+'').padStart(2,"0"),
         Yyyy = date.getFullYear(),
         hh = (date.getHours()+'').padStart(2,"0"),
         mm = (date.getMinutes()+'').padStart(2,"0"),
-        ss = (date.getSeconds()+'').padStart(2,"0");
-
-    result += "("+lvl+") ["+Dd+"-"+Mm+"-"+Yyyy+" "+hh+":"+mm+":"+ss+"] "+message+" "+this.getFileAndLine()+"\n";
+        ss = (date.getSeconds()+'').padStart(2,"0"),
+        result = "("+lvl+") ["+Dd+"-"+Mm+"-"+Yyyy+" "+hh+":"+mm+":"+ss+"] "+message+" "+this.getFileAndLine()+"\n";
 
     return result;
   }

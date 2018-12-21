@@ -33,7 +33,7 @@ module.exports = class Building extends ShopItem {
   }
 
   nextLevelInfo(){
-    var response = {
+    const response = {
       level:this.level+1,
       name:this.name,
       cost:this.cost,
@@ -41,7 +41,7 @@ module.exports = class Building extends ShopItem {
       cps:this.cps,
       cpsMultiplier:this.cpsMultiplier
     };
-    if(this.owner!==null){
+    if(this.getOwner() !== null){
       response.cps *= this.cpsMultiplier;
     }
     return response;
@@ -56,9 +56,10 @@ module.exports = class Building extends ShopItem {
   }
 
   async levelUp(reduce=true){
-    if(this.owner && (this.canPurchase(this.owner)|| !reduce)){
+    const owner = this.getOwner();
+    if(owner && (this.canPurchase(owner)|| !reduce)){
       this.apply(reduce);
-      await dbQuery("UPDATE user_"+this.constructor.name.toLowerCase() + " SET ? WHERE id_user = '"+this.owner.getId()+"' AND id_"+this.constructor.name.toLowerCase()+"= "+this.id,{"level":this.level});
+      await dbQuery("UPDATE user_"+this.constructor.name.toLowerCase() + " SET ? WHERE id_user = '"+owner.getId()+"' AND id_"+this.constructor.name.toLowerCase()+"= "+this.getId(),{"level":this.getLevel()});
       return true;
     }
     return false;

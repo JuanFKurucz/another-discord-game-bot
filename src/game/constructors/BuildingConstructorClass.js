@@ -5,7 +5,7 @@ const Building = require("../items/BuildingClass.js");
 
 module.exports = class BuildingConstructor extends Constructor {
   constructor(){
-    super({
+    super("Building",{
       "1":{
         name:"Homeless",
         cost:10,

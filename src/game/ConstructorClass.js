@@ -1,20 +1,22 @@
 'use strict';
 
 module.exports = class Constructor {
-  constructor(elements){
+  constructor(oName,elements){
     this.elements=elements;
+    this.objectName=oName;
+  }
+
+  getObjectName(){
+    return this.objectName;
   }
 
   getElement(id){
-    return this.elements[id];
+    const element = this.elements[id];
+    return (typeof element !== "undefined") ? element : null;
   }
 
   checkExists(id){
-    var elementInfo = this.getElement(id);
-    if(elementInfo){
-      return true;
-    }
-    return false;
+    return typeof this.getElement(id) !== null;
   }
 
   createObject(id,info){
@@ -22,10 +24,7 @@ module.exports = class Constructor {
   }
 
   create(id){
-    var elementInfo = this.getElement(id);
-    if(elementInfo){
-      return this.createObject(id,elementInfo);
-    }
-    return null;
+    const element = this.getElement(id);
+    return (typeof element !== "undefined") ? this.createObject(id,element) : null;
   }
 }

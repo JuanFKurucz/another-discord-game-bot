@@ -12,15 +12,14 @@ class DataBase {
   static async update(db1,db2){
     DataBase.structure = [];
     if(db1&&db2&&db1.connection!=null && db2.connection!=null){
-      let dbname1=db1.options.database,
-          dbname2=db2.options.database,
-          times1=await db1.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname1+"'"),
-          times2=await db2.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname2+"'");
-
-      let aux1=0;
-      let aux2=0;
-      let mayor=null;
-      let menor=null;
+      const dbname1=db1.options.database,
+            dbname2=db2.options.database,
+            times1=await db1.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname1+"'"),
+            times2=await db2.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+dbname2+"'");
+      let aux1=0,
+          aux2=0,
+          mayor=null,
+          menor=null;
 
       while(aux1<times1.length && aux2<times2.length){
         DataBase.structure.push(times1[aux1]["TABLE_NAME"]);

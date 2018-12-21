@@ -8,7 +8,7 @@
 **/
 
 const Discord = require('discord.js');
-const Message = require('discord.js').RichEmbed;
+const Message = require('discord.js').RichEmbed; //https://discord.js.org/#/docs/main/stable/class/RichEmbed
 const Game = require(__dirname+"/game/GameClass.js");
 
 let BotObject = null;
@@ -61,33 +61,49 @@ module.exports = class Bot {
     this.client.login(token);
   }
 
+  isACommand(text){
+    return text.indexOf(this.prefix)===0;
+  }
+
+  /**
+    commandHandler:
+
+    This function gets a Discord Message object (https://discord.js.org/#/docs/main/stable/class/Message) as the only parameter
+    With this Message it will decide if the content of the message is a command for the bot (if it starts with the prefix).
+    It will execute the command for the prefix if it has one, if it doesn't it will do nothing instead.
+  **/
   async commandHandler(msg){
-    let response = null;
-    let text = msg.content+"";
-    var user=await this.game.getUser(msg.author);
+    const user = await this.game.getUser(msg.author),
+          text = msg.content+"";
+    let response = null,
+        command;
 
-    if(text.indexOf(this.prefix)===0){
+    this.game.onMessage(user); //handles what to do when a user send a message (Ex: gives cookies);
+
+    if(this.isACommand(text)){
+      response = new Message(); //Instances a new discord RichEmbed;
+
       console.log(msg.author.id +" sent "+msg.content,1);
-      text=text.substring(this.prefix.length,text.length).toLowerCase();
-      var command = text.split(" ");
 
-      let call = command[0];
-      let commandFunc = this.game.getCommand(call);
-      response = new Message();
-      if(!commandFunc){
-        commandFunc= this.game.getCommand("error");
-      }
-      await commandFunc.execute(response,user,command);
+      command = text.substring(this.prefix.length,text.length).toLowerCase().split(" "); //Splits the text of the message in spaces removing the prefix out of it
+
+      console.performance();
+
+      await this.game.getCommand(command[0]).execute(response,user,command); //gets the command using the first string in the splitteed message and executes it
     }
 
     return response;
+  }
+
+  getUserIcon(author){
+    return 'https://cdn.discordapp.com/avatars/'+author.id+'/'+author.avatar+'.webp?size=128';
   }
 
   async onMessage(msg){
     if(msg.hasOwnProperty("author") && !msg.author.bot && (!this.debugMode || (this.debugMode && msg.channel.id === this.debuggChannel))){
       let response=await this.commandHandler(msg);
       if(response!==null){
-        response.setFooter(this.client.user.username);
+        response.setFooter(msg.author.username,this.getUserIcon(msg.author));
         response.setTimestamp(new Date());
         msg.channel.send(response)
         .then(message => console.log(`Reply message: ${response}`))

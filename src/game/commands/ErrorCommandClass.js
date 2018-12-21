@@ -8,7 +8,7 @@ module.exports = class ErrorCommand extends Command {
 
   async execute(m,user,command){
     console.performance();
-    let prefix = new require("../../BotClass.js").get().getPrefix();
+    const prefix = new require("../../BotClass.js").get().getPrefix();
     m.setTitle("Unknown command");
     m.setDescription("Please write "+prefix+"help to see the command list");
     console.performance();

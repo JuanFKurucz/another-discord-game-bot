@@ -5,7 +5,7 @@ const Upgrade = require("../items/UpgradeClass.js");
 
 module.exports = class UpgradeConstructor extends Constructor {
   constructor(){
-    super({
+    super("Upgrade",{
       "1":{
         name:"+10% CPS",
         cost:250,

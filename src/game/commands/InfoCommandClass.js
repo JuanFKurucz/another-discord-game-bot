@@ -10,31 +10,32 @@ module.exports = class InfoCommand extends Command {
     let aux=null,
         response="";
 
-    for(var i in objects){
-      aux=objects[i];
-      response+=aux.print()+"\n";
+    for(let i in objects){
+      aux = objects[i];
+      response += aux.print()+"\n";
     }
 
     return response;
   }
 
   addList(m,title,objects){
-    let list = this.makeList(objects);
-    if(list!==""){
+    const list = this.makeList(objects);
+    if(list !== ""){
       m.addField(title,list);
     }
   }
 
   async execute(m,user,command){
     console.performance();
-    let response="You have "+user.cookies+" cookies" + "\n" +
+    const response="You have "+user.getCookies()+" cookies" + "\n" +
                   "CPS: "+user.getTotalCps() + "\n"+
                   "CPM: "+user.getTotalCpm();
 
     m.setTitle("Player information");
     m.setDescription(response);
-    this.addList(m,"Buildings owned",user.buildings);
-    this.addList(m,"Upgrades owned",user.upgrades);
+    for(let i in user.items){
+      this.addList(m,i.charAt(0).toUpperCase() + i.slice(1)+" owned",user.items[i]);
+    }
     console.performance();
   }
 }

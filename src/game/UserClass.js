@@ -3,7 +3,7 @@ module.exports = class User {
   constructor(id) {
     this.mention="<@!"+id+">";
     this.id=id;
-    this.cookies = 0;
+    this.cookies = 100;
     this.cpm = 1;
 
     this.multipliers={
@@ -11,9 +11,10 @@ module.exports = class User {
       "buildingMultiplier":1,
       "buildingCost":1
     };
-
-    this.buildings={};
-    this.upgrades={};
+    this.items={
+      "building":{},
+      "upgrade":{}
+    };
     this.info=null;
   }
 
@@ -36,8 +37,8 @@ module.exports = class User {
   getTotalCps(){
     let sum=0;
 
-    for(var i in this.buildings){
-      sum+=(parseFloat(this.buildings[i].cps))*this.multipliers["buildingMultiplier"];
+    for(let i in this.items["building"]){
+      sum+=(parseFloat(this.items["building"][i].getCps()))*this.multipliers["buildingMultiplier"];
     }
 
     return sum;
@@ -51,27 +52,20 @@ module.exports = class User {
     this.cookies+=this.getTotalCpm();
   }
 
-  getBuilding(id){
-    var building = this.buildings[id];
-    if(building){
-      return building;
+  getItem(type,id){
+    const typeName=type.toLowerCase();
+    if(typeof this.items[typeName] !== "undefined" && typeof this.items[typeName][id] !== "undefined"){
+      return this.items[typeName][id];
     }
     return null;
   }
 
-  getUpgrade(id){
-    var upgrade = this.upgrades[id];
-    if(upgrade){
-      return upgrade;
+  addItem(type,item){
+    const typeName=type.toLowerCase();
+    if(typeof this.items[typeName] !== "undefined"){
+      this.items[typeName][item.getId()]=item;
+      return true;
     }
-    return null;
-  }
-
-  addBuilding(building){
-    this.buildings[building.id]=building;
-  }
-
-  addUpgrade(upgrade){
-    this.upgrades[upgrade.id]=upgrade;
+    return false;
   }
 }
