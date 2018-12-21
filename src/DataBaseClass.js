@@ -26,7 +26,7 @@ class DataBase {
       let mayor = DataBase.databases[0];
       let mayorData = times[0];
       for(let tMain=1; tMain<lengthTimes;tMain++){
-        if(times[tMain].length === times[tMain-1].length){
+        if(times[tMain].length === mayorData.length){
           let aux=0,
               tempLength = times[tMain].length;
           while(aux<tempLength){
@@ -41,11 +41,26 @@ class DataBase {
           }
         }
       }
-      for(let d in DataBase.databases){
-        if(DataBase.databases[d].id !== mayor.id){
-          await DataBase.databases[d].copyDatabase(mayor);
+
+      let databasesToUpdate=[];
+
+      for(let tMain=0; tMain<lengthTimes;tMain++){
+        if(times[tMain].length === mayorData.length){
+          let aux=0,
+              tempLength = times[tMain].length;
+          while(aux<tempLength){
+            if(times[tMain][aux]["UPDATE_TIME"]>mayorData[aux]["UPDATE_TIME"]){
+              console.error("nani");
+              break;
+            } else if(mayorData[aux]["UPDATE_TIME"]>times[tMain][aux]["UPDATE_TIME"]){
+              databasesToUpdate.push(DataBase.databases[tMain]);
+              break;
+            }
+            aux++;
+          }
         }
       }
+      await mayor.copyToDatabases(databasesToUpdate);
     }
   }
 
@@ -141,8 +156,8 @@ class DataBase {
     return response;
   }
 
-  async copyDatabase(db){
-    if(this.connection){
+  async copyToDatabases(dbs){
+    if(this.connection !== null){
       let table,
           underscore,
           condition,
@@ -154,46 +169,51 @@ class DataBase {
           promises=[];
       for(let s=0;s<DataBase.structure.length;s++){
         table = DataBase.structure[s];
-        let userResults=db.query("SELECT * FROM "+table);
+        let userResults=this.query("SELECT * FROM "+table);
         promisesTables.push(userResults);
       }
-      await Promise.all(promisesTables).then(async (promisesTables) => {
-        var dataList=[];
-        var conditionList=[];
-        for(let ur in promisesTables){
-          for(let userResult in promisesTables[ur]){
-            let actualData = promisesTables[ur][userResult];
-            table = DataBase.structure[ur];
-            underscore = table.split("_");
-            condition="";
-            for(let u=0;u<underscore.length;u++){
-              if(u!=0){
-                condition+=" AND ";
+      for(let d in dbs){
+        let db = dbs[d];
+        if(db.id !== this.id && db.connection !== null){
+          await Promise.all(promisesTables).then(async (promisesTables) => {
+          var dataList=[];
+          var conditionList=[];
+          for(let ur in promisesTables){
+            for(let userResult in promisesTables[ur]){
+              let actualData = promisesTables[ur][userResult];
+              table = DataBase.structure[ur];
+              underscore = table.split("_");
+              condition="";
+              for(let u=0;u<underscore.length;u++){
+                if(u!=0){
+                  condition+=" AND ";
+                }
+                idName="id_"+underscore[u];
+                id = actualData[idName];
+                condition += idName+"="+id;
               }
-              idName="id_"+underscore[u];
-              id = actualData[idName];
-              condition += idName+"="+id;
+              promisesSelect.push({
+                "table":table,
+                "request":db.query("SELECT * FROM "+table+" WHERE "+condition),
+                "data":actualData,
+                "condition":condition
+              });
             }
-            promisesSelect.push({
-              "table":table,
-              "request":this.query("SELECT * FROM "+table+" WHERE "+condition),
-              "data":actualData,
-              "condition":condition
-            });
           }
+          var a = promisesSelect.map(function(x) {
+             return x["request"];
+          });
+          await Promise.all(a).then((a) => {
+            for(let ur in promisesSelect){
+              let tempResult = promisesSelect[ur]["request"];
+              tempResult.then( (result) => {
+                promises.push(db.updateStuff(result,promisesSelect[ur]));
+              });
+            }
+          });
+        });
         }
-        var a = promisesSelect.map(function(x) {
-           return x["request"];
-        });
-        await Promise.all(a).then((a) => {
-          for(let ur in promisesSelect){
-            let tempResult = promisesSelect[ur]["request"];
-            tempResult.then( (result) => {
-              promises.push(this.updateStuff(result,promisesSelect[ur]));
-            });
-          }
-        });
-      });
+      }
       await Promise.all(promises);
     }
   }
@@ -217,9 +237,10 @@ exports.dbQuery = async function(sql,object){
     for(let d in DataBase.databases){
       let db = DataBase.databases[d];
       if(db !== null && db.enabled === true && db.connection !== null){
-        let temp = await db.query(sql,object);
         if(result === null){
-          result = temp;
+          result = await db.query(sql,object);
+        } else {
+          db.query(sql,object);
         }
       }
     }
