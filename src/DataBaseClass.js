@@ -60,6 +60,13 @@ class DataBase {
 
   setEnabled(bool){
     this.enabled=bool;
+    if(bool === false){
+      for(let d in DataBase.databases){
+        if(DataBase.databases[d].id === this.id){
+          DataBase.databases.splice(d, 1);
+        }
+      }
+    }
   }
 
   async start(){
@@ -71,13 +78,23 @@ class DataBase {
         this.connection.connect((err) => {
           if (err) {
             if(this.printErrors){
-              console.error(err);
+              console.log(err,4);
             }
             this.connection=null;
+            this.setEnabled(false);
             resolve(false);
           } else{
             console.log(this.options.host+" connected!",0.5);
             resolve(true);
+          }
+        });
+
+        this.connection.on('error', (err) => {
+          console.error(err,4);
+          if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+            this.setEnabled(false);                         // lost due to either server restart, or a
+          } else {                                      // connnection idle timeout (the wait_timeout
+            console.error(err);                               // server variable configures this)
           }
         });
       });
@@ -115,9 +132,9 @@ class DataBase {
       response = await this.queryPromise(sql,object);
     } catch(e){
       if(this.printErrors){
-        console.error(sql);
-        console.error(object);
-        console.error(e);
+        console.log(sql,4);
+        console.log(object,4);
+        console.log(e,4);
       }
       response = null;
     }

@@ -98,13 +98,15 @@ module.exports = class Logger {
 
   performance(args){
     const time = performance.now();
-    this.sendConsole(time + " Last Diff: "+(time-this.lastTime) + this.getFileAndLine(1)+"\n","yellow");
+    this.sendConsole(this.level,time + " Last Diff: "+(time-this.lastTime) + this.getFileAndLine(1)+"\n","yellow");
     this.lastTime=time;
   }
 
-  sendConsole(text,color="white"){
+  sendConsole(level,text,color="white"){
     this.output(text);
-    process.stdout.write(this.style.font[color]+text);
+    if(this.level >= level){
+      process.stdout.write(this.style.font[color]+text);
+    }
   }
 
   console(args,color="white"){
@@ -122,7 +124,7 @@ module.exports = class Logger {
     }
     const r = util.format.apply(null, args),
           cute = this.parseOutput(r,l);
-    this.sendConsole(cute,color);
+    this.sendConsole(l,cute,color);
   }
 
   getLevel(){
