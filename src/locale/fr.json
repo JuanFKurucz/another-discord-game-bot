@@ -9,7 +9,7 @@
   "_notaffordable":"trop cher encore",
 
   "command_buy":"acheter",
-  "command_buy_description":"Utilise pour acheter des structures qui te donneras CPS\nThrow *{0}{1}* pour voir la liste des bâtiments \nThrow *{0}{1}* nombre pour acheter un bâtiment ",
+  "command_buy_description":"Utilise pour acheter des structures qui te donneras CPS\nThrow *{0}{1}* pour voir la liste des bâtiments \nThrow *{0}{1} nombre* pour acheter un bâtiment ",
   "command_deleteuser":"deleteuser",
   "command_deleteuser_description":"Removes yourself from the game database",
   "command_error":"erreur",
@@ -18,8 +18,8 @@
   "command_help_description":"Use to retrieve list of commands",
   "command_info":"info",
   "command_info_description":"Use to retrieve user profile and information",
-  "command_upgrade":"upgrade",
-  "command_upgrade_description":"Use to upgrades that will boost you in different ways\nThrow *{0}{1}* to see the list of upgrades\nThrow *{0}{1} number* to buy an upgrade",
+  "command_upgrade":"amélioration",
+  "command_upgrade_description":"Utilise pour améliorer ..\nThrow *{0}{1}* pour voir la liste des améliorations\nThrow *{0}{1} nombre* pour acheter une amélioration",
 
   "item_homeless":"sans abris",
   "item_shelter":"abris",
@@ -30,7 +30,7 @@
 
   "item_+10%cps":"+10% CPS",
   "item_+10%cpm":"+10% CPM",
-  "item_+10%costreduction":"+10% Cost reduction",
+  "item_+10%costreduction":"+10% Coût réduction",
 
   "buy_list":"liste des bâtiments",
   "buy_levelUp":"tu as amélioré ton bâtiment!",
@@ -43,14 +43,14 @@
   "upgrade_buy":"acheter améliorations",
   "upgrade_noexists":"cette amélioration n'existe pas",
 
-  "deleteuser_title":"delete user",
-  "deleteuser_message":"user deleted successfully",
+  "deleteuser_title":"supprime utilisateur",
+  "deleteuser_message":"utilisateur supprimé avec succès",
 
   "error_title":"commande inconnue",
   "error_message":"s'il-te-plaît écrit {0}{1} pour voir la liste des commandes",
 
   "help_title":"aide",
-  "help_message":"someone write a description here please",
+  "help_message":"quelqu'un écrit une description ici s'il-te-plaît",
 
   "info_title":"information du joueur",
   "info_message":"tu as {0} cookies\nCPS: {1}\nCPM: {2}"
