@@ -84,34 +84,45 @@ class DataBase {
     }
   }
 
+  onError(err){
+    console.error(err,4);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      this.setEnabled(false);                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      console.error(err);                               // server variable configures this)
+    }
+  }
+
+  connect(resolve,reject,err){
+    if (err) {
+      if(this.printErrors){
+        console.log(err,4);
+      }
+      this.connection=null;
+      this.setEnabled(false);
+      resolve(false);
+    } else{
+      console.log(this.options.host+" connected!",0.5);
+      resolve(true);
+    }
+  }
+
+  async startConnection(resolve,reject){
+    console.log("connecting...");
+    this.connection.connect((err) => {
+      this.connect(resolve,reject,err);
+    });
+    this.connection.on('error', (err) => {
+      this.onError(err)
+    });
+  }
+
   async start(){
     if(this.enabled){
       console.log("Loading "+this.options.host+" database");
       this.connection=mysql.createConnection(this.options);
-      return await new Promise(async (resolve,reject) => {
-        console.log("connecting...");
-        this.connection.connect((err) => {
-          if (err) {
-            if(this.printErrors){
-              console.log(err,4);
-            }
-            this.connection=null;
-            this.setEnabled(false);
-            resolve(false);
-          } else{
-            console.log(this.options.host+" connected!",0.5);
-            resolve(true);
-          }
-        });
-
-        this.connection.on('error', (err) => {
-          console.error(err,4);
-          if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
-            this.setEnabled(false);                         // lost due to either server restart, or a
-          } else {                                      // connnection idle timeout (the wait_timeout
-            console.error(err);                               // server variable configures this)
-          }
-        });
+      return await new Promise((resolve,reject) => {
+        this.startConnection(resolve,reject);
       });
     }
   }
@@ -156,6 +167,45 @@ class DataBase {
     return response;
   }
 
+  async getPromisesTables(promisesTables,promises,promisesSelect){
+    let dataList=[],
+        conditionList=[];
+
+    for(let ur in promisesTables){
+      for(let userResult in promisesTables[ur]){
+        let actualData = promisesTables[ur][userResult];
+        table = DataBase.structure[ur];
+        underscore = table.split("_");
+        condition="";
+        for(let u=0;u<underscore.length;u++){
+          if(u!=0){
+            condition+=" AND ";
+          }
+          idName="id_"+underscore[u];
+          id = actualData[idName];
+          condition += idName+"="+id;
+        }
+        promisesSelect.push({
+          "table":table,
+          "request":db.query("SELECT * FROM "+table+" WHERE "+condition),
+          "data":actualData,
+          "condition":condition
+        });
+      }
+    }
+    var a = promisesSelect.map(function(x) {
+       return x["request"];
+    });
+    await Promise.all(a).then((a) => {
+      for(let ur in promisesSelect){
+        let tempResult = promisesSelect[ur]["request"];
+        tempResult.then( (result) => {
+          promises.push(db.updateStuff(result,promisesSelect[ur]));
+        });
+      }
+    });
+  }
+
   async copyToDatabases(dbs){
     if(this.connection !== null){
       let table,
@@ -165,7 +215,6 @@ class DataBase {
           idName,
           tempResult,
           promisesTables=[],
-          promisesSelect=[],
           promises=[];
       for(let s=0;s<DataBase.structure.length;s++){
         table = DataBase.structure[s];
@@ -175,43 +224,9 @@ class DataBase {
       for(let d in dbs){
         let db = dbs[d];
         if(db.id !== this.id && db.connection !== null){
-          await Promise.all(promisesTables).then(async (promisesTables) => {
-          var dataList=[];
-          var conditionList=[];
-          for(let ur in promisesTables){
-            for(let userResult in promisesTables[ur]){
-              let actualData = promisesTables[ur][userResult];
-              table = DataBase.structure[ur];
-              underscore = table.split("_");
-              condition="";
-              for(let u=0;u<underscore.length;u++){
-                if(u!=0){
-                  condition+=" AND ";
-                }
-                idName="id_"+underscore[u];
-                id = actualData[idName];
-                condition += idName+"="+id;
-              }
-              promisesSelect.push({
-                "table":table,
-                "request":db.query("SELECT * FROM "+table+" WHERE "+condition),
-                "data":actualData,
-                "condition":condition
-              });
-            }
-          }
-          var a = promisesSelect.map(function(x) {
-             return x["request"];
+          await Promise.all(promisesTables).then((promisesTables) => {
+            this.getPromisesTables(promisesTables,promises,promisesSelect)
           });
-          await Promise.all(a).then((a) => {
-            for(let ur in promisesSelect){
-              let tempResult = promisesSelect[ur]["request"];
-              tempResult.then( (result) => {
-                promises.push(db.updateStuff(result,promisesSelect[ur]));
-              });
-            }
-          });
-        });
         }
       }
       await Promise.all(promises);
