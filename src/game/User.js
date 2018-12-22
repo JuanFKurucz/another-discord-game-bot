@@ -1,4 +1,7 @@
 'use strict';
+
+const Language = require("../Language.js");
+
 module.exports = class User {
   constructor(id) {
     this.mention="<@!"+id+">";
@@ -16,6 +19,27 @@ module.exports = class User {
       "upgrade":{}
     };
     this.info=null;
+    this.messageLang = null;
+  }
+
+  getLanguage(){
+    if(this.messageLang === null){
+      let id = "";
+      if(this.info !== null){
+        id=this.info.lastMessage.channel.id;//this.info.lastMessage.channel.member.guild.id;
+      }
+      return Language.getLan(id);
+    } else {
+      return this.messageLang;
+    }
+  }
+
+  setMessageLang(lan){
+    this.messageLang=lan;
+  }
+
+  emptyMessageLang(){
+    this.messageLang=null;
   }
 
   getId(){

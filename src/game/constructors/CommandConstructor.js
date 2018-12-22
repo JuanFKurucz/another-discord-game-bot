@@ -4,7 +4,7 @@ const Constructor = require("../Constructor.js"),
       fs = require('fs');
 
 module.exports = class CommandConstructor extends Constructor {
-  constructor(){
+  constructor(botprefix){
     const commandsFolder = "./src/game/commands/",
           files = fs.readdirSync(commandsFolder),
           elements = {},
@@ -26,6 +26,7 @@ module.exports = class CommandConstructor extends Constructor {
     });
 
     super("Command",elements);
+    this.botPrefix=botprefix;
   }
 
   initCommands(){
@@ -34,13 +35,16 @@ module.exports = class CommandConstructor extends Constructor {
 
     for(let e in this.elements){
       object=this.create(e);
-      commands[object.getName()]=object;
+      commands["command_"+object.name]=object;
     }
 
     return commands;
   }
 
   createObject(id,commandInfo){
-    return new commandInfo.constructor(id,commandInfo.name);
+    return new commandInfo.constructor(
+      id,
+      commandInfo.name
+    );
   }
 }

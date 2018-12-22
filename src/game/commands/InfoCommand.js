@@ -1,10 +1,10 @@
 'use strict';
-const Command = require("../Command.js");
+const Language = require("../../Language.js"),
+      Command = require("../Command.js");
 
 module.exports = class InfoCommand extends Command {
   constructor(id,name) {
-    const description = "Use to retrieve user profile and information";
-    super(id,name,description);
+    super(id,name);
   }
 
   makeList(objects){
@@ -28,11 +28,9 @@ module.exports = class InfoCommand extends Command {
 
   async execute(m,user,command){
     console.performance();
-    const response="You have "+user.getCookies()+" cookies" + "\n" +
-                  "CPS: "+user.getTotalCps() + "\n"+
-                  "CPM: "+user.getTotalCpm();
+    const response=Language.get("info_message",{"lan":user.getLanguage()}).format(user.getCookies(),user.getTotalCps(),user.getTotalCpm());
 
-    m.setTitle("Player information");
+    m.setTitle(Language.get("info_title",{"lan":user.getLanguage()}));
     m.setDescription(response);
     for(let i in user.items){
       this.addList(m,i.charAt(0).toUpperCase() + i.slice(1)+" owned",user.items[i]);

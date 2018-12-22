@@ -1,11 +1,11 @@
 'use strict';
-const Command = require("../Command.js");
-const UpgradeConstructor = require("../constructors/UpgradeConstructor.js");
+const Language = require("../../Language.js"),
+      Command = require("../Command.js"),
+      UpgradeConstructor = require("../constructors/UpgradeConstructor.js");
 
 module.exports = class UpgradeCommand extends Command {
   constructor(id,name) {
-    const description = "Use to upgrades that will boost you in different ways\nThrow *{prefix}{name}* to see the list of upgrades\nThrow *{prefix}{name} number* to buy an upgrade";
-    super(id,name,description);
+    super(id,name);
     this.constructor = new UpgradeConstructor();
   }
 
@@ -18,15 +18,15 @@ module.exports = class UpgradeCommand extends Command {
 
     if(upgrade !== null){
       if(await upgrade.acquire(user) === true){
-        response = "You bought an upgrade " + id_upgrade + "!";
+        response = Language.get("upgrade_acquire",{"lan":user.getLanguage()}).format(id_upgrade);
       } else {
-        response = user.mention + " you don't have enough cookies...";
+        response = Language.get("_nocookies",{"lan":user.getLanguage()}).format(user.mention);
       }
     } else {
-      response = "This upgrade doesn't exist";
+      response = Language.get("upgrade_noexists",{"lan":user.getLanguage()});
     }
 
-    m.setTitle("Buy upgrade");
+    m.setTitle(Language.get("upgrade_buy",{"lan":user.getLanguage()}));
     m.setDescription(response);
   }
 
@@ -36,20 +36,21 @@ module.exports = class UpgradeCommand extends Command {
         tmp = "",
         i=1;
 
-    m.setTitle("List of upgrades");
+    m.setTitle(Language.get("upgrade_list",{"lan":user.getLanguage()}));
     for(let v in this.constructor.elements){
       userUpgrade = user.getItem(this.constructor.getObjectName(),v);
       if(userUpgrade === null){
+
         upgrade = this.constructor.create(v);
         if(upgrade.canPurchase(user) === false){
-          tmp = " (Not affordable yet)";
+          tmp = " ("+Language.get("_notaffordable",{"lan":user.getLanguage()})+")";
         } else {
           tmp = "";
         }
 
         m.addField(
-          i+". "+upgrade.name + tmp,
-          " Price: "+ upgrade.cost
+          i+". "+upgrade.getName(user.getLanguage()) + tmp,
+          " "+Language.get("_price",{"lan":user.getLanguage()})+": "+ upgrade.cost
         );
         i++;
       }

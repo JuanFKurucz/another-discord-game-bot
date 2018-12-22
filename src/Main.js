@@ -8,10 +8,9 @@
   Here we just call for Bot and DataBase classes and start them.
 **/
 
-const Bot = new require(__dirname+"/Bot.js");
-const Logger = new require(__dirname+"/Logger.js");
-const { dbChangeEnable } = require(__dirname+"/DataBase.js");
-const token = 'NTE4NDc3Nzc3NTcwMTAzMjk2.DuRVpw.FrIJP52YjMI_ZRr2Jr_VI0ZzhmI';
+const Bot = new require(__dirname+"/Bot.js"),
+      Logger = new require(__dirname+"/Logger.js"),
+      { dbChangeEnable } = require(__dirname+"/DataBase.js");
 
 module.exports = class Main {
   constructor() {

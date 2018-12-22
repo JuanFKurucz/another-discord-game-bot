@@ -9,7 +9,9 @@ Levels of logs:
 
 **/
 
-const fs = require('fs'), util = require('util'), { performance } = require('perf_hooks');
+const fs = require('fs'),
+      util = require('util'),
+      { performance } = require('perf_hooks');
 
 let LogObject = null;
 

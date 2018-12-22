@@ -1,17 +1,17 @@
 'use strict';
-const Command = require("../Command.js");
+const Language = require("../../Language.js"),
+      Command = require("../Command.js");
 
 module.exports = class ErrorCommand extends Command {
   constructor(id,name) {
-    const description = "Default error message for unknown commands";
-    super(id,name,description);
+    super(id,name);
   }
 
   async execute(m,user,command){
     console.performance();
     const prefix = new require("../../Bot.js").get().getPrefix();
-    m.setTitle("Unknown command");
-    m.setDescription("Please write "+prefix+"help to see the command list");
+    m.setTitle(Language.get("error_title",{"lan":user.getLanguage()}));
+    m.setDescription(Language.get("error_message",{"lan":user.getLanguage()}).format(prefix,Language.get("command_help",{"style":"lower","lan":user.getLanguage()})));
     console.performance();
   }
 }

@@ -1,12 +1,11 @@
 'use strict';
-const Language = require("../../Language.js");
-const Command = require("../Command.js");
-const BuildingConstructor = require("../constructors/BuildingConstructor.js");
+const Language = require("../../Language.js"),
+      Command = require("../Command.js"),
+      BuildingConstructor = require("../constructors/BuildingConstructor.js");
 
 module.exports = class BuyCommand extends Command {
   constructor(id,name) {
-    const description = "Use to buy structures that will give you CPS\nThrow *{prefix}{name}* to see the list of buildings\nThrow *{prefix}{name} number* to buy a building";
-    super(id,name,description);
+    super(id,name);
     this.constructor = new BuildingConstructor();
   }
 
@@ -19,18 +18,18 @@ module.exports = class BuyCommand extends Command {
     if(building !== null){
       if(await building.acquire(user)){
         if(building.getLevel()>1){
-          response = Language.get("building_levelUp");
+          response = Language.get("buy_levelUp",{"lan":user.getLanguage()});
         } else {
-          response = Language.get("building_acquire").format(id_building);
+          response = Language.get("buy_acquire",{"lan":user.getLanguage()}).format(id_building);
         }
       } else {
-        response = Language.get("nocookies").format(user.mention);
+        response = Language.get("_nocookies",{"lan":user.getLanguage()}).format(user.mention);
       }
     } else {
-      response = Language.get("building_noexists");
+      response = Language.get("buy_noexists",{"lan":user.getLanguage()});
     }
 
-    m.setTitle(Language.get("buy_building"));
+    m.setTitle(Language.get("buy_building",{"lan":user.getLanguage()}));
     m.setDescription(response);
   }
 
@@ -39,10 +38,10 @@ module.exports = class BuyCommand extends Command {
         buildingInfo="",
         tmp="";
 
-    m.setTitle("List of buildings");
+    m.setTitle(Language.get("buy_list",{"lan":user.getLanguage()}));
 
     for(let w in this.constructor.elements){
-      tmp="";
+
       building=user.getItem(this.constructor.getObjectName(),w);
       if(building === null){
         building=this.constructor.create(w);
@@ -50,12 +49,14 @@ module.exports = class BuyCommand extends Command {
       buildingInfo=building.nextLevelInfo();
 
       if(building.canPurchase(user) === false){
-        tmp = " ("+Language.get("not_affordable")+")";
+        tmp = " ("+Language.get("_notaffordable",{"lan":user.getLanguage()})+")";
+      } else {
+        tmp="";
       }
 
       m.addField(
-        w+". "+buildingInfo.name + " Level: "+buildingInfo.level + tmp,
-        " Price: "+ buildingInfo.cost + "   " +" Cps: "+ buildingInfo.cps
+        w+". "+building.getName(user.getLanguage()) + " "+Language.get("_level",{"lan":user.getLanguage()})+": "+buildingInfo.level + tmp,
+        " "+Language.get("_price",{"lan":user.getLanguage()})+": "+ buildingInfo.cost + "   " +" "+Language.get("_cps",{"lan":user.getLanguage()})+": "+ buildingInfo.cps
       );
     }
   }

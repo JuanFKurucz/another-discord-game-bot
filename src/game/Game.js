@@ -7,15 +7,17 @@ Every message from Discord is setn to read function, where it creates the player
 and handles the message with commandHandler.
 **/
 
-const User = require(__dirname+"/User.js");
-const { dbQuery } = require("../DataBase.js");
-const CommandConstructor = require(__dirname+"/constructors/CommandConstructor.js");
+const User = require(__dirname+"/User.js"),
+      { dbQuery } = require("../DataBase.js"),
+      CommandConstructor = require(__dirname+"/constructors/CommandConstructor.js"),
+      Language = require("../Language.js");
 
 module.exports = class Game {
-  constructor() {
+  constructor(prefix) {
     this.users = {};
-    this.commandConstructor = new CommandConstructor();
+    this.commandConstructor = new CommandConstructor(prefix);
     this.commands = this.commandConstructor.initCommands();
+    this.lanCommands = Language.getCommands();
   }
 
   async deleteUser(user){
@@ -78,8 +80,21 @@ module.exports = class Game {
     return this.commands;
   }
 
-  getCommand(command){
-    const realCommand = (this.commands.hasOwnProperty(command) === true) ? command : "error";
+  getCommand(command,user){
+    let realCommand="command_error";
+    if(this.lanCommands.hasOwnProperty(command) === true){
+      realCommand=this.lanCommands[command][0].command;
+      let notsetIt = false;
+      for(let s in this.lanCommands[command]){
+        if(user.getLanguage() === this.lanCommands[command][s].lan){
+          notsetIt=true;
+          break;
+        }
+      }
+      if(notsetIt === false){
+        user.setMessageLang(this.lanCommands[command][0].lan);
+      }
+    }
     return this.commands[realCommand];
   }
 

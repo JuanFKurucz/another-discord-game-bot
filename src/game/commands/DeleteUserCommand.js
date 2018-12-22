@@ -1,18 +1,18 @@
 'use strict';
-const Command = require("../Command.js");
-const { dbQuery } = require("../../DataBase.js");
+const Language = require("../../Language.js"),
+      Command = require("../Command.js"),
+      { dbQuery } = require("../../DataBase.js");
 
 module.exports = class ErrorCommand extends Command {
   constructor(id,name) {
-    const description = "Removes yourself from the game database";
-    super(id,name,description);
+    super(id,name);
   }
 
   async execute(m,user,command){
     console.performance();
     new require("../../Bot.js").get().game.deleteUser(user);
-    m.setTitle("Delete user");
-    m.setDescription("User deleted successfully");
+    m.setTitle(Language.get("deleteuser_title",{"lan":user.getLanguage()}));
+    m.setDescription(Language.get("deleteuser_message",{"lan":user.getLanguage()}));
     console.performance();
   }
 }

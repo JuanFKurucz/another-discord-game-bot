@@ -1,7 +1,7 @@
 'use strict';
 
-const ShopItem = require("../ShopItem.js");
-const { dbQuery } = require("../../DataBase.js");
+const ShopItem = require("../ShopItem.js"),
+      { dbQuery } = require("../../DataBase.js");
 
 module.exports = class Building extends ShopItem {
   constructor(id,name,cost,costMultiplier,cps,cpsMultiplier) {
@@ -13,7 +13,7 @@ module.exports = class Building extends ShopItem {
   }
 
   print(){
-    return this.name+" (Level: "+this.level+") CPS: "+this.cps;
+    return this.getName()+" (Level: "+this.level+") CPS: "+this.cps;
   }
 
   getLevel(){
@@ -35,7 +35,6 @@ module.exports = class Building extends ShopItem {
   nextLevelInfo(){
     const response = {
       level:this.level+1,
-      name:this.name,
       cost:this.cost,
       costMultiplier:this.costMultiplier,
       cps:this.cps,

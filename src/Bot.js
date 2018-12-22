@@ -7,23 +7,16 @@
   Nothing much to see here, every message is sent to the GameClass
 **/
 
-const Discord = require('discord.js');
-const Message = require('discord.js').RichEmbed; //https://discord.js.org/#/docs/main/stable/class/RichEmbed
-const Game = require(__dirname+"/game/Game.js");
+const Discord = require('discord.js'),
+      Message = require('discord.js').RichEmbed, //https://discord.js.org/#/docs/main/stable/class/RichEmbed
+      Game = require(__dirname+"/game/Game.js");
 
 let BotObject = null;
 
 module.exports = class Bot {
-  static get(){
-    if(BotObject===null){
-      BotObject = new Bot();
-    }
-    return BotObject;
-  }
-
   constructor(debugMode=true) {
     this.prefix = "!";
-    this.game = new Game();
+    this.game = new Game(this.prefix);
     this.client = new Discord.Client();
     this.debugMode = debugMode;
     this.debuggChannel = "521806120134639627";
@@ -86,7 +79,7 @@ module.exports = class Bot {
 
       console.performance();
 
-      await this.game.getCommand(command[0]).execute(response,user,command); //gets the command using the first string in the splitteed message and executes it
+      await this.game.getCommand(command[0],user).execute(response,user,command); //gets the command using the first string in the splitteed message and executes it
     }
 
     return response;
@@ -106,6 +99,14 @@ module.exports = class Bot {
         .then(message => console.log(`Reply message: ${response}`))
         .catch(console.error);
       }
+      user.emptyMessageLang();
     }
+  }
+
+  static get(){
+    if(BotObject===null){
+      BotObject = new Bot();
+    }
+    return BotObject;
   }
 }
