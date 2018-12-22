@@ -19,7 +19,7 @@
   "command_info":"info",
   "command_info_description":"usalo para conseguir la informacion de tu perfil",
   "command_upgrade":"mejora",
-  "command_upgrade_description":"usalo para mejoras que te ayudaran de diferentes formas\nEscribe *{0}{1}* para ver la lista de mejoras\nEscribe *{0}{1} numero* para comprar una mejora",
+  "command_upgrade_description":"usalo para comprar mejoras que te ayudaran de diferentes formas\nEscribe *{0}{1}* para ver la lista de mejoras\nEscribe *{0}{1} numero* para comprar una mejora",
 
   "item_homeless":"sin hogar",
   "item_shelter":"asilo",

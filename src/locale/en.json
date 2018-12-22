@@ -9,7 +9,7 @@
   "_notaffordable":"not affordable yet",
 
   "command_buy":"buy",
-  "command_buy_description":"Use to buy structures that will give you CPS\nThrow *{0}{1}* to see the list of buildings\nThrow *{0}{1} number* to buy a building",
+  "command_buy_description":"Use to buy structures that will give you CPS\nWrite *{0}{1}* to see the list of buildings\nWrite *{0}{1} number* to buy a building",
   "command_deleteuser":"deleteuser",
   "command_deleteuser_description":"Removes yourself from the game database",
   "command_error":"error",
@@ -19,7 +19,7 @@
   "command_info":"info",
   "command_info_description":"Use to retrieve user profile and information",
   "command_upgrade":"upgrade",
-  "command_upgrade_description":"Use to upgrades that will boost you in different ways\nThrow *{0}{1}* to see the list of upgrades\nThrow *{0}{1} number* to buy an upgrade",
+  "command_upgrade_description":"Use to upgrades that will boost you in different ways\nWrite *{0}{1}* to see the list of upgrades\nWrite *{0}{1} number* to buy an upgrade",
 
   "item_homeless":"homeless",
   "item_shelter":"shelter",

@@ -20,6 +20,7 @@ module.exports = class Constructor {
 
   createObject(id,info){
     //override
+    console.log(id,info);
   }
 
   create(id){

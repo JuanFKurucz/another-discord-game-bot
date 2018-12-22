@@ -26,5 +26,6 @@ module.exports = class Command {
 
   execute(m,user,command){
     //to implement
+    console.log(m,user,command);
   }
 }

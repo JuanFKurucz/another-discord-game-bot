@@ -27,7 +27,7 @@ module.exports = class Logger {
   }
 
   parseStackLine(line){
-    return line.substring(line.indexOf("(")+1,line.indexOf(")")).replace(/^.*[\\\/]/, '');
+    return line.substring(line.indexOf("(")+1,line.indexOf(")")).replace(/^.*[\\/]/, '');
   }
 
   getLineNumber(){
@@ -37,7 +37,7 @@ module.exports = class Logger {
     return this.parseStackLine(stackTrace).split(":")[1];
   }
 
-  getFileAndLine(rec=0) {
+  getFileAndLine() {
     let response = "\nTrace";
     let end = "\n";
     if(this.maxTrace===0){
@@ -73,7 +73,7 @@ module.exports = class Logger {
       }
     }
     return response+end;
-  };
+  }
 
   constructor(level,maxTrace) {
     this.linePrinting=[];
@@ -123,7 +123,7 @@ module.exports = class Logger {
     this.linePrinting.push(this.getLineNumber());
   }
 
-  performance(args){
+  performance(){
     const time = performance.now();
     this.sendConsole(this.level,time + " Last Diff: "+(time-this.lastTime) + this.getFileAndLine(1)+"\n","yellow");
     this.lastTime=time;
