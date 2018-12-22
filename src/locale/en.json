@@ -1,0 +1,8 @@
+{
+  "building_levelUp":"You upgraded your building !",
+  "building_acquire":"You bought a building {}!",
+  "nocookies":"{} you don't have enough cookies...",
+  "building_noexists":"This building doesn't exist",
+  "buy_building":"Buy building",
+  "not_affordable":"Not affordable yet"
+}

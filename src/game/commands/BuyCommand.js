@@ -1,4 +1,5 @@
 'use strict';
+const Language = require("../../Language.js");
 const Command = require("../Command.js");
 const BuildingConstructor = require("../constructors/BuildingConstructor.js");
 
@@ -18,18 +19,18 @@ module.exports = class BuyCommand extends Command {
     if(building !== null){
       if(await building.acquire(user)){
         if(building.getLevel()>1){
-          response = "You upgraded your building !";
+          response = Language.get("building_levelUp");
         } else {
-          response = "You bought a building "+id_building+"!";
+          response = Language.get("building_acquire").format(id_building);
         }
       } else {
-        response = user.mention+" you don't have enough cookies...";
+        response = Language.get("nocookies").format(user.mention);
       }
     } else {
-      response = "This building doesn't exist";
+      response = Language.get("building_noexists");
     }
 
-    m.setTitle("Buy building");
+    m.setTitle(Language.get("buy_building"));
     m.setDescription(response);
   }
 
@@ -49,7 +50,7 @@ module.exports = class BuyCommand extends Command {
       buildingInfo=building.nextLevelInfo();
 
       if(building.canPurchase(user) === false){
-        tmp = " (Not affordable yet)";
+        tmp = " ("+Language.get("not_affordable")+")";
       }
 
       m.addField(
