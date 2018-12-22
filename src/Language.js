@@ -39,7 +39,7 @@ class Language {
       if(options.hasOwnProperty("style")){
         switch(options.style){
           case "camelcase":
-            let words = text.split(" ");
+            var words = text.split(" ");
             for(let w in words){
               words[w]=Language.upperCaseFirstChar(words[w],true);
             }
