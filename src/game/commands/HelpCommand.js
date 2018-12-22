@@ -16,7 +16,7 @@ module.exports = class HelpCommand extends Command {
     m.setDescription(Language.get("help_message",user.getLanguage()));
     for(let i in commandList){
       m.addField(
-        bot.getPrefix()+commandList[i].getName(),
+        bot.getPrefix()+commandList[i].getName(user.getLanguage()),
         commandList[i].getDescription(user.getLanguage()).format(bot.getPrefix(),commandList[i].getName())
       );
     }
