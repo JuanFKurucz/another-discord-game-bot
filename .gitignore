@@ -1,3 +1,4 @@
+index.js
 # Logs
 logs
 *.log
@@ -64,4 +65,4 @@ typings/
 output/*
 
 # exception to the rule
-!output/.gitkeep 
+!output/.gitkeep

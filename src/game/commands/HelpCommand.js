@@ -12,12 +12,12 @@ module.exports = class HelpCommand extends Command {
     const bot = require("../../Bot.js").get(),
         commandList = bot.game.getCommands();
 
-    m.setTitle(Language.get("help_title",{"lan":user.getLanguage()}));
-    m.setDescription(Language.get("help_message",{"lan":user.getLanguage()}));
+    m.setTitle(Language.get("help_title",user.getLanguage()));
+    m.setDescription(Language.get("help_message",user.getLanguage()));
     for(let i in commandList){
       m.addField(
         bot.getPrefix()+commandList[i].getName(),
-        commandList[i].getDescription(user.getLanguage()).replace(/{name}/g,commandList[i].getName()).replace(/{prefix}/g,bot.getPrefix())
+        commandList[i].getDescription(user.getLanguage()).format(bot.getPrefix(),commandList[i].getName())
       );
     }
     console.performance();

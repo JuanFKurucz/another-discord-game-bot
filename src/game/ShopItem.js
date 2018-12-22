@@ -19,7 +19,7 @@ module.exports = class ShopItem {
   }
 
   getName(lan){
-    return Language.get("item_"+this.name.toLowerCase().split(" ").join(""),{"style":"camelcase","lan":lan});
+    return Language.get("item_"+this.name.toLowerCase().split(" ").join(""),lan,{"style":"camelcase"});
   }
 
   getId(){

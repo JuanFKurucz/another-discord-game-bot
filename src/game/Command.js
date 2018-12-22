@@ -10,9 +10,8 @@ module.exports = class Command {
   }
 
   getName(lan){
-    return Language.get("command_"+this.name,{
+    return Language.get("command_"+this.name,lan,{
       "default":this.name,
-      "lan":lan,
       "style":"lower"
     });
   }
@@ -22,9 +21,7 @@ module.exports = class Command {
   }
 
   getDescription(lan){
-    return Language.get("command_"+this.name.toLowerCase()+"_description",{"lan":lan}).format(
-      this.getName(),this.botPrefix
-    );
+    return Language.get("command_"+this.name.toLowerCase()+"_description",lan);
   }
 
   execute(m,user,command){

@@ -26,14 +26,14 @@
   "item_appartment":"apartamento",
   "item_house":"casa",
   "item_palace":"palacio",
-  "item_bigmama":"gran mama",
+  "item_bigmama":"big mama",
 
   "item_+10%cps":"+10% GPS",
   "item_+10%cpm":"+10% GPM",
   "item_+10%costreduction":"+10% Reduccion de costos",
 
   "buy_list":"lista de estructuras",
-  "buy_levelUp":"mejoraste tu estructura!",
+  "buy_levelup":"mejoraste tu estructura!",
   "buy_acquire":"compraste una estructura {0}!",
   "buy_noexists":"esta estructura no existe",
   "buy_building":"compra estructuras",

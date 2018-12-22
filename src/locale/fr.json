@@ -1,12 +1,12 @@
 {
-  "_level":"level",
-  "_price":"price",
+  "_level":"niveau",
+  "_price":"prix",
   "_cps":"cps",
   "_cpm":"cpm",
   "_cookie":"cookie",
   "_cookies":"cookies",
-  "_nocookies":"{0} you don't have enough cookies...",
-  "_notaffordable":"not affordable yet",
+  "_nocookies":"{0} tu n'as pas assez de cookies...",
+  "_notaffordable":"trop cher encore",
 
   "command_buy":"buy",
   "command_buy_description":"Use to buy structures that will give you CPS\nThrow *{0}{1}* to see the list of buildings\nThrow *{0}{1} number* to buy a building",
@@ -33,7 +33,7 @@
   "item_+10%costreduction":"+10% Cost reduction",
 
   "buy_list":"list of buildings",
-  "buy_levelup":"you upgraded your building!",
+  "buy_levelUp":"you upgraded your building!",
   "buy_acquire":"you bought a building {0}!",
   "buy_noexists":"this building doesn't exist",
   "buy_building":"buy buildings",

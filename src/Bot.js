@@ -19,7 +19,7 @@ module.exports = class Bot {
     this.game = new Game(this.prefix);
     this.client = new Discord.Client();
     this.debugMode = debugMode;
-    this.debuggChannel = "521806120134639627";
+    this.debuggChannels = ["521806120134639627","526085327539142676","526101590550118410"];
     this.startDaemon();
   }
 
@@ -41,12 +41,6 @@ module.exports = class Bot {
     await this.game.loadUsers();
     this.client.on('ready', () => {
       console.log(`Logged in as ${this.client.user.tag}!`,1);
-      if(this.debugMode){
-        let trainingChannel = this.client.channels.get(this.debuggChannel);
-        if(trainingChannel){
-          trainingChannel.send("Everything is started for testing");
-        }
-      }
     });
     this.client.on('message', msg => {
       this.onMessage(msg);
@@ -86,7 +80,7 @@ module.exports = class Bot {
   }
 
   async onMessage(msg){
-    if(msg.hasOwnProperty("author") && !msg.author.bot && (!this.debugMode || (this.debugMode && msg.channel.id === this.debuggChannel))){
+    if(msg.hasOwnProperty("author") && !msg.author.bot && (!this.debugMode || (this.debugMode && this.debuggChannels.indexOf(msg.channel.id)!==-1))){
 
       const user = await this.game.getUser(msg.author);
       this.game.onMessage(user); //handles what to do when a user send a message (Ex: gives cookies);

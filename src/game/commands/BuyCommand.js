@@ -18,18 +18,18 @@ module.exports = class BuyCommand extends Command {
     if(building !== null){
       if(await building.acquire(user)){
         if(building.getLevel()>1){
-          response = Language.get("buy_levelUp",{"lan":user.getLanguage()});
+          response = Language.get("buy_levelUp",user.getLanguage());
         } else {
-          response = Language.get("buy_acquire",{"lan":user.getLanguage()}).format(id_building);
+          response = Language.get("buy_acquire",user.getLanguage()).format(id_building);
         }
       } else {
-        response = Language.get("_nocookies",{"lan":user.getLanguage()}).format(user.mention);
+        response = Language.get("_nocookies",user.getLanguage()).format(user.mention);
       }
     } else {
-      response = Language.get("buy_noexists",{"lan":user.getLanguage()});
+      response = Language.get("buy_noexists",user.getLanguage());
     }
 
-    m.setTitle(Language.get("buy_building",{"lan":user.getLanguage()}));
+    m.setTitle(Language.get("buy_building",user.getLanguage()));
     m.setDescription(response);
   }
 
@@ -38,7 +38,7 @@ module.exports = class BuyCommand extends Command {
         buildingInfo="",
         tmp="";
 
-    m.setTitle(Language.get("buy_list",{"lan":user.getLanguage()}));
+    m.setTitle(Language.get("buy_list",user.getLanguage()));
 
     for(let w in this.constructor.elements){
 
@@ -49,14 +49,14 @@ module.exports = class BuyCommand extends Command {
       buildingInfo=building.nextLevelInfo();
 
       if(building.canPurchase(user) === false){
-        tmp = " ("+Language.get("_notaffordable",{"lan":user.getLanguage()})+")";
+        tmp = " ("+Language.get("_notaffordable",user.getLanguage())+")";
       } else {
         tmp="";
       }
 
       m.addField(
-        w+". "+building.getName(user.getLanguage()) + " "+Language.get("_level",{"lan":user.getLanguage()})+": "+buildingInfo.level + tmp,
-        " "+Language.get("_price",{"lan":user.getLanguage()})+": "+ buildingInfo.cost + "   " +" "+Language.get("_cps",{"lan":user.getLanguage()})+": "+ buildingInfo.cps
+        w+". "+building.getName(user.getLanguage()) + " "+Language.get("_level",user.getLanguage())+": "+buildingInfo.level + tmp,
+        " "+Language.get("_price",user.getLanguage())+": "+ buildingInfo.cost + "   " +" "+Language.get("_cps",user.getLanguage())+": "+ buildingInfo.cps
       );
     }
   }

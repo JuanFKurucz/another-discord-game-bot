@@ -11,8 +11,8 @@ module.exports = class ErrorCommand extends Command {
   async execute(m,user,command){
     console.performance();
     new require("../../Bot.js").get().game.deleteUser(user);
-    m.setTitle(Language.get("deleteuser_title",{"lan":user.getLanguage()}));
-    m.setDescription(Language.get("deleteuser_message",{"lan":user.getLanguage()}));
+    m.setTitle(Language.get("deleteuser_title",user.getLanguage()));
+    m.setDescription(Language.get("deleteuser_message",user.getLanguage()));
     console.performance();
   }
 }

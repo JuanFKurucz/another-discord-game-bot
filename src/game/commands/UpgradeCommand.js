@@ -18,15 +18,15 @@ module.exports = class UpgradeCommand extends Command {
 
     if(upgrade !== null){
       if(await upgrade.acquire(user) === true){
-        response = Language.get("upgrade_acquire",{"lan":user.getLanguage()}).format(id_upgrade);
+        response = Language.get("upgrade_acquire",user.getLanguage()).format(id_upgrade);
       } else {
-        response = Language.get("_nocookies",{"lan":user.getLanguage()}).format(user.mention);
+        response = Language.get("_nocookies",user.getLanguage()).format(user.mention);
       }
     } else {
-      response = Language.get("upgrade_noexists",{"lan":user.getLanguage()});
+      response = Language.get("upgrade_noexists",user.getLanguage());
     }
 
-    m.setTitle(Language.get("upgrade_buy",{"lan":user.getLanguage()}));
+    m.setTitle(Language.get("upgrade_buy",user.getLanguage()));
     m.setDescription(response);
   }
 
@@ -36,21 +36,21 @@ module.exports = class UpgradeCommand extends Command {
         tmp = "",
         i=1;
 
-    m.setTitle(Language.get("upgrade_list",{"lan":user.getLanguage()}));
+    m.setTitle(Language.get("upgrade_list",user.getLanguage()));
     for(let v in this.constructor.elements){
       userUpgrade = user.getItem(this.constructor.getObjectName(),v);
       if(userUpgrade === null){
 
         upgrade = this.constructor.create(v);
         if(upgrade.canPurchase(user) === false){
-          tmp = " ("+Language.get("_notaffordable",{"lan":user.getLanguage()})+")";
+          tmp = " ("+Language.get("_notaffordable",user.getLanguage())+")";
         } else {
           tmp = "";
         }
 
         m.addField(
           i+". "+upgrade.getName(user.getLanguage()) + tmp,
-          " "+Language.get("_price",{"lan":user.getLanguage()})+": "+ upgrade.cost
+          " "+Language.get("_price",user.getLanguage())+": "+ upgrade.cost
         );
         i++;
       }

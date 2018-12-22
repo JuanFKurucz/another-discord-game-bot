@@ -81,19 +81,10 @@ module.exports = class Game {
   }
 
   getCommand(command,user){
+    const lan = user.getLanguage();
     let realCommand="command_error";
-    if(this.lanCommands.hasOwnProperty(command) === true){
-      realCommand=this.lanCommands[command][0].command;
-      let notsetIt = false;
-      for(let s in this.lanCommands[command]){
-        if(user.getLanguage() === this.lanCommands[command][s].lan){
-          notsetIt=true;
-          break;
-        }
-      }
-      if(notsetIt === false){
-        user.setMessageLang(this.lanCommands[command][0].lan);
-      }
+    if(this.lanCommands.hasOwnProperty(lan) === true && this.lanCommands[lan].hasOwnProperty(command)===true){
+      realCommand=this.lanCommands[lan][command];
     }
     return this.commands[realCommand];
   }

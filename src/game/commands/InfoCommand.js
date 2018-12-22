@@ -28,9 +28,9 @@ module.exports = class InfoCommand extends Command {
 
   async execute(m,user,command){
     console.performance();
-    const response=Language.get("info_message",{"lan":user.getLanguage()}).format(user.getCookies(),user.getTotalCps(),user.getTotalCpm());
+    const response=Language.get("info_message",user.getLanguage()).format(user.getCookies(),user.getTotalCps(),user.getTotalCpm());
 
-    m.setTitle(Language.get("info_title",{"lan":user.getLanguage()}));
+    m.setTitle(Language.get("info_title",user.getLanguage()));
     m.setDescription(response);
     for(let i in user.items){
       this.addList(m,i.charAt(0).toUpperCase() + i.slice(1)+" owned",user.items[i]);

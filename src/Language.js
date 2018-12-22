@@ -15,11 +15,16 @@ String.prototype.format = function () {
 
 class Language {
   static getLan(serverId){
-    if(serverId==="526085327539142676"){//"509053465016795147"){
-      return "es";
-    } else {
-      return "en";
+    let lan="en";
+    switch(serverId){
+      case "526101590550118410":
+        lan = "fr";
+        break;
+      case "526085327539142676":
+        lan = "es";
+        break;
     }
+    return lan;
   }
 
   static getCommands(){
@@ -28,9 +33,7 @@ class Language {
 
   static lancommands(){}
   static languages(){}
-  static get(id,options={}){
-    const lan = (options.hasOwnProperty("lan") === true && typeof options.lan !== "undefined") ? options.lan.toLowerCase() : "es"
-
+  static get(id,lan="en",options={}){
     if(Language.languages.hasOwnProperty(lan) && Language.languages[lan].hasOwnProperty(id.toLowerCase())){
       let text = Language.languages[lan][id.toLowerCase()];
       if(options.hasOwnProperty("style")){
@@ -83,13 +86,10 @@ class Language {
         if(l.indexOf("command_")!==-1){
           let underscoreSplit = l.split("_");
           if(underscoreSplit.length===2){
-            if(!Language.lancommands.hasOwnProperty(Language.languages[lan][l])){
-              Language.lancommands[Language.languages[lan][l]]=[]
+            if(!Language.lancommands.hasOwnProperty(lan)){
+              Language.lancommands[lan]={};
             }
-            Language.lancommands[Language.languages[lan][l]].push({
-              "command":l,
-              "lan":lan
-            });
+            Language.lancommands[lan][Language.languages[lan][l]]=l;
           }
         }
       }

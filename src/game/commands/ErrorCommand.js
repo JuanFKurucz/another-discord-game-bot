@@ -10,8 +10,8 @@ module.exports = class ErrorCommand extends Command {
   async execute(m,user,command){
     console.performance();
     const prefix = new require("../../Bot.js").get().getPrefix();
-    m.setTitle(Language.get("error_title",{"lan":user.getLanguage()}));
-    m.setDescription(Language.get("error_message",{"lan":user.getLanguage()}).format(prefix,Language.get("command_help",{"style":"lower","lan":user.getLanguage()})));
+    m.setTitle(Language.get("error_title",user.getLanguage()));
+    m.setDescription(Language.get("error_message",user.getLanguage()).format(prefix,Language.get("command_help",user.getLanguage(),{"style":"lower"})));
     console.performance();
   }
 }
