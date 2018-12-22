@@ -10,6 +10,30 @@ class DataBase {
   static enabled(){}
   static databases(){}
   static structure(){}
+
+  static getUpdatedDatabase(times){
+    let lengthTimes = times.length;
+    let mayor = DataBase.databases[0];
+    let mayorData = times[0];
+    for(let tMain=1; tMain<lengthTimes;tMain++){
+      if(times[tMain].length === mayorData.length){
+        let aux=0,
+            tempLength = times[tMain].length;
+        while(aux<tempLength){
+          if(times[tMain][aux]["UPDATE_TIME"]>mayorData[aux]["UPDATE_TIME"]){
+            mayor = DataBase.databases[tMain];
+            mayorData = times[tMain];
+            break;
+          } else if(mayorData[aux]["UPDATE_TIME"]>times[tMain][aux]["UPDATE_TIME"]){
+            break;
+          }
+          aux++;
+        }
+      }
+    }
+    return {mayor,mayorData,lengthTimes};
+  }
+
   static async update(db1,db2){
     DataBase.structure = [];
     if(DataBase.enabled === true && DataBase.databases.length>1){
@@ -22,28 +46,9 @@ class DataBase {
       for(let t in times[0]){
         DataBase.structure.push(times[0][t]["TABLE_NAME"]);
       }
-      let lengthTimes = times.length;
-      let mayor = DataBase.databases[0];
-      let mayorData = times[0];
-      for(let tMain=1; tMain<lengthTimes;tMain++){
-        if(times[tMain].length === mayorData.length){
-          let aux=0,
-              tempLength = times[tMain].length;
-          while(aux<tempLength){
-            if(times[tMain][aux]["UPDATE_TIME"]>mayorData[aux]["UPDATE_TIME"]){
-              mayor = DataBase.databases[tMain];
-              mayorData = times[tMain];
-              break;
-            } else if(mayorData[aux]["UPDATE_TIME"]>times[tMain][aux]["UPDATE_TIME"]){
-              break;
-            }
-            aux++;
-          }
-        }
-      }
 
+      let {mayor,mayorData,lengthTimes} = this.getUpdatedDatabase(times);
       let databasesToUpdate=[];
-
       for(let tMain=0; tMain<lengthTimes;tMain++){
         if(times[tMain].length === mayorData.length){
           let aux=0,
