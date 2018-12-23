@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
 Game Class, this is where the fun begins.
@@ -33,39 +33,38 @@ module.exports = class Game {
     const buildingConstractor = new BuildingConstructor(),
           upgradeConstractor = new UpgradeConstructor(),
           userResults = await dbQuery("SELECT * FROM user");
-    let user = null,
-        building = null,
-        upgrade = null,
-        buildingResults = null,
-        upgradeResults = null;
 
     if(userResults !== null){
-      for(let userResult in userResults) {
-        user = new User(userResults[userResult].id_user);
-        user.cookies = userResults[userResult].cookies;
+      let userResultsLength = userResults.length;
+      for(let u = 0; u < userResultsLength; u++) {
+        let user = new User(userResults[u].id_user);
+        user.cookies = userResults[u].cookies;
 
-        buildingResults=await dbQuery("SELECT id_building, level FROM user_building LEFT JOIN user ON user.id_user = user_building.id_user WHERE user.id_user = "+user.getId());
+        let buildingResults=await dbQuery("SELECT id_building, level FROM user_building LEFT JOIN user ON user.id_user = user_building.id_user WHERE user.id_user = "+user.getId());
         if(buildingResults !== null){
-          for(let buildingResult in buildingResults){
-            building = buildingConstractor.create(buildingResults[buildingResult].id_building);
+          let buildingResultsLength = buildingResults.length;
+          for(let b=0; b<buildingResultsLength; b++){
+            let building = buildingConstractor.create(buildingResults[b].id_building);
             building.owner = user;
-            for(let i=0;i<buildingResults[buildingResult].level;i++){
-              building.levelUp();
+            const level = buildingResults[b].level;
+            for(let i=0;i<level;i++){
+              building.levelUp(false);
             }
             user.addItem("building",building);
           }
         }
 
-        upgradeResults=await dbQuery("SELECT id_upgrade FROM user_upgrade LEFT JOIN user ON user.id_user = user_upgrade.id_user WHERE user.id_user = "+user.getId());
+        let upgradeResults=await dbQuery("SELECT id_upgrade FROM user_upgrade LEFT JOIN user ON user.id_user = user_upgrade.id_user WHERE user.id_user = "+user.getId());
         if(upgradeResults !== null){
-          for(let upgradeResult in upgradeResults){
-            upgrade = upgradeConstractor.create(upgradeResults[upgradeResult].id_upgrade);
+          let upgradeResultsLength = upgradeResults.length;
+          for(let b=0; b<upgradeResultsLength; b++){
+            let upgrade = upgradeConstractor.create(upgradeResults[b].id_upgrade);
             upgrade.owner = user;
             upgrade.apply();
             user.addItem("upgrade",upgrade);
           }
         }
-        this.users[userResults[userResult].id_user] = user;
+        this.users[userResults[u].id_user] = user;
       }
     }
   }

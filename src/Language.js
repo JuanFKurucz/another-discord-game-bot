@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const fs = require('fs');
 
@@ -34,8 +34,10 @@ class Language {
   static lancommands(){}
   static languages(){}
   static get(id,lan="en",options={}){
-    if(Language.languages.hasOwnProperty(lan) && Language.languages[lan].hasOwnProperty(id.toLowerCase())){
-      let text = Language.languages[lan][id.toLowerCase()];
+    const realId = id.toLowerCase();
+    
+    if(Language.languages.hasOwnProperty(lan) && Language.languages[lan].hasOwnProperty(realId)){
+      let text = Language.languages[lan][realId];
       if(options.hasOwnProperty("style")){
         switch(options.style){
           case "camelcase":

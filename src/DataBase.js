@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
   This currently does nothing
@@ -79,7 +79,7 @@ class DataBase {
     let response;
     try {
       response = await new Promise((resolve,reject ) => {
-        this.connection.query(sql,args,(err,rows) => {
+        this.connection.query(sql,object,(err,rows) => {
           (err) ? reject(err) : resolve(rows);
         });
       });
@@ -123,7 +123,7 @@ DataBase.enabled=true;
 DataBase.databases=[];
 
 exports.dbQuery = async function(sql,object){
-  return (DataBase.enabled === true && DataBase.databases.length > 0) ? DataBase.executeQuerys(sql,object) : null;
+  return (DataBase.enabled === true && DataBase.databases.length > 0) ? await DataBase.executeQuerys(sql,object) : null;
 };
 
 exports.dbChangeEnable = async function (bool="true"){

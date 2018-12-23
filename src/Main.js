@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
   This index.js is meant to work as any main file of any project.

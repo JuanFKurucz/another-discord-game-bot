@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
   This is the BotClass, pretty similar to the GameClass (i might merge them or something later)

@@ -8,15 +8,4 @@
     "database": "notagame",
     "debug": false
   }
-},
-{
-"enabled":true,
-"options":{
-  "connectionLimit": 100,
-  "host": "localhost",
-  "user": "root",
-  "password": "",
-  "database": "copy_notagame",
-  "debug": false
-}
 }]

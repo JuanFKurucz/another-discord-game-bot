@@ -1,4 +1,5 @@
-'use strict';
+"use strict";
+
 const Language = require("../../Language.js"),
       Command = require("../Command.js");
 

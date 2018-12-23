@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const Constructor = require("../Constructor.js"),
       Building = require("../items/Building.js");
