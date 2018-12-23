@@ -8,7 +8,7 @@ module.exports = class HelpCommand extends Command {
   }
 
   async execute(m,user,command){
-    console.performance();
+    console.time();
     const bot = require("../../Bot.js").get(),
         commandList = bot.game.getCommands();
 
@@ -20,6 +20,6 @@ module.exports = class HelpCommand extends Command {
         commandList[i].getDescription(user.getLanguage()).format(bot.getPrefix(),commandList[i].getName())
       );
     }
-    console.performance();
+    console.time();
   }
 }

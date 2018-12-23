@@ -97,11 +97,11 @@ class DataBase {
   static async loadDataBases(databaseConfig){
     for(let dc in databaseConfig){
       if(databaseConfig[dc].enabled === true){
-        console.performance();
+        console.time();
         let tempDb = new DataBase(databaseConfig[dc].options);
-        console.performance();
+        console.time();
         await tempDb.start();
-        console.performance();
+        console.time();
       }
     }
   }
@@ -127,7 +127,7 @@ exports.dbQuery = async function(sql,object){
 };
 
 exports.dbChangeEnable = async function (bool="true"){
-  console.performance();
+  console.time();
   let boolValue = bool == "true";
   console.log("Database enabled: "+boolValue);
   DataBase.enabled = boolValue;

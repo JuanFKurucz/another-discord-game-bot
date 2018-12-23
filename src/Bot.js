@@ -71,7 +71,7 @@ module.exports = class Bot {
 
       command = text.substring(this.prefix.length,text.length).toLowerCase().split(" "); //Splits the text of the message in spaces removing the prefix out of it
 
-      console.performance();
+      console.time();
 
       await this.game.getCommand(command[0],user).execute(response,user,command); //gets the command using the first string in the splitteed message and executes it
     }

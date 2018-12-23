@@ -119,7 +119,7 @@ module.exports = class Logger {
     this.linePrinting.push(this.getLineNumber());
     console.log = function() { self.console(arguments) };
     console.error = function(){ self.console(arguments,"red") };
-    console.performance = function(){ self.performance(arguments) }
+    console.time = function(){ self.performance(arguments) }
     this.linePrinting.push(this.getLineNumber());
   }
 

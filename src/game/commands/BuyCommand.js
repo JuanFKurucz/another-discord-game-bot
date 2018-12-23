@@ -62,12 +62,12 @@ module.exports = class BuyCommand extends Command {
   }
 
   async execute(m,user,command){
-    console.performance();
+    console.time();
     if(command.length>1){
       await this.buyBuilding(m,command,user)
     } else {
       await this.displayBuildingList(m,user);
     }
-    console.performance();
+    console.time();
   }
 }
