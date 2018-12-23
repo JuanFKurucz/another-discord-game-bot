@@ -33,7 +33,7 @@ module.exports = class Message {
       if(result.indexOf("^") !== -1){
         result = this.parseText(result);
       }
-      return result;
+      return (result!=="") ? result : text;
     }
   }
 
