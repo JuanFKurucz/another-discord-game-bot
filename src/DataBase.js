@@ -34,11 +34,7 @@ class DataBase {
   setEnabled(bool){
     this.enabled=bool;
     if(bool === false){
-      for(let d in DataBase.databases){
-        if(DataBase.databases[d].id === this.id){
-          DataBase.databases.splice(d, 1);
-        }
-      }
+      DataBase.databases = DataBase.databases.filter(db => db.id !== this.id);
     }
   }
 
@@ -87,24 +83,16 @@ class DataBase {
 
   queryPromise(sql,args) {
     return new Promise((resolve,reject ) => {
-      if(this.connection===null || this.enabled===false){
-        resolve(null);
-      } else {
-        this.connection.query(sql,args,(err,rows) => {
-          if (err)
-            return reject(err);
-          resolve(rows);
-        });
-      }
+      this.connection.query(sql,args,(err,rows) => {
+        (err) ? reject(err) : resolve(rows);
+      });
     });
   }
 
   close() {
     return new Promise((resolve,reject) => {
       this.connection.end(err => {
-        if (err)
-          return reject(err);
-        resolve();
+        (err) ? reject(err) : resolve();
       });
     });
   }
@@ -138,7 +126,7 @@ class DataBase {
   }
 
   canExecute(){
-    return db !== null && db.enabled === true && db.connection !== null;
+    return this.enabled === true && this.connection !== null;
   }
 
   static async executeQuerys(sql,object){
@@ -146,7 +134,7 @@ class DataBase {
         length = DataBase.databases.length;
     for(let d = 0; d<length; d++){
       let db = DataBase.databases[d];
-      if(db.canExecute() === true){
+      if(db !== null && db.canExecute() === true){
         (result === null) ? result = await db.query(sql,object) : db.query(sql,object);
       }
     }
@@ -171,7 +159,7 @@ exports.dbChangeEnable = async function (bool="true"){
       console.log("Reading databases config file");
       let databaseConfig = JSON.parse(fs.readFileSync(configFile, 'utf8'));
       console.log("Finished reading databases, starting loading them");
-      Database.loadDataBases(databaseConfig);
+      DataBase.loadDataBases(databaseConfig);
       console.log("Finished loading databases");
       DataBase.getStructure();
     } else {
