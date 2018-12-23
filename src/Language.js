@@ -40,6 +40,7 @@ class Language {
 
   static lancommands(){}
   static languages(){}
+
   static get(id,lan="en",options={}){
     const realId = id.toLowerCase();
 

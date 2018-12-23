@@ -18,7 +18,17 @@ module.exports = class Building extends ShopItem {
   }
 
   print(){
-    return this.getName()+" (Level: "+this.level+") CPS: "+this.cps;
+    return "^"+this.getName()+"^ (^_level^: "+this.level+") ^_cps^: "+this.cps;
+  }
+
+  printBuy(user){
+    const tmp = (this.canPurchase(user)===true) ? "" : " (^_notaffordable^)",
+          buildingInfo = this.nextLevelInfo();
+
+    return {
+      "title":"^"+this.getName()+"^ ^_level^: "+buildingInfo.level + tmp,
+      "description":" ^_price^: "+ buildingInfo.cost + "   " +" ^_cps^: "+ buildingInfo.cps
+    };
   }
 
   getLevel(){

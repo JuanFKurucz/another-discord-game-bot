@@ -75,4 +75,8 @@ module.exports = class ShopItem {
     }
     return this.response;
   }
+
+  canAcquire(user){
+    return true;
+  }
 }

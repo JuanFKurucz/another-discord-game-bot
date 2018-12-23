@@ -28,9 +28,9 @@
   "item_palace":"palace",
   "item_bigmama":"big mama",
 
-  "item_+10%cps":"+10% CPS",
-  "item_+10%cpm":"+10% CPM",
-  "item_+10%costreduction":"+10% Cost reduction",
+  "item_buildingbooster":"Building Booster",
+  "item_selfmadebooster":"Selfmade Booster",
+  "item_costreduction":"Cost reduction",
 
   "buy_list":"list of buildings",
   "buy_levelup":"you upgraded your building!",

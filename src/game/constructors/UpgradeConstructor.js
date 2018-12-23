@@ -7,19 +7,19 @@ module.exports = class UpgradeConstructor extends Constructor {
   constructor(){
     super("Upgrade",{
       "1":{
-        name:"+10% CPS",
+        name:"Building Booster",
         cost:250,
         multiplierName:"buildingMultiplier",
         multiplier:0.1
       },
       "2":{
-        name:"+10% CPM",
+        name:"Selfmade Booster",
         cost:500,
         multiplierName:"cpmMultiplier",
         multiplier:0.1
       },
       "3":{
-        name:"+10% Cost reduction",
+        name:"Cost reduction",
         cost:1000,
         multiplierName:"buildingCost",
         multiplier:-0.1

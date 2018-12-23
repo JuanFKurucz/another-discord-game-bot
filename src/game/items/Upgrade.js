@@ -15,7 +15,16 @@ module.exports = class Upgrade extends ShopItem {
   }
 
   print(){
-    return this.name+" "+this.multiplierName+": "+(parseFloat(this.multiplier)*100)+"%";
+    return "^"+this.name+"^ ^"+this.multiplierName+"^: "+(parseFloat(this.multiplier)*100)+"%";
+  }
+
+  printBuy(user){
+    const tmp = (this.canPurchase(user)===true) ? "" : " (^_notaffordable^)";
+
+    return {
+      "title":"^"+this.getName()+"^" + tmp,
+      "description":" ^_price^: "+ this.cost+" ^"+this.multiplierName+"^: "+(parseFloat(this.multiplier)*100)+"%"
+    };
   }
 
   canBeApplied(){
@@ -29,5 +38,9 @@ module.exports = class Upgrade extends ShopItem {
       return true;
     }
     return false;
+  }
+
+  canAcquire(user){
+    return user.getItem(this.constructor.name,this.id) === null;
   }
 }

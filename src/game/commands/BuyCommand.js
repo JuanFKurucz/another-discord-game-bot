@@ -1,65 +1,51 @@
 "use strict";
 
 const Command = require("../Command.js"),
+      ShopList = require("../ShopList.js"),
       BuildingConstructor = require("../constructors/BuildingConstructor.js");
 
 module.exports = class BuyCommand extends Command {
   constructor(id,name) {
     super(id,name);
     this.constructor = new BuildingConstructor();
+    this.shopList = null;
   }
 
-  async buyBuilding(m,command,user){
-    const id_building = parseInt(command[1]),
-          userBuilding = user.getItem(this.constructor.getObjectName(),id_building),
-          building = (userBuilding === null) ? this.constructor.create(id_building) : userBuilding;
+  async buyBuilding(message,name){
+    let response = await this.shopList.buyItem(name);
 
-    let response="";
-
-    if(building !== null){
-      response = await building.acquire(user);
-    } else {
+    if(response === null){
       response = "buy_noexists";
     }
 
-    m.setTitle("buy_building");
-    m.setDescription(response);
+    message.setTitle("buy_building");
+    message.setDescription(response);
   }
 
-  displayBuildingList(m,user){
-    let building=null,
-        buildingInfo="",
-        tmp="";
+  displayBuildingList(message,page=0){
+    const printList = this.shopList.printList(page),
+        printListLength = printList.length;
 
-    m.setTitle("buy_list");
-
-    for(let w in this.constructor.elements){
-
-      building=user.getItem(this.constructor.getObjectName(),w);
-      if(building === null){
-        building=this.constructor.create(w);
-      }
-      buildingInfo=building.nextLevelInfo();
-
-      if(building.canPurchase(user) === false){
-        tmp = " (^_notaffordable^)";
-      } else {
-        tmp="";
-      }
-
-      m.addField(
-        w+". ^"+building.getName()+"^ ^_level^: "+buildingInfo.level + tmp,
-        " ^_price^: "+ buildingInfo.cost + "   " +" ^_cps^: "+ buildingInfo.cps
-      );
+    for(let s = 0; s<printListLength; s++){
+      message.addField(printList[s].title,printList[s].description);
     }
+
+    message.setTitle("buy_list");
   }
 
-  async execute(m,user,command){
+  async execute(message,user,command){
     console.time();
+    this.shopList = new ShopList(user,this.constructor);
     if(command.length>1){
-      await this.buyBuilding(m,command,user)
+      command.shift();
+      command = command.join(" ");
+      if(isNaN(command)){
+        await this.buyBuilding(message,command);
+      } else {
+        this.displayBuildingList(message,parseInt(command));
+      }
     } else {
-      await this.displayBuildingList(m,user);
+      this.displayBuildingList(message);
     }
     console.time();
   }
