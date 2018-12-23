@@ -1,7 +1,5 @@
 "use strict";
 
-const Language = require("../Language.js");
-
 module.exports = class Command {
   constructor(id,name,description="") {
     this.id=id;
@@ -9,19 +7,16 @@ module.exports = class Command {
     this.description=description;
   }
 
-  getName(lan){
-    return Language.get("command_"+this.name,lan,{
-      "default":this.name,
-      "style":"lower"
-    });
+  getName(){
+    return "command_"+this.name;
   }
 
   getId(){
     return this.id;
   }
 
-  getDescription(lan){
-    return Language.get("command_"+this.name.toLowerCase()+"_description",lan);
+  getDescription(){
+    return "command_"+this.name.toLowerCase()+"_description";
   }
 
   execute(m,user,command){

@@ -1,7 +1,6 @@
 "use strict";
 
-const Language = require("../../Language.js"),
-      Command = require("../Command.js"),
+const Command = require("../Command.js"),
       BuildingConstructor = require("../constructors/BuildingConstructor.js");
 
 module.exports = class BuyCommand extends Command {
@@ -14,23 +13,26 @@ module.exports = class BuyCommand extends Command {
     const id_building = parseInt(command[1]),
           userBuilding = user.getItem(this.constructor.getObjectName(),id_building),
           building = (userBuilding === null) ? this.constructor.create(id_building) : userBuilding;
-    let response="";
+    let response="",
+        data=[];
 
     if(building !== null){
       if(await building.acquire(user)){
         if(building.getLevel()>1){
-          response = Language.get("buy_levelUp",user.getLanguage());
+          response = "buy_levelUp";
         } else {
-          response = Language.get("buy_acquire",user.getLanguage()).format(id_building);
+          response = "buy_acquire";
+          data.push(id_building);
         }
       } else {
-        response = Language.get("_nocookies",user.getLanguage()).format(user.mention);
+        response = "_nocookies";
+        data.push(user.mention);
       }
     } else {
-      response = Language.get("buy_noexists",user.getLanguage());
+      response = "buy_noexists";
     }
 
-    m.setTitle(Language.get("buy_building",user.getLanguage()));
+    m.setTitle("buy_building");
     m.setDescription(response);
   }
 
@@ -39,7 +41,7 @@ module.exports = class BuyCommand extends Command {
         buildingInfo="",
         tmp="";
 
-    m.setTitle(Language.get("buy_list",user.getLanguage()));
+    m.setTitle("buy_list");
 
     for(let w in this.constructor.elements){
 
@@ -50,14 +52,14 @@ module.exports = class BuyCommand extends Command {
       buildingInfo=building.nextLevelInfo();
 
       if(building.canPurchase(user) === false){
-        tmp = " ("+Language.get("_notaffordable",user.getLanguage())+")";
+        tmp = " (^_notaffordable^)";
       } else {
         tmp="";
       }
 
       m.addField(
-        w+". "+building.getName(user.getLanguage()) + " "+Language.get("_level",user.getLanguage())+": "+buildingInfo.level + tmp,
-        " "+Language.get("_price",user.getLanguage())+": "+ buildingInfo.cost + "   " +" "+Language.get("_cps",user.getLanguage())+": "+ buildingInfo.cps
+        w+". ^"+building.getName()+"^ ^_level^: "+buildingInfo.level + tmp,
+        " ^_price^: "+ buildingInfo.cost + "   " +" ^_cps^: "+ buildingInfo.cps
       );
     }
   }

@@ -1,7 +1,6 @@
 "use strict";
 
-const Language = require("../../Language.js"),
-      Command = require("../Command.js");
+const Command = require("../Command.js");
 
 module.exports = class HelpCommand extends Command {
   constructor(id,name) {
@@ -13,12 +12,16 @@ module.exports = class HelpCommand extends Command {
     const bot = require("../../Bot.js").get(),
         commandList = bot.game.getCommands();
 
-    m.setTitle(Language.get("help_title",user.getLanguage()));
-    m.setDescription(Language.get("help_message",user.getLanguage()));
+    m.setTitle("help_title");
+    m.setDescription("help_message");
     for(let i in commandList){
       m.addField(
-        bot.getPrefix()+commandList[i].getName(user.getLanguage()),
-        commandList[i].getDescription(user.getLanguage()).format(bot.getPrefix(),commandList[i].getName())
+        bot.getPrefix()+"^"+commandList[i].getName()+"^",
+        {
+          "text":"^"+commandList[i].getDescription()+"^",
+          "data":[[bot.getPrefix(),"^"+commandList[i].getName()+"^"]],
+          "style":"lower"
+        }
       );
     }
     console.time();

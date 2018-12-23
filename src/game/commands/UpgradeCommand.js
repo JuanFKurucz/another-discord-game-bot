@@ -1,7 +1,6 @@
 "use strict";
 
-const Language = require("../../Language.js"),
-      Command = require("../Command.js"),
+const Command = require("../Command.js"),
       UpgradeConstructor = require("../constructors/UpgradeConstructor.js");
 
 module.exports = class UpgradeCommand extends Command {
@@ -15,20 +14,23 @@ module.exports = class UpgradeCommand extends Command {
           userUpgrade = user.getItem(this.constructor.getObjectName(),id_upgrade),
           upgrade = (userUpgrade === null) ? this.constructor.create(id_upgrade) : null;
 
-    let response="";
+    let response = "",
+        data = [];
 
     if(upgrade !== null){
       if(await upgrade.acquire(user) === true){
-        response = Language.get("upgrade_acquire",user.getLanguage()).format(id_upgrade);
+        response = "upgrade_acquire";
+        data.push(id_upgrade);
       } else {
-        response = Language.get("_nocookies",user.getLanguage()).format(user.mention);
+        response = "_nocookies";
+        data.push(user.mention);
       }
     } else {
-      response = Language.get("upgrade_noexists",user.getLanguage());
+      response = "upgrade_noexists";
     }
 
-    m.setTitle(Language.get("upgrade_buy",user.getLanguage()));
-    m.setDescription(response);
+    m.setTitle("upgrade_buy");
+    m.setDescription(response,data);
   }
 
   displayUpgradeList(m,user){
@@ -37,21 +39,21 @@ module.exports = class UpgradeCommand extends Command {
         tmp = "",
         i=1;
 
-    m.setTitle(Language.get("upgrade_list",user.getLanguage()));
+    m.setTitle("upgrade_list");
     for(let v in this.constructor.elements){
       userUpgrade = user.getItem(this.constructor.getObjectName(),v);
       if(userUpgrade === null){
 
         upgrade = this.constructor.create(v);
         if(upgrade.canPurchase(user) === false){
-          tmp = " ("+Language.get("_notaffordable",user.getLanguage())+")";
+          tmp = " (^_notaffordable^)";
         } else {
           tmp = "";
         }
 
         m.addField(
-          i+". "+upgrade.getName(user.getLanguage()) + tmp,
-          " "+Language.get("_price",user.getLanguage())+": "+ upgrade.cost
+          i+". ^"+upgrade.getName()+"^" + tmp,
+          " ^_price^: "+ upgrade.cost
         );
         i++;
       }

@@ -3,12 +3,19 @@
 const fs = require('fs');
 
 String.prototype.format = function () {
-  const num = arguments.length;
-  let text = this.replace("","");
+  let num = arguments.length,
+      text = this.replace("",""),
+      formats = [];
+  if(num===1 && Array.isArray(arguments[0])){
+    formats=arguments[0];
+    num=arguments[0].length;
+  } else {
+    formats=arguments;
+  }
   for (let i = 0; i < num; i++) {
     const pattern = "\\{" + (i) + "\\}",
           re = new RegExp(pattern, "g");
-    text = text.replace(re, arguments[i]);
+    text = text.replace(re, formats[i]);
   }
   return text;
 };
@@ -35,7 +42,7 @@ class Language {
   static languages(){}
   static get(id,lan="en",options={}){
     const realId = id.toLowerCase();
-    
+
     if(Language.languages.hasOwnProperty(lan) && Language.languages[lan].hasOwnProperty(realId)){
       let text = Language.languages[lan][realId];
       if(options.hasOwnProperty("style")){
@@ -59,7 +66,7 @@ class Language {
       if(options.hasOwnProperty("default")){
         return options.default;
       } else {
-        console.error("There is no translation for this text: "+id.toLowerCase());
+        //console.error("There is no translation for this text: "+id.toLowerCase());
         if(Language.languages["en"][id.toLowerCase()]){
           return Language.languages["en"][id.toLowerCase()];
         } else {

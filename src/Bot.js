@@ -8,7 +8,7 @@
 **/
 
 const Discord = require('discord.js'),
-      Message = require('discord.js').RichEmbed, //https://discord.js.org/#/docs/main/stable/class/RichEmbed
+      Message = require("./Message.js"), //https://discord.js.org/#/docs/main/stable/class/RichEmbed
       Game = require(__dirname+"/game/Game.js");
 
 let BotObject = null;
@@ -65,7 +65,7 @@ module.exports = class Bot {
         command;
 
     if(this.isACommand(text)){
-      response = new Message(); //Instances a new discord RichEmbed;
+      response = new Message(user); //Instances a new discord RichEmbed;
 
       console.log(msg.author.id +" sent "+msg.content,1);
 
@@ -87,9 +87,7 @@ module.exports = class Bot {
       const response=await this.commandHandler(msg,user);
 
       if(response!==null){
-        response.setFooter(user.getName(),user.getAvatar());
-        response.setTimestamp(new Date());
-        msg.channel.send(response)
+        msg.channel.send(response.print())
         .then(message => console.log(`Reply message: ${response}`))
         .catch(console.error);
       }

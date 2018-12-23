@@ -1,6 +1,5 @@
 "use strict";
-const Language = require("../Language.js"),
-      { dbQuery } = require("../DataBase.js");
+const { dbQuery } = require("../DataBase.js");
 
 module.exports = class ShopItem {
   constructor(id,name,cost) {
@@ -18,8 +17,8 @@ module.exports = class ShopItem {
     //override
   }
 
-  getName(lan){
-    return Language.get("item_"+this.name.toLowerCase().split(" ").join(""),lan,{"style":"camelcase"});
+  getName(){
+    return "item_"+this.name.toLowerCase().split(" ").join("");
   }
 
   getId(){
