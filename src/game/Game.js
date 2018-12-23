@@ -108,6 +108,7 @@ module.exports = class Game {
 
   onMessage(user){
     this.claimMessage(user);
+    user.resetResponses();
   }
 
   claimMessage(user){

@@ -20,6 +20,21 @@ module.exports = class User {
     };
     this.info=null;
     this.messageLang = null;
+
+    this.lastResponse = null;
+    this.shopList = null;
+  }
+
+  resetResponses(){
+    this.lastResponse = null;
+    this.shopList = null;
+  }
+
+  async setLastResponse(message){
+    this.lastResponse=message;
+    if(this.shopList!==null){
+      await this.shopList.setMessage(message);
+    }
   }
 
   getLanguage(){

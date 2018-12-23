@@ -88,7 +88,10 @@ module.exports = class Bot {
 
       if(response!==null){
         msg.channel.send(response.print())
-        .then(message => console.log(`Reply message: ${response}`))
+        .then(async (message) => {
+          await user.setLastResponse(message);
+          console.log("Message sent");
+        })
         .catch(console.error);
       }
       user.emptyMessageLang();
