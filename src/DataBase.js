@@ -124,26 +124,40 @@ class DataBase {
     }
     return response;
   }
+
+  static async loadDataBases(databaseConfig){
+    for(let dc in databaseConfig){
+      if(databaseConfig[dc].enabled === true){
+        console.performance();
+        let tempDb = new DataBase(databaseConfig[dc].options);
+        console.performance();
+        await tempDb.start();
+        console.performance();
+      }
+    }
+  }
+
+  canExecute(){
+    return db !== null && db.enabled === true && db.connection !== null;
+  }
+
+  static async executeQuerys(sql,object){
+    let result = null,
+        length = DataBase.databases.length;
+    for(let d = 0; d<length; d++){
+      let db = DataBase.databases[d];
+      if(db.canExecute() === true){
+        (result === null) ? result = await db.query(sql,object) : db.query(sql,object);
+      }
+    }
+    return result
+  }
 }
 
 DataBase.databases=[];
 
 exports.dbQuery = async function(sql,object){
-  let result = null,
-      length = DataBase.databases.length;
-  if(DataBase.enabled === true && DataBase.databases.length > 0){
-    for(let d = length-1; d>0; d--){
-      let db = DataBase.databases[d];
-      if(db !== null && db.enabled === true && db.connection !== null){
-        if(result === null){
-          result = await db.query(sql,object);
-        } else {
-          db.query(sql,object);
-        }
-      }
-    }
-  }
-  return result;
+  return (DataBase.enabled === true && DataBase.databases.length > 0) ? DataBase.executeQuerys(sql,object) : null;
 };
 
 exports.dbChangeEnable = async function (bool="true"){
@@ -157,15 +171,7 @@ exports.dbChangeEnable = async function (bool="true"){
       console.log("Reading databases config file");
       let databaseConfig = JSON.parse(fs.readFileSync(configFile, 'utf8'));
       console.log("Finished reading databases, starting loading them");
-      for(let dc in databaseConfig){
-        if(databaseConfig[dc].enabled === true){
-          console.performance();
-          let tempDb = new DataBase(databaseConfig[dc].options);
-          console.performance();
-          await tempDb.start();
-          console.performance();
-        }
-      }
+      Database.loadDataBases(databaseConfig);
       console.log("Finished loading databases");
       DataBase.getStructure();
     } else {
