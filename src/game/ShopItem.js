@@ -7,6 +7,9 @@ module.exports = class ShopItem {
     this.id=id;
     this.name=name;
     this.cost=cost;
+    this.response=null;
+    this.responses={
+    };
   }
 
   print(){
@@ -34,6 +37,7 @@ module.exports = class ShopItem {
   }
 
   canPurchase(user){
+    this.response={"text":"_nocookies","data":user.mention};
     return parseFloat(user.cookies) >= parseFloat(this.cost);
   }
 
@@ -57,17 +61,18 @@ module.exports = class ShopItem {
     }
     this.owner.cookies-=this.cost;
     await dbQuery("INSERT INTO user_"+this.constructor.name.toLowerCase() + " SET ?",this.getDataBaseObject(user));
-    return true;
+    this.response=this.responses["acquire"];
   }
 
   async acquire(user){
     if(this.canPurchase(user) === true){
       const item = user.getItem(this.constructor.name,this.id);
       if(item === null){
-        return await this.purchase(user);
+        await this.purchase(user);
+      } else {
+        await item.levelUp();
       }
-      return await item.levelUp();
     }
-    return false;
+    return this.response;
   }
 }

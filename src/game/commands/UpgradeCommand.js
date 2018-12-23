@@ -14,23 +14,16 @@ module.exports = class UpgradeCommand extends Command {
           userUpgrade = user.getItem(this.constructor.getObjectName(),id_upgrade),
           upgrade = (userUpgrade === null) ? this.constructor.create(id_upgrade) : null;
 
-    let response = "",
-        data = [];
+    let response = "";
 
     if(upgrade !== null){
-      if(await upgrade.acquire(user) === true){
-        response = "upgrade_acquire";
-        data.push(id_upgrade);
-      } else {
-        response = "_nocookies";
-        data.push(user.mention);
-      }
+      response = await upgrade.acquire(user);
     } else {
       response = "upgrade_noexists";
     }
 
     m.setTitle("upgrade_buy");
-    m.setDescription(response,data);
+    m.setDescription(response);
   }
 
   displayUpgradeList(m,user){

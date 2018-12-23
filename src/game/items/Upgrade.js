@@ -8,6 +8,10 @@ module.exports = class Upgrade extends ShopItem {
     this.applyed=false;
     this.multiplier=multiplier;
     this.multiplierName=multiplierName;
+
+    this.responses={
+      "acquire":{"text":"upgrade_acquire","data":this.id}
+    };
   }
 
   print(){

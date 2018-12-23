@@ -13,21 +13,11 @@ module.exports = class BuyCommand extends Command {
     const id_building = parseInt(command[1]),
           userBuilding = user.getItem(this.constructor.getObjectName(),id_building),
           building = (userBuilding === null) ? this.constructor.create(id_building) : userBuilding;
-    let response="",
-        data=[];
+
+    let response="";
 
     if(building !== null){
-      if(await building.acquire(user)){
-        if(building.getLevel()>1){
-          response = "buy_levelUp";
-        } else {
-          response = "buy_acquire";
-          data.push(id_building);
-        }
-      } else {
-        response = "_nocookies";
-        data.push(user.mention);
-      }
+      response = await building.acquire(user);
     } else {
       response = "buy_noexists";
     }

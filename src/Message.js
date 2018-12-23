@@ -37,33 +37,36 @@ module.exports = class Message {
     }
   }
 
+  objectify(text,data=[]){
+    let realText=text;
+    if(typeof realText === "string"){
+      realText = {
+        "text":text,
+        "data":data
+      }
+    }
+    return realText;
+  }
+
   setTitle(title,data=[]){
-    this.message.setTitle(this.parseText(title,data));
+    let realTitle=this.objectify(title,data);
+    this.message.setTitle(this.parseText(realTitle.text,realTitle.data));
   }
 
   setDescription(description,data=[]){
-    this.message.setDescription(this.parseText(description,data));
+    let realDescription=this.objectify(description,data);
+    this.message.setDescription(this.parseText(realDescription.text,realDescription.data));
   }
 
   addField(title,description){
-    let realTitle=title,
-        realDescription=description;
-    if(typeof realTitle === "string"){
-      realTitle = {
-        "text":title,
-        "data":[]
-      }
+    let realTitle=this.objectify(title),
+        realDescription=this.objectify(description);
+    if(realTitle.text!==""){
+      this.message.addField(
+        this.parseText(realTitle.text,realTitle.data),
+        this.parseText(realDescription.text,realDescription.data)
+      );
     }
-    if(typeof realDescription === "string"){
-      realDescription = {
-        "text":description,
-        "data":[]
-      }
-    }
-    this.message.addField(
-      this.parseText(realTitle.text,realTitle.data),
-      this.parseText(realDescription.text,realDescription.data)
-    );
   }
 
   print(){

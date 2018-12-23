@@ -10,6 +10,11 @@ module.exports = class Building extends ShopItem {
     this.cpsMultiplier=cpsMultiplier;
     this.cps=parseFloat(cps);
     this.level=0;
+
+    this.responses={
+      "levelup":"buy_levelup",
+      "acquire":{"text":"buy_acquire","data":this.id}
+    };
   }
 
   print(){
@@ -62,8 +67,7 @@ module.exports = class Building extends ShopItem {
       if(reduce === true){
         await dbQuery("UPDATE user_"+this.constructor.name.toLowerCase() + " SET ? WHERE id_user = '"+owner.getId()+"' AND id_"+this.constructor.name.toLowerCase()+"= "+this.getId(),{"level":this.getLevel()});
       }
-      return true;
+      this.response = this.responses["levelup"];
     }
-    return false;
   }
 }
