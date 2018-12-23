@@ -11,61 +11,14 @@ class DataBase {
   static databases(){}
   static structure(){}
 
-  static getUpdatedDatabase(times){
-    let lengthTimes = times.length;
-    let mayor = DataBase.databases[0];
-    let mayorData = times[0];
-    for(let tMain=1; tMain<lengthTimes;tMain++){
-      if(times[tMain].length === mayorData.length){
-        let aux=0,
-            tempLength = times[tMain].length;
-        while(aux<tempLength){
-          if(times[tMain][aux]["UPDATE_TIME"]>mayorData[aux]["UPDATE_TIME"]){
-            mayor = DataBase.databases[tMain];
-            mayorData = times[tMain];
-            break;
-          } else if(mayorData[aux]["UPDATE_TIME"]>times[tMain][aux]["UPDATE_TIME"]){
-            break;
-          }
-          aux++;
-        }
-      }
-    }
-    return {mayor,mayorData,lengthTimes};
-  }
-
-  static async update(db1,db2){
+  static async getStructure(db1,db2){
     DataBase.structure = [];
     if(DataBase.enabled === true && DataBase.databases.length>1){
-      let times = [];
-      for(let d in DataBase.databases){
-        let db = DataBase.databases[d];
-        let timeInfo = await db.query("SELECT TABLE_NAME,UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+db.options.database+"'");
-        times.push(timeInfo);
+      let db = DataBase.databases[0],
+          table = await db.query("SELECT TABLE_NAME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+db.options.database+"'");
+      for(let t in table){
+        DataBase.structure.push(table[t]["TABLE_NAME"]);
       }
-      for(let t in times[0]){
-        DataBase.structure.push(times[0][t]["TABLE_NAME"]);
-      }
-
-      let {mayor,mayorData,lengthTimes} = this.getUpdatedDatabase(times);
-      let databasesToUpdate=[];
-      for(let tMain=0; tMain<lengthTimes;tMain++){
-        if(times[tMain].length === mayorData.length){
-          let aux=0,
-              tempLength = times[tMain].length;
-          while(aux<tempLength){
-            if(times[tMain][aux]["UPDATE_TIME"]>mayorData[aux]["UPDATE_TIME"]){
-              console.error("nani");
-              break;
-            } else if(mayorData[aux]["UPDATE_TIME"]>times[tMain][aux]["UPDATE_TIME"]){
-              databasesToUpdate.push(DataBase.databases[tMain]);
-              break;
-            }
-            aux++;
-          }
-        }
-      }
-      await mayor.copyToDatabases(databasesToUpdate);
     }
   }
 
@@ -157,7 +110,7 @@ class DataBase {
   }
 
   async query(sql,object){
-    console.log(this.options.host+": "+sql,0.5);
+    console.log(this.options.host+"("+this.options.database+")"+": "+sql,0.5);
     let response;
     try {
       response = await this.queryPromise(sql,object);
@@ -171,90 +124,15 @@ class DataBase {
     }
     return response;
   }
-
-  async getPromisesTables(promisesTables,promises,promisesSelect){
-    let dataList=[],
-        conditionList=[];
-
-    for(let ur in promisesTables){
-      for(let userResult in promisesTables[ur]){
-        let actualData = promisesTables[ur][userResult];
-        table = DataBase.structure[ur];
-        underscore = table.split("_");
-        condition="";
-        for(let u=0;u<underscore.length;u++){
-          if(u!=0){
-            condition+=" AND ";
-          }
-          idName="id_"+underscore[u];
-          id = actualData[idName];
-          condition += idName+"="+id;
-        }
-        promisesSelect.push({
-          "table":table,
-          "request":db.query("SELECT * FROM "+table+" WHERE "+condition),
-          "data":actualData,
-          "condition":condition
-        });
-      }
-    }
-    var a = promisesSelect.map(function(x) {
-       return x["request"];
-    });
-    await Promise.all(a).then((a) => {
-      for(let ur in promisesSelect){
-        let tempResult = promisesSelect[ur]["request"];
-        tempResult.then( (result) => {
-          promises.push(db.updateStuff(result,promisesSelect[ur]));
-        });
-      }
-    });
-  }
-
-  async copyToDatabases(dbs){
-    if(this.connection !== null){
-      let table,
-          underscore,
-          condition,
-          id,
-          idName,
-          tempResult,
-          promisesTables=[],
-          promises=[];
-      for(let s=0;s<DataBase.structure.length;s++){
-        table = DataBase.structure[s];
-        let userResults=this.query("SELECT * FROM "+table);
-        promisesTables.push(userResults);
-      }
-      for(let d in dbs){
-        let db = dbs[d];
-        if(db.id !== this.id && db.connection !== null){
-          await Promise.all(promisesTables).then((promisesTables) => {
-            this.getPromisesTables(promisesTables,promises,promisesSelect)
-          });
-        }
-      }
-      await Promise.all(promises);
-    }
-  }
-
-  updateStuff(result,data){
-    let call;
-    if(result.length>0){
-      call=this.query("UPDATE "+data["table"]+" SET ? WHERE "+data["condition"],data["data"]);
-    } else {
-      call=this.query("INSERT INTO "+data["table"]+" SET ?",data["data"]);
-    }
-    return call;
-  }
 }
 
 DataBase.databases=[];
 
 exports.dbQuery = async function(sql,object){
-  let result = null;
+  let result = null,
+      length = DataBase.databases.length;
   if(DataBase.enabled === true && DataBase.databases.length > 0){
-    for(let d in DataBase.databases){
+    for(let d = length-1; d>0; d--){
       let db = DataBase.databases[d];
       if(db !== null && db.enabled === true && db.connection !== null){
         if(result === null){
@@ -289,9 +167,7 @@ exports.dbChangeEnable = async function (bool="true"){
         }
       }
       console.log("Finished loading databases");
-      console.log("Starting database merge");
-      DataBase.update();
-      console.log("Database merge ended");
+      DataBase.getStructure();
     } else {
       console.error("Couldn't find database config file");
     }
