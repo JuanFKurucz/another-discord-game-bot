@@ -19,7 +19,7 @@ module.exports = class Bot {
     this.game = new Game(this.prefix);
     this.client = new Discord.Client();
     this.debugMode = debugMode;
-    this.debuggChannels = ["521806120134639627","526085327539142676","526101590550118410"];
+    this.debuggChannels = ["526844501570879489"];
     this.startDaemon();
   }
 
