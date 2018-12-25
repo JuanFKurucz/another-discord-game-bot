@@ -68,3 +68,4 @@ emojis/*
 
 # exception to the rule
 !output/.gitkeep
+index.js
