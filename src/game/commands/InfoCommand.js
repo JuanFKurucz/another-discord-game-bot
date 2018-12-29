@@ -35,4 +35,4 @@ module.exports = class InfoCommand extends Command {
     }
     console.time();
   }
-}
+};

@@ -79,4 +79,4 @@ module.exports = class ShopItem {
   canAcquire(user){
     return true;
   }
-}
+};

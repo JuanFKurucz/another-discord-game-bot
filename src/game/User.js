@@ -134,4 +134,4 @@ module.exports = class User {
     }
     return false;
   }
-}
+};

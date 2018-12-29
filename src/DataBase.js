@@ -120,7 +120,7 @@ class DataBase {
     }
     return result;
   }
-}
+};
 
 DataBase.enabled=true;
 DataBase.databases=[];

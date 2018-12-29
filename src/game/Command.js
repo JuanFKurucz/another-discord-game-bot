@@ -23,4 +23,4 @@ module.exports = class Command {
     //to implement
     console.log(m,user,command);
   }
-}
+};

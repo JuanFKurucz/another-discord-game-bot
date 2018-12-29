@@ -73,4 +73,4 @@ module.exports = class Message {
     this.message.setTimestamp(new Date());
     return this.message;
   }
-}
+};

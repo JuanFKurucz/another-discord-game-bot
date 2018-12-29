@@ -150,5 +150,4 @@ module.exports = class ShopList {
       return await this.list[realName].acquire(this.owner);
     }
   }
-
-}
+};

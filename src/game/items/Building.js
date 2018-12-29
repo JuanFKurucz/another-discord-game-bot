@@ -80,4 +80,4 @@ module.exports = class Building extends ShopItem {
       this.response = this.responses["levelup"];
     }
   }
-}
+};

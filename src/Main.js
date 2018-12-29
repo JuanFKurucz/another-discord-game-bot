@@ -64,4 +64,4 @@ module.exports = class Main {
     await this.botObject.start(token);
     console.log("Bot initiated",1);
   }
-}
+};

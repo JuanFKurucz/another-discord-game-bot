@@ -50,4 +50,4 @@ module.exports = class ShopAbstractCommand extends Command {
     }
     console.time();
   }
-}
+};

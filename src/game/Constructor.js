@@ -26,4 +26,4 @@ module.exports = class Constructor {
   create(id){
     return (this.checkExists(id) === true) ? this.createObject(id,this.getElement(id)) : null;
   }
-}
+};

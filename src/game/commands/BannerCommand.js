@@ -15,4 +15,4 @@ module.exports = class BannerCommand extends Command {
     m.setTitle(command);
     console.time();
   }
-}
+};

@@ -65,4 +65,4 @@ module.exports = class Banner {
       this.doThisAgain(msg,messageText,actualIndex,max);
     },500);
   }
-}
+};

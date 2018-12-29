@@ -43,4 +43,4 @@ module.exports = class Upgrade extends ShopItem {
   canAcquire(user){
     return user.getItem(this.constructor.name,this.id) === null;
   }
-}
+};

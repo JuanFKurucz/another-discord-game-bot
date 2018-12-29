@@ -26,4 +26,4 @@ module.exports = class HelpCommand extends Command {
     }
     console.time();
   }
-}
+};

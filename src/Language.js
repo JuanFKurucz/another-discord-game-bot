@@ -105,6 +105,6 @@ class Language {
       }
     });
   }
-}
+};
 Language.init();
 module.exports = Language;

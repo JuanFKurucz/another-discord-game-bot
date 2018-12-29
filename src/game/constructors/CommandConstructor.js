@@ -49,4 +49,4 @@ module.exports = class CommandConstructor extends Constructor {
       commandInfo.name
     );
   }
-}
+};

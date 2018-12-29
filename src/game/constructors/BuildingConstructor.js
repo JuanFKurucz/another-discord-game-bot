@@ -54,4 +54,4 @@ module.exports = class BuildingConstructor extends Constructor {
       buildingInfo.cpsMultiplier
     );
   }
-}
+};

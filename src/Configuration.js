@@ -30,7 +30,7 @@ class Configuration {
 
 exports.config = function(){
   const configObject = Configuration.get();
-  if(arguments.length==1){
+  if(arguments.length===1){
     return configObject.config["global"][arguments[0]];
   } else {
     return configObject.config[arguments[0]][arguments[1]];

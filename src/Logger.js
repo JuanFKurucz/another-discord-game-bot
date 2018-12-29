@@ -148,4 +148,4 @@ module.exports = class Logger {
     }
     fs.appendFileSync(this.outputFile, message);
   }
-}
+};

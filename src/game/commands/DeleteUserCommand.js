@@ -15,4 +15,4 @@ module.exports = class ErrorCommand extends Command {
     m.setDescription("deleteuser_message");
     console.time();
   }
-}
+};

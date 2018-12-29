@@ -1,5 +1,3 @@
-index.js
-
 # Logs
 logs
 *.log
@@ -68,4 +66,5 @@ emojis/*
 
 # exception to the rule
 !output/.gitkeep
-index.js
+
+token.json

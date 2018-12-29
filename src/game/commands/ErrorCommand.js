@@ -14,4 +14,4 @@ module.exports = class ErrorCommand extends Command {
     m.setDescription("error_message",[prefix,"^command_help^"]);
     console.time();
   }
-}
+};

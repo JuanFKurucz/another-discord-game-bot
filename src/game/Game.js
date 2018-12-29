@@ -114,4 +114,4 @@ module.exports = class Game {
   claimMessage(user){
     user.addCookie();
   }
-}
+};
