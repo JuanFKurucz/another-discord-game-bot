@@ -86,13 +86,14 @@ module.exports = class Bot {
     return response;
   }
 
-  async sendMessage(msg,user){
-    msg.channel.send(msg)
-    .then(async (message) => {
+  async sendMessage(msg,response,user){
+    try{
+      const message = await msg.channel.send(response);
       await user.setLastResponse(message);
       console.log("Message sent");
-    })
-    .catch(console.error);
+    } catch(e){
+      console.error(e);
+    }
   }
 
   async onMessage(msg){
@@ -104,7 +105,7 @@ module.exports = class Bot {
       const response=await this.commandHandler(msg,user);
 
       if(response!==null){
-        this.sendMessage(response.print(),user);
+        await this.sendMessage(msg,response.print(),user);
       }
 
       user.emptyMessageLang();
