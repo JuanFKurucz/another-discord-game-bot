@@ -5,6 +5,7 @@ module.exports = class Command {
     this.id=id;
     this.name=name;
     this.description=description;
+    this.permission = 0;
   }
 
   getName(){
@@ -20,7 +21,11 @@ module.exports = class Command {
   }
 
   execute(m,user,command){
-    //to implement
-    console.log(m,user,command);
+    if(user.getPermission()>=this.permission){
+      this.doExecute(m,user,command);
+    } else {
+      m.setTitle("Not enough permissions");
+      m.setDescription("You don't have enough permissions to use this command. (Command permission level: "+this.permission+")");
+    }
   }
 };

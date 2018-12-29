@@ -34,7 +34,7 @@ module.exports = class ShopAbstractCommand extends Command {
     message.setTitle(this.prefix+"_list");
   }
 
-  async execute(message,user,command){
+  async doExecute(message,user,command){
     console.time();
     this.shopList = new ShopList(user,this.constructor);
     if(command.length>1){

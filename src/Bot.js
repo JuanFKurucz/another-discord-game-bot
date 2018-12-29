@@ -71,6 +71,9 @@ module.exports = class Bot {
     let response = null,
         command;
 
+    let permissionLevel = (msg.member.hasPermission("ADMINISTRATOR")) ? 1 : 0;
+    user.setPermission(permissionLevel);
+
     if(this.isACommand(text)){
       response = new Message(user); //Instances a new discord RichEmbed;
 

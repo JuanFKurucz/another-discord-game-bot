@@ -5,9 +5,10 @@ const Command = require("../Command.js");
 module.exports = class BannerCommand extends Command {
   constructor(id,name) {
     super(id,name);
+    this.permission=1;
   }
 
-  async execute(m,user,command){
+  async doExecute(m,user,command){
     console.time();
     command.shift();
     command = command.join(" ");

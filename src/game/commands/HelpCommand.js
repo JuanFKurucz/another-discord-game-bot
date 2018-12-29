@@ -7,7 +7,7 @@ module.exports = class HelpCommand extends Command {
     super(id,name);
   }
 
-  async execute(m,user,command){
+  async doExecute(m,user,command){
     console.time();
     const bot = require("../../Bot.js").get(),
         commandList = bot.game.getCommands();

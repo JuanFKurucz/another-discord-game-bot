@@ -26,7 +26,7 @@ module.exports = class InfoCommand extends Command {
     }
   }
 
-  async execute(m,user,command){
+  async doExecute(m,user,command){
     console.time();
     m.setTitle("info_title");
     m.setDescription("info_message",[user.getCookies(),user.getTotalCps(),user.getTotalCpm()]);

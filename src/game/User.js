@@ -27,6 +27,16 @@ module.exports = class User {
     this.messageBanner = false;
     this.banner = null;
     this.lastMessage = null;
+
+    this.permission=-1;
+  }
+
+  setPermission(p){
+    this.permission=p;
+  }
+
+  getPermission(){
+    return this.permission;
   }
 
   resetResponses(){
