@@ -9,9 +9,9 @@ Levels of logs:
 
 **/
 
-const fs = require('fs'),
-      util = require('util'),
-      { performance } = require('perf_hooks'),
+const fs = require("fs"),
+      util = require("util"),
+      { performance } = require("perf_hooks"),
       {config} = require("./Configuration.js");
 
 let LogObject = null;
@@ -28,7 +28,7 @@ module.exports = class Logger {
   }
 
   parseStackLine(line){
-    return line.substring(line.indexOf("(")+1,line.indexOf(")")).replace(/^.*[\\/]/, '');
+    return line.substring(line.indexOf("(")+1,line.indexOf(")")).replace(/^.*[\\/]/, "");
   }
 
   getLineNumber(){
@@ -87,9 +87,15 @@ module.exports = class Logger {
     const self = this;
 
     this.linePrinting.push(this.getLineNumber());
-    console.log = function() { self.console(arguments) };
-    console.error = function(){ self.console(arguments,"red") };
-    console.time = function(){ self.performance(arguments) };
+    console.log = function() {
+      self.console(arguments);
+    };
+    console.error = function(){
+      self.console(arguments,"red");
+    };
+    console.time = function(){
+      self.performance(arguments);
+    };
     this.linePrinting.push(this.getLineNumber());
   }
 
@@ -131,12 +137,12 @@ module.exports = class Logger {
 
   parseOutput(message,lvl){
     const date = new Date(),
-        Dd = (date.getDate()+'').padStart(2,"0"),
-        Mm = ((date.getMonth()+1)+'').padStart(2,"0"),
+        Dd = (date.getDate()+"").padStart(2,"0"),
+        Mm = ((date.getMonth()+1)+"").padStart(2,"0"),
         Yyyy = date.getFullYear(),
-        hh = (date.getHours()+'').padStart(2,"0"),
-        mm = (date.getMinutes()+'').padStart(2,"0"),
-        ss = (date.getSeconds()+'').padStart(2,"0"),
+        hh = (date.getHours()+"").padStart(2,"0"),
+        mm = (date.getMinutes()+"").padStart(2,"0"),
+        ss = (date.getSeconds()+"").padStart(2,"0"),
         result = "("+lvl+") ["+Dd+"-"+Mm+"-"+Yyyy+" "+hh+":"+mm+":"+ss+"] "+message+" "+this.getFileAndLine()+"\n";
 
     return result;

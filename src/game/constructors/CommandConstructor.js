@@ -1,7 +1,7 @@
 "use strict";
 
 const Constructor = require("../Constructor.js"),
-      fs = require('fs');
+      fs = require("fs");
 
 module.exports = class CommandConstructor extends Constructor {
   constructor(botprefix){
@@ -13,10 +13,10 @@ module.exports = class CommandConstructor extends Constructor {
 
     files.forEach(function(filename) {
       if(filename.toLowerCase().indexOf("abstract")===-1){
-        let name = filename.substring(0,filename.lastIndexOf('Command')).toLowerCase();
+        let name = filename.substring(0,filename.lastIndexOf("Command")).toLowerCase();
         if(namesCheck.hasOwnProperty(name) === false){
           elements[i]={
-            "name":name,
+            name,
             "constructor":require("../commands/"+filename)
           };
           namesCheck[name]=true;

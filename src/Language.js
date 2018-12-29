@@ -1,6 +1,6 @@
 "use strict";
 
-const fs = require('fs');
+const fs = require("fs");
 
 String.prototype.format = function () {
   let num = arguments.length,
@@ -91,7 +91,7 @@ class Language {
           files = fs.readdirSync(commandsFolder);
     files.forEach(function(filename) {
       let lan = filename.split(".")[0];
-      Language.languages[lan]=JSON.parse(fs.readFileSync(commandsFolder+filename, 'utf8'));
+      Language.languages[lan]=JSON.parse(fs.readFileSync(commandsFolder+filename, "utf8"));
       for(let l in Language.languages[lan]){
         if(l.indexOf("command_")!==-1){
           let underscoreSplit = l.split("_");
@@ -105,6 +105,6 @@ class Language {
       }
     });
   }
-};
+}
 Language.init();
 module.exports = Language;

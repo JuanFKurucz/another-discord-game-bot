@@ -80,7 +80,7 @@ module.exports = class User {
   }
 
   getAvatar(){
-    return (this.info !== null) ? 'https://cdn.discordapp.com/avatars/'+this.getId()+'/'+this.info.avatar+'.webp?size=128' : null;
+    return (this.info !== null) ? "https://cdn.discordapp.com/avatars/"+this.getId()+"/"+this.info.avatar+".webp?size=128" : null;
   }
 
   setInfo(info){
@@ -128,7 +128,7 @@ module.exports = class User {
 
   removeItem(type,item){
     const typeName=type.toLowerCase();
-    if(this.items.hasOwnProperty(typeName) === true && this.items[typeName].hasOwnProperty(id) === true){
+    if(this.items.hasOwnProperty(typeName) === true && this.items[typeName].hasOwnProperty(item.getId()) === true){
       delete this.items[typeName][item.getId()];
       return true;
     }

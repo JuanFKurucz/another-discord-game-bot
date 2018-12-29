@@ -8,9 +8,10 @@
   Here we just call for Bot and DataBase classes and start them.
 **/
 
-const Bot = new require(__dirname+"/Bot.js"),
-      Logger = new require(__dirname+"/Logger.js"),
+const Bot = require(__dirname+"/Bot.js"),
+      Logger = require(__dirname+"/Logger.js"),
       { dbChangeEnable } = require(__dirname+"/DataBase.js");
+
 
 module.exports = class Main {
   constructor() {
@@ -19,21 +20,21 @@ module.exports = class Main {
 
   async exitHandler(options, exitCode) {
     await Bot.get().saveDatabase();
-    options.cleanup && console.log('clean',0);
+    options.cleanup && console.log("clean",0);
     (exitCode || exitCode === 0) && console.log("exitCode",exitCode,0);
     options.exit && process.exit();
   }
 
   onExit(){
     //do something when app is closing
-    process.on('exit', this.exitHandler.bind(null,{cleanup:true}));
+    process.on("exit", this.exitHandler.bind(null,{cleanup:true}));
     //catches ctrl+c event
-    process.on('SIGINT', this.exitHandler.bind(null,{exit:true}));
+    process.on("SIGINT", this.exitHandler.bind(null,{exit:true}));
     // catches "kill pid" (for example: nodemon restart)
-    process.on('SIGUSR1', this.exitHandler.bind(null,{exit:true}));
-    process.on('SIGUSR2', this.exitHandler.bind(null,{exit:true}));
+    process.on("SIGUSR1", this.exitHandler.bind(null,{exit:true}));
+    process.on("SIGUSR2", this.exitHandler.bind(null,{exit:true}));
     //catches uncaught exceptions
-    process.on('uncaughtException', this.exitHandler.bind(null,{exit:true}));
+    process.on("uncaughtException", this.exitHandler.bind(null,{exit:true}));
   }
 
   async configuration(){

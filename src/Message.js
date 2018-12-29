@@ -1,7 +1,7 @@
 "use strict";
 
 const Language = require("./Language.js"),
-      RichEmbed = require('discord.js').RichEmbed;
+      RichEmbed = require("discord.js").RichEmbed;
 
 module.exports = class Message {
   constructor(user) {
@@ -41,9 +41,9 @@ module.exports = class Message {
     let realText=text;
     if(typeof realText === "string"){
       realText = {
-        "text":text,
-        "data":data
-      }
+        text,
+        data
+      };
     }
     return realText;
   }

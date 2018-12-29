@@ -56,13 +56,11 @@ module.exports = class ShopList {
     const filter = (reaction, user) => {
       return this.getReactions(this.reactions).includes(reaction.emoji.id) && user.id === this.owner.getId();
     };
-    this.message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+    this.message.awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] })
     .then(async (collected) => {
         const reaction = collected.first(),
-              id_reaction = reaction._emoji.id;
-        console.log(id_reaction);
-        let action = Object.keys(this.reactions2).find(key => this.reactions2[key] === id_reaction);
-        console.log(action);
+              idReaction = reaction._emoji.id;
+        let action = Object.keys(this.reactions2).find((key) => this.reactions2[key] === idReaction);
         switch(action){
           case "1":
           case "2":
@@ -85,7 +83,7 @@ module.exports = class ShopList {
         }
         await this.updateMessage();
     })
-    .catch(collected => {
+    .catch((collected) => {
         console.log(`After a minute, only ${collected.size} out of 4 reacted.`);
     });
   }

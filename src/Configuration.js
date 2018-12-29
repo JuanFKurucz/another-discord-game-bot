@@ -1,6 +1,6 @@
 "use strict";
 
-const fs = require('fs');
+const fs = require("fs");
 
 let Config = null;
 
@@ -22,7 +22,7 @@ class Configuration {
           files = fs.readdirSync(configsFolder);
     files.forEach((filename) => {
       let name = filename.split(".")[0];
-      this.config[name]=JSON.parse(fs.readFileSync(configsFolder+filename, 'utf8'));
+      this.config[name]=JSON.parse(fs.readFileSync(configsFolder+filename, "utf8"));
     });
   }
 }
@@ -35,4 +35,4 @@ exports.config = function(){
   } else {
     return configObject.config[arguments[0]][arguments[1]];
   }
-}
+};
