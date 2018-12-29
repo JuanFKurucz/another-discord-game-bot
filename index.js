@@ -1,7 +1,7 @@
 "use strict";
 
 const Main = new require(__dirname+"/src/Main.js"),
-      token = '';
+      token = "";
 
 var Program = new Main();
 Program.start(token);

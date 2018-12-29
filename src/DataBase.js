@@ -3,8 +3,8 @@
 /**
   This currently does nothing
 **/
-const mysql = require('mysql'),
-      fs = require('fs'),
+const mysql = require("mysql"),
+      fs = require("fs"),
       {config} = require("./Configuration.js");
 
 class DataBase {
@@ -26,7 +26,7 @@ class DataBase {
 
   onError(err){
     console.error(err,4);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
+    if(err.code === "PROTOCOL_CONNECTION_LOST") {
       this.setEnabled(false);
     } else {
       console.error(err);
@@ -52,7 +52,7 @@ class DataBase {
     this.connection.connect((err) => {
       this.connect(resolve,reject,err);
     });
-    this.connection.on('error', (err) => {
+    this.connection.on("error", (err) => {
       this.onError(err)
     });
   }
@@ -118,7 +118,7 @@ class DataBase {
         (result === null) ? result = await db.query(sql,object) : db.query(sql,object);
       }
     }
-    return result
+    return result;
   }
 }
 
@@ -131,11 +131,11 @@ exports.dbQuery = async function(sql,object){
 
 exports.dbChangeEnable = async function (bool="true"){
   console.time();
-  let boolValue = bool == "true";
+  let boolValue = bool === "true";
   console.log("Database enabled: "+boolValue);
   DataBase.enabled = boolValue;
   if(boolValue === true){
     DataBase.loadDataBases();
     console.log("Finished loading databases");
   }
-}
+};

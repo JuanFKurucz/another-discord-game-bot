@@ -8,4 +8,4 @@ module.exports = class UpgradeCommand extends ShopAbstractCommand {
     super(id,name,"upgrade");
     this.constructor = new UpgradeConstructor();
   }
-}
+};

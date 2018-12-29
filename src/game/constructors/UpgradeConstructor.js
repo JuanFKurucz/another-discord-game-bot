@@ -36,4 +36,4 @@ module.exports = class UpgradeConstructor extends Constructor {
       upgradeInfo.multiplier
     );
   }
-}
+};

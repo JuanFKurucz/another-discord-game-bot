@@ -7,7 +7,7 @@
   Nothing much to see here, every message is sent to the GameClass
 **/
 
-const Discord = require('discord.js'),
+const Discord = require("discord.js"),
       Message = require("./Message.js"), //https://discord.js.org/#/docs/main/stable/class/RichEmbed
       Game = require(__dirname+"/game/Game.js"),
       {config} = require("./Configuration.js");
@@ -46,10 +46,10 @@ module.exports = class Bot {
 
   async start(token){
     await this.game.loadUsers();
-    this.client.on('ready', () => {
+    this.client.on("ready", () => {
       console.log(`Logged in as ${this.client.user.tag}!`,1);
     });
-    this.client.on('message', (msg) => {
+    this.client.on("message", (msg) => {
       this.onMessage(msg);
     });
     this.client.login(token);
@@ -105,4 +105,4 @@ module.exports = class Bot {
       user.emptyMessageLang();
     }
   }
-}
+};
