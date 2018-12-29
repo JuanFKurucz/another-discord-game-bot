@@ -10,12 +10,12 @@ module.exports = class Banner {
   }
 
   async getEmoji(id){
-    if(id==""){
+    if(id===""){
       return "";
     }
     try{
       const emojiList = require("./Bot.js").get().client.guilds.get(config("serverId")).emojis,
-            emoji = await emojiList.find(emoji => emoji.id == id);
+            emoji = await emojiList.find((emoji) => emoji.id === id);
       if(emoji){
         return emoji.toString();
       }
@@ -55,12 +55,14 @@ module.exports = class Banner {
     try{
       await msg.edit(await this.writeChars(messageText,actualIndex,max)+"\n"+actualIndex);
     }catch(e){
-
+      console.error(e);
     }
     actualIndex++;
     if(actualIndex>=messageText.length){
       actualIndex=0;
     }
-    setTimeout(()=>{this.doThisAgain(msg,messageText,actualIndex,max)},500);
+    setTimeout(() => {
+      this.doThisAgain(msg,messageText,actualIndex,max)
+    },500);
   }
 }
