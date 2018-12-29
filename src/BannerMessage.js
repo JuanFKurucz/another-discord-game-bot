@@ -1,10 +1,12 @@
 "use strict";
 
-class Banner {
+const {config} = require("./Configuration.js");
+
+module.exports = class Banner {
   constructor(messageObject) {
     this.message=messageObject;
     this.text=messageObject.embeds[0].title;
-    this.doThisAgain(this.message,this.text,0,Banner.max);
+    this.doThisAgain(this.message,this.text,0,config("banner","max"));
   }
 
   async getEmoji(id){
@@ -12,7 +14,7 @@ class Banner {
       return "";
     }
     try{
-      const emojiList = require("./Bot.js").get().client.guilds.get(Banner.serverId).emojis,
+      const emojiList = require("./Bot.js").get().client.guilds.get(config("serverId")).emojis,
             emoji = await emojiList.find(emoji => emoji.id == id);
       if(emoji){
         return emoji.toString();
@@ -26,15 +28,17 @@ class Banner {
   async writeChars(msgAbstract,index,max,callback){
     let realmessage="",
         partMessage=(msgAbstract+" "+msgAbstract).slice(index,index+max);
-    const list1=Banner.dictionary[partMessage[0]].split(" ");
+    const dictionary = config("banner","dictionary"),
+          list1=dictionary[partMessage[0]].split(" "),
+          emojis = config("banner","emojis");
 
     for(let y=0;y<list1.length;y++){
       for(let m=0;m<max;m++){
         if(m<partMessage.length){
-          let list = Banner.dictionary[partMessage[m]].split(" ");
+          let list = dictionary[partMessage[m]].split(" ");
           for(let w=0;w<list[y].length;w++){
             try{
-              realmessage+=await this.getEmoji(Banner.emojis[list[y][w]]);
+              realmessage+=await this.getEmoji(emojis[list[y][w]]);
             }catch(e){
               console.error(e);
             }
@@ -60,42 +64,3 @@ class Banner {
     setTimeout(()=>{this.doThisAgain(msg,messageText,actualIndex,max)},500);
   }
 }
-
-Banner.serverId=require("./Configuration.js").get("global","serverId");
-Banner.max = 5;
-Banner.dictionary = { //3x5
-  "a":"bbb bnb bnb bbb bnb",
-  "b":"bbn bnb bbn bnb bbn",
-  "c":"bbb bnn bnn bnn bbb",
-  "d":"bbn bnb bnb bnb bbn",
-  "e":"bbb bnn bbb bnn bbb",
-  "f":"bbb bnn bbb bnn bnn",
-  "g":"bbb bnn bnb bnb bbb",
-  "h":"bnb bnb bbb bnb bnb",
-  "i":"nbn nbn nbn nbn nbn",
-  "j":"nnb nnb nnb nnb bbb",
-  "k":"bnb bnb bbn bnb bnb",
-  "l":"bnn bnn bnn bnn bbb",
-  "m":"bnb bbb bnb bnb bnb",
-  "n":"nnb bnb bbb bnb bnn",
-  "o":"bbb bnb bnb bnb bbb",
-  "p":"bbb bnb bbb bnn bnn",
-  "q":"bbb bnb bnb bbb nnb",
-  "r":"bbn bnb bbn bnb bnb",
-  "s":"bbb bnn bbb nnb bbb",
-  "t":"bbb nbn nbn nbn nbn",
-  "u":"bnb bnb bnb bnb bbb",
-  "v":"bnb bnb bnb bnb nbn",
-  "w":"bnb bnb bnb bbb bnb",
-  "x":"bnb bnb nbn bnb bnb",
-  "y":"bnb bnb nbn nbn nbn",
-  "z":"bbb nnb nbn bnn bbb",
-  " ":", , , , ,"
-};
-Banner.emojis = {
-  "b":526982553807224842,
-  "n":526982553811288084,
-  ",":526981193003171850
-};
-
-module.exports = Banner;

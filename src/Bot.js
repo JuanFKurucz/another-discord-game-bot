@@ -9,7 +9,8 @@
 
 const Discord = require('discord.js'),
       Message = require("./Message.js"), //https://discord.js.org/#/docs/main/stable/class/RichEmbed
-      Game = require(__dirname+"/game/Game.js");
+      Game = require(__dirname+"/game/Game.js"),
+      {config} = require("./Configuration.js");
 
 let BotObject = null;
 
@@ -26,7 +27,6 @@ module.exports = class Bot {
     this.game = new Game(this.prefix);
     this.client = new Discord.Client();
     this.debugMode = debugMode;
-    this.debuggChannels = require("./Configuration.js").get("global","debuggChannels");
     this.startDaemon();
   }
 
@@ -46,10 +46,10 @@ module.exports = class Bot {
 
   async start(token){
     await this.game.loadUsers();
-    this.client.on('ready',() => {
+    this.client.on('ready', () => {
       console.log(`Logged in as ${this.client.user.tag}!`,1);
     });
-    this.client.on('message', msg => {
+    this.client.on('message', (msg) => {
       this.onMessage(msg);
     });
     this.client.login(token);
@@ -87,7 +87,8 @@ module.exports = class Bot {
   }
 
   async onMessage(msg){
-    if(msg.hasOwnProperty("author") && !msg.author.bot && (!this.debugMode || (this.debugMode && this.debuggChannels.indexOf(msg.channel.id)!==-1))){
+    const debugChannels = config("debuggChannels");
+    if(msg.hasOwnProperty("author") && !msg.author.bot && (!this.debugMode || (this.debugMode && debugChannels.indexOf(msg.channel.id)!==-1))){
 
       const user = await this.game.getUser(msg.author);
       this.game.onMessage(user); //handles what to do when a user send a message (Ex: gives cookies);

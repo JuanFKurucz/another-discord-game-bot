@@ -4,7 +4,8 @@
   This currently does nothing
 **/
 const mysql = require('mysql'),
-      fs = require('fs');
+      fs = require('fs'),
+      {config} = require("./Configuration.js");
 
 class DataBase {
   constructor(config,enabled=true){
@@ -95,10 +96,12 @@ class DataBase {
   }
 
   static async loadDataBases(databaseConfig){
-    for(let dc in databaseConfig){
-      if(databaseConfig[dc].enabled === true){
+    const enabled = config("database","enabled"),
+          options = config("database","options");
+    if(enabled === true){
+      for(let dc in options){
         console.time();
-        let tempDb = new DataBase(databaseConfig[dc].options);
+        let tempDb = new DataBase(options[dc]);
         console.time();
         await tempDb.start();
         console.time();
@@ -132,15 +135,7 @@ exports.dbChangeEnable = async function (bool="true"){
   console.log("Database enabled: "+boolValue);
   DataBase.enabled = boolValue;
   if(boolValue === true){
-    let configFile = './databases.json';
-    if (fs.existsSync(configFile) === true) {
-      console.log("Reading databases config file");
-      let databaseConfig = JSON.parse(fs.readFileSync(configFile, 'utf8'));
-      console.log("Finished reading databases, starting loading them");
-      DataBase.loadDataBases(databaseConfig);
-      console.log("Finished loading databases");
-    } else {
-      console.error("Couldn't find database config file");
-    }
+    DataBase.loadDataBases();
+    console.log("Finished loading databases");
   }
 }

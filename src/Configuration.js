@@ -4,12 +4,12 @@ const fs = require('fs');
 
 let Config = null;
 
-module.exports = class Configuration {
-  static get(parent,param){
+class Configuration {
+  static get(){
     if(Config===null){
       Config = new Configuration();
     }
-    return Config.config[parent][param];
+    return Config;
   }
 
   constructor() {
@@ -24,5 +24,15 @@ module.exports = class Configuration {
       let name = filename.split(".")[0];
       this.config[name]=JSON.parse(fs.readFileSync(configsFolder+filename, 'utf8'));
     });
+  }
+}
+
+
+exports.config = function(){
+  const configObject = Configuration.get();
+  if(arguments.length==1){
+    return configObject.config["global"][arguments[0]];
+  } else {
+    return configObject.config[arguments[0]][arguments[1]];
   }
 }

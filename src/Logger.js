@@ -11,7 +11,8 @@ Levels of logs:
 
 const fs = require('fs'),
       util = require('util'),
-      { performance } = require('perf_hooks');
+      { performance } = require('perf_hooks'),
+      {config} = require("./Configuration.js");
 
 let LogObject = null;
 
@@ -21,8 +22,8 @@ module.exports = class Logger {
   }
 
   static init(level,maxTrace){
-    const l = (level) ? level : 3;
-    const mT = (maxTrace) ? maxTrace : 1;
+    const l = (level) ? level : config("logger","level");
+    const mT = (maxTrace) ? maxTrace : config("logger","maxTrace");
     LogObject = new Logger(l,mT);
   }
 
@@ -78,37 +79,6 @@ module.exports = class Logger {
   constructor(level,maxTrace) {
     this.linePrinting=[];
     this.fileNames={};
-    this.style={
-      "type":{
-        "reset":"\x1b[0m",
-        "bright":"\x1b[1m",
-        "dim":"\x1b[2m",
-        "underscore":"\x1b[4m",
-        "blink":"\x1b[5m",
-        "reverse":"\x1b[7m",
-        "hidden":"\x1b[8m"
-      },
-      "font":{
-        "black":"\x1b[30m",
-        "red":"\x1b[31m",
-        "green":"\x1b[32m",
-        "yellow":"\x1b[33m",
-        "blue":"\x1b[34m",
-        "magenta":"\x1b[35m",
-        "cyan":"\x1b[36m",
-        "white":"\x1b[37m"
-      },
-      "background":{
-        "back":"\x1b[40m",
-        "red":"\x1b[41m",
-        "green":"\x1b[42m",
-        "yellow":"\x1b[43m",
-        "blue":"\x1b[44m",
-        "magenta":"\x1b[45m",
-        "cyan":"\x1b[46m",
-        "white":"\x1b[47m"
-      }
-    };
 
     this.level = level;
     this.maxTrace = maxTrace;
@@ -130,9 +100,10 @@ module.exports = class Logger {
   }
 
   sendConsole(level,text,color="white"){
+    const style = config("logger","style");
     this.output(text);
     if(this.level >= level){
-      process.stdout.write(this.style.font[color]+text);
+      process.stdout.write(style.font[color]+text);
     }
   }
 
