@@ -1,6 +1,7 @@
 "use strict";
 
-const Language = require("../Language.js");
+const Language = require("../Language.js"),
+      {config} = require("../Configuration.js");
 
 module.exports = class ShopList {
   constructor(user,itemConstructor) {
@@ -11,45 +12,24 @@ module.exports = class ShopList {
     this.itemsPerPage = 3;
     this.owner.shopList = this;
     this.message = null;
-    this.reactions = {
-      "numbers":[
-        "526463862409789469",
-        "526463864737628170",
-        "526463864699617290",
-        "526463864838291506",
-        "526463864968052737"
-      ],
-      "previousPage":"526463866205634581",
-      "nextPage":"526463866658357290",
-      "increment":"526463866364887060",
-      "decrement":"526463866381664256"
-    };
-    this.reactions2={
-      "1":"526463862409789469",
-      "2":"526463864737628170",
-      "3":"526463864699617290",
-      "4":"526463864838291506",
-      "5":"526463864968052737",
-      "previousPage":"526463866205634581",
-      "nextPage":"526463866658357290",
-      "increment":"526463866364887060",
-      "decrement":"526463866381664256"
-    };
+    this.reactions = config("shoplist","reactions");
+    this.reactions2 = config("shoplist","reactions2");
     this.lastList=null;
   }
 
   async putReactions(){
     this.message.clearReactions();
+    if(this.lastList!== null){
+      const lengthLastList = this.lastList.length;
 
-    const lengthLastList = this.lastList.length;
-
-    await this.message.react(this.reactions["previousPage"]);
-    for(let i=0;i<lengthLastList;i++){
-      await this.message.react(this.reactions["numbers"][i]);
+      await this.message.react(this.reactions["previousPage"]);
+      for(let i=0;i<lengthLastList;i++){
+        await this.message.react(this.reactions["numbers"][i]);
+      }
+      await this.message.react(this.reactions["increment"]);
+      await this.message.react(this.reactions["decrement"]);
+      await this.message.react(this.reactions["nextPage"]);
     }
-    await this.message.react(this.reactions["increment"]);
-    await this.message.react(this.reactions["decrement"]);
-    await this.message.react(this.reactions["nextPage"]);
   }
 
   getReactions(list){

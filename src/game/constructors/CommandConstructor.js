@@ -12,16 +12,18 @@ module.exports = class CommandConstructor extends Constructor {
     let i=0;
 
     files.forEach(function(filename) {
-      let name = filename.substring(0,filename.lastIndexOf('Command')).toLowerCase();
-      if(namesCheck.hasOwnProperty(name) === false){
-        elements[i]={
-          "name":name,
-          "constructor":require("../commands/"+filename)
-        };
-        namesCheck[name]=true;
-        i++;
-      } else {
-        console.error(name+" already exists as a command. DUPLICATED COMMAND NAME",0);
+      if(filename.toLowerCase().indexOf('abstract')===-1){
+        let name = filename.substring(0,filename.lastIndexOf('Command')).toLowerCase();
+        if(namesCheck.hasOwnProperty(name) === false){
+          elements[i]={
+            "name":name,
+            "constructor":require("../commands/"+filename)
+          };
+          namesCheck[name]=true;
+          i++;
+        } else {
+          console.error(name+" already exists as a command. DUPLICATED COMMAND NAME",0);
+        }
       }
     });
 
