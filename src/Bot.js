@@ -10,7 +10,8 @@
 const Discord = require("discord.js"),
       Message = require("./Message.js"), //https://discord.js.org/#/docs/main/stable/class/RichEmbed
       Game = require(__dirname+"/game/Game.js"),
-      {config} = require("./Configuration.js");
+      {config} = require("./Configuration.js"),
+      Graph = require("./graph/Graph.js");
 
 let BotObject = null;
 
@@ -24,6 +25,7 @@ module.exports = class Bot {
 
   constructor(debugMode=true) {
     this.prefix = "!";
+    this.userGraph = new Graph("1");
     this.game = new Game(this.prefix);
     this.client = new Discord.Client();
     this.debugMode = debugMode;
@@ -46,8 +48,31 @@ module.exports = class Bot {
 
   async start(token){
     await this.game.loadUsers();
-    this.client.on("ready", () => {
+    this.client.on("ready", async () => {
       console.log(`Logged in as ${this.client.user.tag}!`,1);
+      let users = await this.client.users.array(),
+          lengthUsers = users.length;
+      for(let u=0;u<lengthUsers;u++){
+        this.userGraph.addNode(users[u].id,users[u]);
+      }
+      let guilds = await this.client.guilds.array(),
+          lengthGuilds = guilds.length;
+      for(let g=0;g<lengthGuilds;g++){
+        let guildUsers = await guilds[g].members.array(),
+            lengthGuildUsers = guildUsers.length;
+        for(let u=0;u<lengthGuildUsers;u++){
+          let node = this.userGraph.getNode(guildUsers[u].id);
+          if(node!==null){
+            for(let u2=0;u2<lengthGuildUsers;u2++){
+              let node2 = this.userGraph.getNode(guildUsers[u2].id);
+              if(node2!==null && !node.equalTo(node2)){
+                node.addAdyacent(node2,1);
+              }
+            }
+          }
+        }
+      }
+      console.log(this.userGraph.print());
     });
     this.client.on("message", (msg) => {
       this.onMessage(msg);
