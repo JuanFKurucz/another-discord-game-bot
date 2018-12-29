@@ -86,22 +86,27 @@ module.exports = class Bot {
     return response;
   }
 
+  async sendMessage(msg,user){
+    msg.channel.send(msg)
+    .then(async (message) => {
+      await user.setLastResponse(message);
+      console.log("Message sent");
+    })
+    .catch(console.error);
+  }
+
   async onMessage(msg){
     const debugChannels = config("debuggChannels");
-    if(msg.hasOwnProperty("author") && !msg.author.bot && (!this.debugMode || (this.debugMode && debugChannels.indexOf(msg.channel.id)!==-1))){
+    if((debugChannels.indexOf(msg.channel.id)!==-1 || this.debugMode === false) && msg.hasOwnProperty("author") && !msg.author.bot){
 
       const user = await this.game.getUser(msg.author);
       this.game.onMessage(user); //handles what to do when a user send a message (Ex: gives cookies);
       const response=await this.commandHandler(msg,user);
 
       if(response!==null){
-        msg.channel.send(response.print())
-        .then(async (message) => {
-          await user.setLastResponse(message);
-          console.log("Message sent");
-        })
-        .catch(console.error);
+        this.sendMessage(response.print(),user);
       }
+
       user.emptyMessageLang();
     }
   }
