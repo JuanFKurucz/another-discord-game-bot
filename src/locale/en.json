@@ -10,6 +10,8 @@
 
   "command_buy":"buy",
   "command_buy_description":"Use to buy structures that will give you CPS\nWrite *{0}{1}* to see the list of buildings\nWrite *{0}{1} number* to buy a building",
+  "command_banner":"banner",
+  "command_banner_description":"Use to write banners",
   "command_deleteuser":"deleteuser",
   "command_deleteuser_description":"Removes yourself from the game database",
   "command_error":"error",

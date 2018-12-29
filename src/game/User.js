@@ -1,6 +1,7 @@
 "use strict";
 
 const Language = require("../Language.js");
+const Banner = require("../BannerMessage.js");
 
 module.exports = class User {
   constructor(id) {
@@ -23,6 +24,9 @@ module.exports = class User {
 
     this.lastResponse = null;
     this.shopList = null;
+    this.messageBanner = false;
+    this.banner = null;
+    this.lastMessage = null;
   }
 
   resetResponses(){
@@ -32,9 +36,15 @@ module.exports = class User {
 
   async setLastResponse(message){
     this.lastResponse=message;
-    if(this.shopList!==null){
+    if(this.messageBanner){
+      this.banner=new Banner(message);
+    } else if(this.shopList!==null){
       await this.shopList.setMessage(message);
     }
+  }
+
+  setLastMessage(message){
+    this.lastMessage=message;
   }
 
   getLanguage(){
