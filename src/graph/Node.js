@@ -10,7 +10,7 @@ module.exports = class Node {
   }
 
   print(){
-    let response = "Node ("+this.id+")\n";
+    let response = "Node "+this.object.username+"#"+this.object.discriminator+" ("+this.id+")\n";
     for(let n in this.adjacents){
       for(let i=0;i<this.adjacents[n].length;i++){
         response+=this.adjacents[n][i].print()+"\n";

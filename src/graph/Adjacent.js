@@ -8,7 +8,7 @@ module.exports = class Adjacent {
   }
 
   print(){
-    return "Adjacent ("+this.target.getId()+") weight: "+this.weight;
+    return "Adjacent "+this.target.getObject().username+"#"+this.target.getObject().discriminator+" ("+this.target.getId()+") weight: "+this.weight;
   }
 
   equalTo(adyacent){
