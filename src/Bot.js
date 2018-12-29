@@ -14,6 +14,13 @@ const Discord = require('discord.js'),
 let BotObject = null;
 
 module.exports = class Bot {
+  static get(){
+    if(BotObject===null){
+      BotObject = new Bot();
+    }
+    return BotObject;
+  }
+  
   constructor(debugMode=true) {
     this.prefix = "!";
     this.game = new Game(this.prefix);
@@ -85,7 +92,7 @@ module.exports = class Bot {
       const user = await this.game.getUser(msg.author);
       this.game.onMessage(user); //handles what to do when a user send a message (Ex: gives cookies);
       const response=await this.commandHandler(msg,user);
-      
+
       if(response!==null){
         msg.channel.send(response.print())
         .then(async (message) => {
@@ -96,12 +103,5 @@ module.exports = class Bot {
       }
       user.emptyMessageLang();
     }
-  }
-
-  static get(){
-    if(BotObject===null){
-      BotObject = new Bot();
-    }
-    return BotObject;
   }
 }

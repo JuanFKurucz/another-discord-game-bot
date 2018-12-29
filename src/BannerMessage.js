@@ -1,7 +1,5 @@
 "use strict";
 
-const Bot = require("./Bot.js");
-
 class Banner {
   constructor(messageObject) {
     this.message=messageObject;
@@ -15,13 +13,13 @@ class Banner {
       return "";
     }
     try{
-      const emojiList = Bot.get().client.guilds.get(Banner.serverId).emojis,
+      const emojiList = require("./Bot.js").get().client.guilds.get(Banner.serverId).emojis,
             emoji = await emojiList.find(emoji => emoji.id == id);
       if(emoji){
         return emoji.toString();
       }
     } catch(e){
-
+      console.error(e);
     }
     return "";
   }
@@ -39,7 +37,7 @@ class Banner {
             try{
               realmessage+=await this.getEmoji(Banner.emojis[list[y][w]]);
             }catch(e){
-
+              console.error(e);
             }
           }
           realmessage+=" ";
