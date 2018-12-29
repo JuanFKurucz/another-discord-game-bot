@@ -4,7 +4,6 @@ class Banner {
   constructor(messageObject) {
     this.message=messageObject;
     this.text=messageObject.embeds[0].title;
-    console.info(this.text);
     this.doThisAgain(this.message,this.text,0,Banner.max);
   }
 
@@ -62,7 +61,7 @@ class Banner {
   }
 }
 
-Banner.serverId="509053465016795147";
+Banner.serverId=require("./Configuration.js").get("global","serverId");
 Banner.max = 5;
 Banner.dictionary = { //3x5
   "a":"bbb bnb bnb bbb bnb",

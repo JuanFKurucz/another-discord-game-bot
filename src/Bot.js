@@ -20,13 +20,13 @@ module.exports = class Bot {
     }
     return BotObject;
   }
-  
+
   constructor(debugMode=true) {
     this.prefix = "!";
     this.game = new Game(this.prefix);
     this.client = new Discord.Client();
     this.debugMode = debugMode;
-    this.debuggChannels = ["526844501570879489"];
+    this.debuggChannels = require("./Configuration.js").get("global","debuggChannels");
     this.startDaemon();
   }
 
