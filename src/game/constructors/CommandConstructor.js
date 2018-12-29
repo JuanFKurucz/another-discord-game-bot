@@ -12,7 +12,7 @@ module.exports = class CommandConstructor extends Constructor {
     let i=0;
 
     files.forEach(function(filename) {
-      if(filename.toLowerCase().indexOf('abstract')===-1){
+      if(filename.toLowerCase().indexOf("abstract")===-1){
         let name = filename.substring(0,filename.lastIndexOf('Command')).toLowerCase();
         if(namesCheck.hasOwnProperty(name) === false){
           elements[i]={

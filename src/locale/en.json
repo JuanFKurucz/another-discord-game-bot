@@ -38,7 +38,7 @@
   "buy_levelup":"you upgraded your building!",
   "buy_acquire":"you bought a building {0}!",
   "buy_noexists":"this building doesn't exist",
-  "buy_building":"buy buildings",
+  "buy_buy":"buy buildings",
 
   "upgrade_list":"list of upgrades",
   "upgrade_acquire":"you bought an upgrade {0}!",

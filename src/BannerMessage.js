@@ -62,7 +62,7 @@ module.exports = class Banner {
       actualIndex=0;
     }
     setTimeout(() => {
-      this.doThisAgain(msg,messageText,actualIndex,max)
+      this.doThisAgain(msg,messageText,actualIndex,max);
     },500);
   }
 }

@@ -19,7 +19,7 @@ module.exports = class ShopAbstractCommand extends Command {
       response = this.prefix+"_noexists";
     }
 
-    message.setTitle(this.prefix+"_building");
+    message.setTitle(this.prefix+"_buy");
     message.setDescription(response);
   }
 
@@ -43,7 +43,7 @@ module.exports = class ShopAbstractCommand extends Command {
       if(isNaN(command)){
         await this.buy(message,command);
       } else {
-        this.displayList(message,parseInt(command));
+        this.displayList(message,parseInt(command,10));
       }
     } else {
       this.displayList(message);
