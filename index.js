@@ -1,7 +1,7 @@
 "use strict";
 
-const Main = require(__dirname+"/src/Main.js"),
-      tokenInfo = require(__dirname+"/token.json");
+const Main = require("./src/Main.js"),
+      tokenInfo = require("./token.json");
 
 var Program = new Main();
 Program.start(tokenInfo["token"]);
