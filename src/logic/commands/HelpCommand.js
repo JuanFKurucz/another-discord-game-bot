@@ -10,7 +10,7 @@ module.exports = class HelpCommand extends Command {
   async doExecute(m,user,command){
     console.time();
     const bot = require("../../Bot.js").get(),
-        commandList = bot.game.getCommands();
+        commandList = bot.logic.getCommands();
 
     m.setTitle("help_title");
     m.setDescription("help_message");

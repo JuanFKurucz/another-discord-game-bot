@@ -1,7 +1,7 @@
 "use strict";
 
 /**
-Game Class, this is where the fun begins.
+Logic Class, this is where the fun begins.
 
 Every message from Discord is setn to read function, where it creates the player of the user that sent the message if it doesn't exist
 and handles the message with commandHandler.
@@ -12,12 +12,19 @@ const User = require(__dirname+"/User.js"),
       CommandConstructor = require(__dirname+"/constructors/CommandConstructor.js"),
       Language = require("../Language.js");
 
-module.exports = class Game {
+module.exports = class Logic {
   constructor(prefix) {
     this.users = {};
     this.commandConstructor = new CommandConstructor(prefix);
     this.commands = this.commandConstructor.initCommands();
     this.lanCommands = Language.getCommands();
+    this.startDaemon();
+  }
+
+  startDaemon(){
+    setInterval( () => {
+      this.claimCookiesUsers();
+    },1000);
   }
 
   async deleteUser(user){

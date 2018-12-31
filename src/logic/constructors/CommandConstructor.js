@@ -5,7 +5,7 @@ const Constructor = require("../Constructor.js"),
 
 module.exports = class CommandConstructor extends Constructor {
   constructor(botprefix){
-    const commandsFolder = "./src/game/commands/",
+    const commandsFolder = "./src/logic/commands/",
           files = fs.readdirSync(commandsFolder),
           elements = {},
           namesCheck = {};
