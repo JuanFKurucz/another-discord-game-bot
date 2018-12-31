@@ -24,7 +24,7 @@ module.exports = class Bot {
   }
 
   constructor(debugMode=true) {
-    this.prefix = "!";
+    this.prefix = config("prefix");
     this.userGraph = new Graph("1");
     this.game = new Game(this.prefix);
     this.client = new Discord.Client();
