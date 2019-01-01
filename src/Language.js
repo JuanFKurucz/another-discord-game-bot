@@ -71,7 +71,7 @@ class Language {
         if(Language.languages["en"][id.toLowerCase()]){
           return Language.languages["en"][id.toLowerCase()];
         } else {
-          return "";
+          return id;
         }
       }
     }
@@ -86,7 +86,7 @@ class Language {
 
   static init(){
     Language.languages = {};
-    Language.lancommands={};
+    Language.lancommands={"en":{}};
     const commandsFolder = "./src/locale/",
           files = fs.readdirSync(commandsFolder);
     files.forEach(function(filename) {
