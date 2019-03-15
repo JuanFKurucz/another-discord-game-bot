@@ -66,5 +66,3 @@ emojis/*
 
 # exception to the rule
 !output/.gitkeep
-
-token.json
