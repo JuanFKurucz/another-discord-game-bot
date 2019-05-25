@@ -9,11 +9,11 @@
   "_notaffordable":"trop cher encore",
 
   "command_buy":"acheter",
-  "command_buy_description":"Utilise pour acheter des structures qui te donneras CPS\nÉcrire *{0}{1}* pour voir la liste des bâtiments \nÉcrire *{0}{1} nombre* pour acheter un bâtiment",
+  "command_buy_description":"Utilise pour acheter des structures qui te donneront du CPS\nÉcrire *{0}{1}* pour voir la liste des bâtiments \nÉcrire *{0}{1} nombre* pour acheter un bâtiment",
   "command_deleteuser":"supprimerutilisateur",
-  "command_deleteuser_description":"Enlèves toi de la base de donnée du jeu",
+  "command_deleteuser_description":"Supprime un utilisateur de la base de donnée du jeu",
   "command_error":"erreur",
-  "command_error_description":"Défaut message d'erreur à cause de commandes inconnues",
+  "command_error_description":"message d'erreur par défaut à cause de commandes inconnues",
   "command_help":"aide",
   "command_help_description":"Utilise pour récupérer la liste des commandes",
   "command_info":"info",
@@ -30,7 +30,7 @@
 
   "item_+10%cps":"+10% CPS",
   "item_+10%cpm":"+10% CPM",
-  "item_+10%costreduction":"+10% Coût réduction",
+  "item_+10%costreduction":"+10% réduction",
 
   "buy_list":"liste des bâtiments",
   "buy_levelUp":"tu as amélioré ton bâtiment!",
